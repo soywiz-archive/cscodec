@@ -1,3 +1,4 @@
+using System;
 namespace cscodec.h243.decoder
 {
 	public class SequenceParameterSet {
@@ -65,8 +66,8 @@ namespace cscodec.h243.decoder
 		public int bitstream_restriction_flag;
 		public int num_reorder_frames;
 		public int scaling_matrix_present;
-		public int[][] scaling_matrix4 = new int[6][16];
-		public int[][] scaling_matrix8 = new int[2][64];
+		public int[,] scaling_matrix4 = new int[6,16];
+		public int[,] scaling_matrix8 = new int[2,64];
 		public int nal_hrd_parameters_present_flag;
 		public int vcl_hrd_parameters_present_flag;
 		public int pic_struct_present_flag;
@@ -118,16 +119,12 @@ namespace cscodec.h243.decoder
 			sps.time_scale = time_scale;
 			sps.fixed_frame_rate_flag = fixed_frame_rate_flag;
 			sps.offset_for_ref_frame = new short[256]; //FIXME dyn aloc?
-			System.arraycopy(offset_for_ref_frame, 0, sps.offset_for_ref_frame, 0, 256);
+			Array.Copy(offset_for_ref_frame, 0, sps.offset_for_ref_frame, 0, 256);
 			sps.bitstream_restriction_flag = bitstream_restriction_flag;
 			sps.num_reorder_frames = num_reorder_frames;
 			sps.scaling_matrix_present = scaling_matrix_present;
-			sps.scaling_matrix4 = new int[6][16];
-			for(int i=0;i<6;i++)
-				System.arraycopy(scaling_matrix4[i], 0, sps.scaling_matrix4[i], 0, 16);
-			sps.scaling_matrix8 = new int[2][64];
-			for(int i=0;i<2;i++)
-				System.arraycopy(scaling_matrix8[i], 0, sps.scaling_matrix8[i], 0, 64);
+			sps.scaling_matrix4 = (int[,])scaling_matrix4.Clone();
+			sps.scaling_matrix8 = (int[,])scaling_matrix8.Clone();
 			sps.nal_hrd_parameters_present_flag = nal_hrd_parameters_present_flag;
 			sps.vcl_hrd_parameters_present_flag = vcl_hrd_parameters_present_flag;
 			sps.pic_struct_present_flag = pic_struct_present_flag;

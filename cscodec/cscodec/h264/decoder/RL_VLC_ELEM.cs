@@ -2,8 +2,8 @@ namespace cscodec.h243.decoder
 {
 	public class RL_VLC_ELEM
 	{
-		short level; //int16_t level;
-		int len; //int8_t len;
-		int run; //uint8_t run;
+		public short level; //int16_t level;
+		public int len; //int8_t len;
+		public int run; //uint8_t run;
 	}
 }
