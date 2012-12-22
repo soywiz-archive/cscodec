@@ -1,3 +1,5 @@
+using cscodec.h243.util;
+using System;
 namespace cscodec.h243.decoder
 {
 	public class ErrorResilience {
@@ -18,13 +20,13 @@ namespace cscodec.h243.decoder
 	
 		public static int[] dc_val_base;
 		public static int[] dc_val = new int[3];
-		public static int[][][] mv = new int[2][4][2];
+		public static int[][][] mv = Arrays.Create3D<int>(2, 4, 2);
 
 		// Number of MacroBlock rows at top/bottom those are skipped, Set by User. 
 		public static int skip_top;
 		public static int skip_bottom;
 	
-		public static void decode_mb(MpegEncContext s, int ref){
+		public static void decode_mb(MpegEncContext s, int @ref){
 			//!!??????????? We need these?
 			//s.dest[0] = s.current_picture.data[0] + (s.mb_y * 16* s.linesize  ) + s.mb_x * 16;
 			//s.dest[1] = s.current_picture.data[1] + (s.mb_y * (16>>s.chroma_y_shift) * s.uvlinesize) + s.mb_x * (16>>s.chroma_x_shift);
@@ -36,11 +38,11 @@ namespace cscodec.h243.decoder
 				//memset(h.non_zero_count_cache, 0, sizeof(h.non_zero_count_cache));
 				Arrays.fill(h.non_zero_count_cache, 0);
 				//assert(ref>=0);
-				if(ref >= h.ref_count[0]) //FIXME it is posible albeit uncommon that slice references differ between slices, we take the easy approuch and ignore it for now. If this turns out to have any relevance in practice then correct remapping should be added
-					ref=0;
-				Rectangle.fill_rectangle_sign(s.current_picture.ref_index[0], 4*h.mb_xy, 2, 2, 2, ref, 1);
-				Rectangle.fill_rectangle_sign(h.ref_cache[0], h.scan8[0], 4, 4, 8, ref, 1);
-				Rectangle.fill_rectangle_mv_cache(h.mv_cache[0],  h.scan8[0] , 4, 4, 8, h.pack16to32(mv[0][0][0],mv[0][0][1]), 4);
+				if (@ref >= h.ref_count[0]) //FIXME it is posible albeit uncommon that slice references differ between slices, we take the easy approuch and ignore it for now. If this turns out to have any relevance in practice then correct remapping should be added
+					@ref=0;
+				Rectangle.fill_rectangle_sign(s.current_picture.ref_index[0], 4*h.mb_xy, 2, 2, 2, @ref, 1);
+				Rectangle.fill_rectangle_sign(h.ref_cache[0], H264Context.scan8[0], 4, 4, 8, @ref, 1);
+				Rectangle.fill_rectangle_mv_cache(h.mv_cache[0], H264Context.scan8[0], 4, 4, 8, H264Context.pack16to32(mv[0][0][0], mv[0][0][1]), 4);
 				////assert(!FRAME_MBAFF);
 				h.ff_h264_hl_decode_mb();
 			}else{
@@ -157,8 +159,8 @@ namespace cscodec.h243.decoder
 
 			for(b_y=0; b_y<h; b_y++){
 				for(b_x=0; b_x<w; b_x++){
-					int color[]={1024,1024,1024,1024};
-					int distance[]={9999,9999,9999,9999};
+					int[] color={1024,1024,1024,1024};
+					int[] distance={9999,9999,9999,9999};
 					int mb_index, error, j;
 					long guess, weight_sum;
 
@@ -270,7 +272,7 @@ namespace cscodec.h243.decoder
 					if(!(left_damage!=0||right_damage!=0)) continue; // both undamaged
 
 					if(   (0==left_intra) && (0==right_intra)
-					   && Math.abs(left_mv[0]-right_mv[0]) + Math.abs(left_mv[1]+right_mv[1]) < 2) continue;
+					   && Math.Abs(left_mv[0]-right_mv[0]) + Math.Abs(left_mv[1]+right_mv[1]) < 2) continue;
 
 					for(y=0; y<8; y++){
 						int a,b,c,d;
@@ -279,8 +281,8 @@ namespace cscodec.h243.decoder
 						b= dst_base[dst_offset + offset + 8 + y*stride] - dst_base[dst_offset + offset + 7 + y*stride];
 						c= dst_base[dst_offset + offset + 9 + y*stride] - dst_base[dst_offset + offset + 8 + y*stride];
 
-						d= Math.abs(b) - ((Math.abs(a) + Math.abs(c) + 1)>>1);
-						d= Math.max(d, 0);
+						d = Math.Abs(b) - ((Math.Abs(a) + Math.Abs(c) + 1) >> 1);
+						d= Math.Max(d, 0);
 						if(b<0) d= -d;
 
 						if(d==0) continue;
@@ -343,7 +345,7 @@ namespace cscodec.h243.decoder
 					if(!(top_damage!=0||bottom_damage!=0)) continue; // both undamaged
 
 					if(   (0==top_intra) && (0==bottom_intra)
-					   && Math.abs(top_mv[0]-bottom_mv[0]) + Math.abs(top_mv[1]+bottom_mv[1]) < 2) continue;
+					   && Math.Abs(top_mv[0]-bottom_mv[0]) + Math.Abs(top_mv[1]+bottom_mv[1]) < 2) continue;
 
 					for(x=0; x<8; x++){
 						int a,b,c,d;
@@ -352,8 +354,8 @@ namespace cscodec.h243.decoder
 						b= dst_base[dst_offset + offset + x + 8*stride] - dst_base[dst_offset + offset + x + 7*stride];
 						c= dst_base[dst_offset + offset + x + 9*stride] - dst_base[dst_offset + offset + x + 8*stride];
 
-						d= Math.abs(b) - ((Math.abs(a) + Math.abs(c)+1)>>1);
-						d= Math.max(d, 0);
+						d= Math.Abs(b) - ((Math.Abs(a) + Math.Abs(c)+1)>>1);
+						d= Math.Max(d, 0);
 						if(b<0) d= -d;
 
 						if(d==0) continue;
@@ -380,7 +382,7 @@ namespace cscodec.h243.decoder
 
 		public static void guess_mv(MpegEncContext s){
 			//uint8_t fixed[s.mb_stride * s.mb_height];
-			int[] fixed = new int[s.mb_stride * s.mb_height];
+			int[] @fixed = new int[s.mb_stride * s.mb_height];
 			int mb_stride = s.mb_stride;
 			int mb_width = s.mb_width;
 			int mb_height= s.mb_height;
@@ -402,7 +404,7 @@ namespace cscodec.h243.decoder
 	        		f=MV_FROZEN; //intra //FIXME check
 				if(0==(error&MpegEncContext.MV_ERROR)) f=MV_FROZEN;           //inter with undamaged MV
 
-				fixed[mb_xy]= f;
+				@fixed[mb_xy]= f;
 				if(f==MV_FROZEN)
 					num_avail++;
 			}
@@ -445,8 +447,8 @@ namespace cscodec.h243.decoder
 					for(mb_y=0; mb_y<s.mb_height; mb_y++){
 						for(mb_x=0; mb_x<s.mb_width; mb_x++){
 							int mb_xy= mb_x + mb_y*s.mb_stride;
-							int[][] mv_predictor = new int[8][2];
-							int[] ref = new int[8];
+							int[][] mv_predictor = Arrays.Create2D<int>(8, 2);
+							int[] @ref = new int[8];
 							int pred_count=0;
 							int j;
 							int best_score=256*256*256*64;
@@ -457,53 +459,53 @@ namespace cscodec.h243.decoder
 
 							if(((mb_x^mb_y^pass)&1)!=0) continue;
 
-							if(fixed[mb_xy]==MV_FROZEN) continue;
+							if(@fixed[mb_xy]==MV_FROZEN) continue;
 							////assert(0== 7 & (int)(s.current_picture.mb_type_base[s.current_picture.mb_type_offset + mb_xy]));
 							////assert(s.last_picture_ptr && s.last_picture_ptr.data[0]);
 
 							j=0;
-							if(mb_x>0           && fixed[mb_xy-1        ]==MV_FROZEN) j=1;
-							if(mb_x+1<mb_width  && fixed[mb_xy+1        ]==MV_FROZEN) j=1;
-							if(mb_y>0           && fixed[mb_xy-mb_stride]==MV_FROZEN) j=1;
-							if(mb_y+1<mb_height && fixed[mb_xy+mb_stride]==MV_FROZEN) j=1;
+							if(mb_x>0           && @fixed[mb_xy-1        ]==MV_FROZEN) j=1;
+							if(mb_x+1<mb_width  && @fixed[mb_xy+1        ]==MV_FROZEN) j=1;
+							if(mb_y>0           && @fixed[mb_xy-mb_stride]==MV_FROZEN) j=1;
+							if(mb_y+1<mb_height && @fixed[mb_xy+mb_stride]==MV_FROZEN) j=1;
 							if(j==0) continue;
 
 							j=0;
-							if(mb_x>0           && fixed[mb_xy-1        ]==MV_CHANGED) j=1;
-							if(mb_x+1<mb_width  && fixed[mb_xy+1        ]==MV_CHANGED) j=1;
-							if(mb_y>0           && fixed[mb_xy-mb_stride]==MV_CHANGED) j=1;
-							if(mb_y+1<mb_height && fixed[mb_xy+mb_stride]==MV_CHANGED) j=1;
+							if(mb_x>0           && @fixed[mb_xy-1        ]==MV_CHANGED) j=1;
+							if(mb_x+1<mb_width  && @fixed[mb_xy+1        ]==MV_CHANGED) j=1;
+							if(mb_y>0           && @fixed[mb_xy-mb_stride]==MV_CHANGED) j=1;
+							if(mb_y+1<mb_height && @fixed[mb_xy+mb_stride]==MV_CHANGED) j=1;
 							if(j==0 && pass>1) continue;
 
 							none_left=0;
 
-							if(mb_x>0 && fixed[mb_xy-1]!=0){
+							if(mb_x>0 && @fixed[mb_xy-1]!=0){
 								mv_predictor[pred_count][0]= s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index - mot_step][0];
 								mv_predictor[pred_count][1]= s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index - mot_step][1];
-								ref         [pred_count]   = s.current_picture.ref_index[0][4*(mb_xy-1)];
+								@ref         [pred_count]   = s.current_picture.ref_index[0][4*(mb_xy-1)];
 								pred_count++;
 							}
-							if(mb_x+1<mb_width && fixed[mb_xy+1]!=0){
+							if(mb_x+1<mb_width && @fixed[mb_xy+1]!=0){
 								mv_predictor[pred_count][0]= s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index + mot_step][0];
 								mv_predictor[pred_count][1]= s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index + mot_step][1];
-								ref         [pred_count]   = s.current_picture.ref_index[0][4*(mb_xy+1)];
+								@ref         [pred_count]   = s.current_picture.ref_index[0][4*(mb_xy+1)];
 								pred_count++;
 							}
-							if(mb_y>0 && fixed[mb_xy-mb_stride]!=0){
+							if(mb_y>0 && @fixed[mb_xy-mb_stride]!=0){
 								mv_predictor[pred_count][0]= s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index - mot_stride*mot_step][0];
 								mv_predictor[pred_count][1]= s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index - mot_stride*mot_step][1];
-								ref         [pred_count]   = s.current_picture.ref_index[0][4*(mb_xy-s.mb_stride)];
+								@ref         [pred_count]   = s.current_picture.ref_index[0][4*(mb_xy-s.mb_stride)];
 								pred_count++;
 							}
-							if(mb_y+1<mb_height && fixed[mb_xy+mb_stride]!=0){
+							if(mb_y+1<mb_height && @fixed[mb_xy+mb_stride]!=0){
 								mv_predictor[pred_count][0]= s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index + mot_stride*mot_step][0];
 								mv_predictor[pred_count][1]= s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index + mot_stride*mot_step][1];
-								ref         [pred_count]   = s.current_picture.ref_index[0][4*(mb_xy+s.mb_stride)];
+								@ref         [pred_count]   = s.current_picture.ref_index[0][4*(mb_xy+s.mb_stride)];
 								pred_count++;
 							}
 							if(pred_count==0) continue;
 
-							boolean skip_mean_and_median = false;
+							bool skip_mean_and_median = false;
 	                    
 							if(pred_count>1){
 								int sum_x=0, sum_y=0, sum_r=0;
@@ -512,8 +514,8 @@ namespace cscodec.h243.decoder
 								for(j=0; j<pred_count; j++){
 									sum_x+= mv_predictor[j][0];
 									sum_y+= mv_predictor[j][1];
-									sum_r+= ref[j];
-									if(j!=0 && ref[j] != ref[j-1]) {
+									sum_r+= @ref[j];
+									if(j!=0 && @ref[j] != @ref[j-1]) {
 										//goto skip_mean_and_median;
 	                            		skip_mean_and_median = true;
 	                            		break;
@@ -525,7 +527,7 @@ namespace cscodec.h243.decoder
 									/* mean */
 									mv_predictor[pred_count][0] = sum_x/j;
 									mv_predictor[pred_count][1] = sum_y/j;
-									ref         [pred_count]    = sum_r/j;
+									@ref         [pred_count]    = sum_r/j;
 	
 									/* median */
 									if(pred_count>=3){
@@ -535,21 +537,21 @@ namespace cscodec.h243.decoder
 										min_x=min_y=max_x=max_y=min_r=max_r=0;
 									}
 									for(j=0; j<pred_count; j++){
-										max_x= Math.max(max_x, mv_predictor[j][0]);
-										max_y= Math.max(max_y, mv_predictor[j][1]);
-										max_r= Math.max(max_r, ref[j]);
-										min_x= Math.min(min_x, mv_predictor[j][0]);
-										min_y= Math.min(min_y, mv_predictor[j][1]);
-										min_r= Math.min(min_r, ref[j]);
+										max_x= Math.Max(max_x, mv_predictor[j][0]);
+										max_y= Math.Max(max_y, mv_predictor[j][1]);
+										max_r= Math.Max(max_r, @ref[j]);
+										min_x= Math.Min(min_x, mv_predictor[j][0]);
+										min_y= Math.Min(min_y, mv_predictor[j][1]);
+										min_r= Math.Min(min_r, @ref[j]);
 									}
 									mv_predictor[pred_count+1][0] = sum_x - max_x - min_x;
 									mv_predictor[pred_count+1][1] = sum_y - max_y - min_y;
-									ref         [pred_count+1]    = sum_r - max_r - min_r;
+									@ref         [pred_count+1]    = sum_r - max_r - min_r;
 	
 									if(pred_count==4){
 										mv_predictor[pred_count+1][0] /= 2;
 										mv_predictor[pred_count+1][1] /= 2;
-										ref         [pred_count+1]    /= 2;
+										@ref         [pred_count+1]    /= 2;
 									}
 									pred_count+=2;
 								} // if not skip_mean_and_median
@@ -561,7 +563,7 @@ namespace cscodec.h243.decoder
 							/* last MV */
 							mv_predictor[pred_count][0]= s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index][0];
 							mv_predictor[pred_count][1]= s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index][1];
-							ref         [pred_count]   = s.current_picture.ref_index[0][4*mb_xy];
+							@ref         [pred_count]   = s.current_picture.ref_index[0][4*mb_xy];
 							pred_count++;
 
 							s.mv_dir = MpegEncContext.MV_DIR_FORWARD;
@@ -584,30 +586,30 @@ namespace cscodec.h243.decoder
 								s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index][1]
 									= mv[0][0][1]= mv_predictor[j][1];
 
-								if(ref[j]<0) //predictor intra or otherwise not available
+								if(@ref[j]<0) //predictor intra or otherwise not available
 									continue;
 
-								decode_mb(s, ref[j]);
+								decode_mb(s, @ref[j]);
 
-								if(mb_x>0 && fixed[mb_xy-1]!=0){
+								if(mb_x>0 && @fixed[mb_xy-1]!=0){
 									int k;
 									for(k=0; k<16; k++)
-										score += Math.abs(src_base[src_offset + k*s.linesize-1 ]-src_base[src_offset + k*s.linesize   ]);
+										score += Math.Abs(src_base[src_offset + k*s.linesize-1 ]-src_base[src_offset + k*s.linesize   ]);
 								}
-								if(mb_x+1<mb_width && fixed[mb_xy+1]!=0){
+								if(mb_x+1<mb_width && @fixed[mb_xy+1]!=0){
 									int k;
 									for(k=0; k<16; k++)
-										score += Math.abs(src_base[src_offset + k*s.linesize+15]-src_base[src_offset + k*s.linesize+16]);
+										score += Math.Abs(src_base[src_offset + k*s.linesize+15]-src_base[src_offset + k*s.linesize+16]);
 								}
-								if(mb_y>0 && fixed[mb_xy-mb_stride]!=0){
+								if(mb_y>0 && @fixed[mb_xy-mb_stride]!=0){
 									int k;
 									for(k=0; k<16; k++)
-										score += Math.abs(src_base[src_offset + k-s.linesize   ]-src_base[src_offset + k               ]);
+										score += Math.Abs(src_base[src_offset + k-s.linesize   ]-src_base[src_offset + k               ]);
 								}
-								if(mb_y+1<mb_height && fixed[mb_xy+mb_stride]!=0){
+								if(mb_y+1<mb_height && @fixed[mb_xy+mb_stride]!=0){
 									int k;
 									for(k=0; k<16; k++)
-										score += Math.abs(src_base[src_offset + k+s.linesize*15]-src_base[src_offset + k+s.linesize*16]);
+										score += Math.Abs(src_base[src_offset + k+s.linesize*15]-src_base[src_offset + k+s.linesize*16]);
 								}
 
 								if(score <= best_score){ // <= will favor the last MV
@@ -627,14 +629,14 @@ namespace cscodec.h243.decoder
 										= mv[0][0][1];
 								}
 
-							decode_mb(s, ref[best_pred]);
+							decode_mb(s, @ref[best_pred]);
 
 
 							if(mv[0][0][0] != prev_x || mv[0][0][1] != prev_y){
-								fixed[mb_xy]=MV_CHANGED;
+								@fixed[mb_xy]=MV_CHANGED;
 								changed++;
 							}else
-								fixed[mb_xy]=MV_UNCHANGED;
+								@fixed[mb_xy]=MV_UNCHANGED;
 						}
 					}
 
@@ -646,8 +648,8 @@ namespace cscodec.h243.decoder
 
 				for(i=0; i<s.mb_num; i++){
 					int mb_xy= s.mb_index2xy[i];
-					if(fixed[mb_xy]!=0)
-						fixed[mb_xy]=MV_FROZEN;
+					if(@fixed[mb_xy]!=0)
+						@fixed[mb_xy]=MV_FROZEN;
 				}
 	//	        printf(":"); fflush(stdout);
 			}
@@ -662,22 +664,22 @@ namespace cscodec.h243.decoder
 
 			s = 0;
 			for(i=0;i<h;i++) {
-				s += Math.abs(pix1_base[pix1_offset + 0] - pix2_base[pix2_offset + 0]);
-				s += Math.abs(pix1_base[pix1_offset + 1] - pix2_base[pix2_offset + 1]);
-				s += Math.abs(pix1_base[pix1_offset + 2] - pix2_base[pix2_offset + 2]);
-				s += Math.abs(pix1_base[pix1_offset + 3] - pix2_base[pix2_offset + 3]);
-				s += Math.abs(pix1_base[pix1_offset + 4] - pix2_base[pix2_offset + 4]);
-				s += Math.abs(pix1_base[pix1_offset + 5] - pix2_base[pix2_offset + 5]);
-				s += Math.abs(pix1_base[pix1_offset + 6] - pix2_base[pix2_offset + 6]);
-				s += Math.abs(pix1_base[pix1_offset + 7] - pix2_base[pix2_offset + 7]);
-				s += Math.abs(pix1_base[pix1_offset + 8] - pix2_base[pix2_offset + 8]);
-				s += Math.abs(pix1_base[pix1_offset + 9] - pix2_base[pix2_offset + 9]);
-				s += Math.abs(pix1_base[pix1_offset + 10] - pix2_base[pix2_offset + 10]);
-				s += Math.abs(pix1_base[pix1_offset + 11] - pix2_base[pix2_offset + 11]);
-				s += Math.abs(pix1_base[pix1_offset + 12] - pix2_base[pix2_offset + 12]);
-				s += Math.abs(pix1_base[pix1_offset + 13] - pix2_base[pix2_offset + 13]);
-				s += Math.abs(pix1_base[pix1_offset + 14] - pix2_base[pix2_offset + 14]);
-				s += Math.abs(pix1_base[pix1_offset + 15] - pix2_base[pix2_offset + 15]);
+				s += Math.Abs(pix1_base[pix1_offset + 0] - pix2_base[pix2_offset + 0]);
+				s += Math.Abs(pix1_base[pix1_offset + 1] - pix2_base[pix2_offset + 1]);
+				s += Math.Abs(pix1_base[pix1_offset + 2] - pix2_base[pix2_offset + 2]);
+				s += Math.Abs(pix1_base[pix1_offset + 3] - pix2_base[pix2_offset + 3]);
+				s += Math.Abs(pix1_base[pix1_offset + 4] - pix2_base[pix2_offset + 4]);
+				s += Math.Abs(pix1_base[pix1_offset + 5] - pix2_base[pix2_offset + 5]);
+				s += Math.Abs(pix1_base[pix1_offset + 6] - pix2_base[pix2_offset + 6]);
+				s += Math.Abs(pix1_base[pix1_offset + 7] - pix2_base[pix2_offset + 7]);
+				s += Math.Abs(pix1_base[pix1_offset + 8] - pix2_base[pix2_offset + 8]);
+				s += Math.Abs(pix1_base[pix1_offset + 9] - pix2_base[pix2_offset + 9]);
+				s += Math.Abs(pix1_base[pix1_offset + 10] - pix2_base[pix2_offset + 10]);
+				s += Math.Abs(pix1_base[pix1_offset + 11] - pix2_base[pix2_offset + 11]);
+				s += Math.Abs(pix1_base[pix1_offset + 12] - pix2_base[pix2_offset + 12]);
+				s += Math.Abs(pix1_base[pix1_offset + 13] - pix2_base[pix2_offset + 13]);
+				s += Math.Abs(pix1_base[pix1_offset + 14] - pix2_base[pix2_offset + 14]);
+				s += Math.Abs(pix1_base[pix1_offset + 15] - pix2_base[pix2_offset + 15]);
 				pix1_offset += line_size;
 				pix2_offset += line_size;
 			}
@@ -711,7 +713,7 @@ namespace cscodec.h243.decoder
 				return 1;
 			*/
 	    
-			skip_amount= Math.max(undamaged_count/50, 1); //check only upto 50 MBs
+			skip_amount= Math.Max(undamaged_count/50, 1); //check only upto 50 MBs
 			is_intra_likely=0;
 
 			j=0;
@@ -851,7 +853,7 @@ namespace cscodec.h243.decoder
 				for(i=0; i<2; i++){
 					//pic.ref_index[i]= av_mallocz(s.mb_stride * s.mb_height * 4 * sizeof(uint8_t));
 					pic.ref_index[i]= new int[s.mb_stride * s.mb_height * 4];
-					pic.motion_val_base[i]= new int[(size+4)][2];
+					pic.motion_val_base[i] = Arrays.Create2D<int>(size + 4, 2);
 					pic.motion_val_offset[i]= 4;
 				}
 				pic.motion_subsample_log2= 3;

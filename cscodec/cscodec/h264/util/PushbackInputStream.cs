@@ -20,7 +20,7 @@ namespace cscodec.h243.util
 		public int available() throws IOException {
 			if(buf == null)
 				throw new IOException();
-			return buf.length - pos + inputStream.available();		
+			return buf.Length - pos + inputStream.available();		
 		}
 	
 		public void close() throws IOException {
@@ -36,7 +36,7 @@ namespace cscodec.h243.util
 		public int read() throws IOException {
 			if(buf==null)
 				throw new IOException();
-			if(pos < buf.length)
+			if(pos < buf.Length)
 				return (buf[pos++] & 0xff);
 			return inputStream.read();
 		}
@@ -47,9 +47,9 @@ namespace cscodec.h243.util
 			int copiedBytes = 0;
 			int copyLength = 0;
 			int newOffset = offset;
-			if(pos < buf.length) {
-				copyLength = (buf.length - pos >= len)?len:buf.length - pos;
-				System.arraycopy(buf, pos, buffer, newOffset, copyLength);
+			if(pos < buf.Length) {
+				copyLength = (buf.Length - pos >= len)?len:buf.Length - pos;
+				Array.Copy(buf, pos, buffer, newOffset, copyLength);
 				newOffset += copyLength;
 				copiedBytes += copyLength;
 				pos += copyLength;
@@ -70,8 +70,8 @@ namespace cscodec.h243.util
 				throw new IOException();
 			if(count <= 0) return 0;
 			int numSkipped = 0;
-			if(pos < buf.length) {
-				numSkipped += (count < buf.length - pos)?count:buf.length - pos;
+			if(pos < buf.Length) {
+				numSkipped += (count < buf.Length - pos)?count:buf.Length - pos;
 				pos += numSkipped;
 			} // if
 			if(numSkipped < count)
@@ -80,13 +80,13 @@ namespace cscodec.h243.util
 		}
 	
 		public void unread(sbyte[] buffer) throws IOException {
-			unread(buffer,0,buffer.length);
+			unread(buffer,0,buffer.Length);
 		}
 	
 		public void unread(sbyte[] buffer, int offset, int length) throws IOException {
 			if(length > pos)
 				throw new IOException();
-			System.arraycopy(buffer, offset, buf, pos - length, length);
+			Array.Copy(buffer, offset, buf, pos - length, length);
 			pos =  pos - length;
 		}
 	

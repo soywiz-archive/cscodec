@@ -180,7 +180,7 @@ namespace cscodec.h243.decoder
 			this.index= re_index;
         
 			//return (NEG_USR32(sign ^ cache, n) ^ sign) - sign;
-			//System.out.println("get_xbit: "+ (( (((int)(sign ^ cache))>>(32-(n))) ^ sign) - sign) );
+			//Console.WriteLine("get_xbit: "+ (( (((int)(sign ^ cache))>>(32-(n))) ^ sign) - sign) );
 			return  ( (((int)(sign ^ cache))>>(32-(n))) ^ sign) - sign;
 		}
 
@@ -210,7 +210,7 @@ namespace cscodec.h243.decoder
 			//CLOSE_READER(re, s)
 			this.index= re_index;
 
-			//System.out.println("get_sbits: "+ (tmp) );        
+			//Console.WriteLine("get_sbits: "+ (tmp) );        
 			return tmp;
 		}
 
@@ -247,7 +247,7 @@ namespace cscodec.h243.decoder
 			//CLOSE_READER(re, s)
 			this.index= re_index;
 
-			//System.out.println("get_bits(,"+n+","+message+"): "+ (tmp) );        
+			//Console.WriteLine("get_bits(,"+n+","+message+"): "+ (tmp) );        
 			return tmp;
 		}
 
@@ -318,7 +318,7 @@ namespace cscodec.h243.decoder
 			index++;
 			this.index= index;
 
-			//System.out.println("get_bits1("+message+"): "+ ((result!=0)?1:0) );        
+			//Console.WriteLine("get_bits1("+message+"): "+ ((result!=0)?1:0) );        
 			return (result!=0)?1:0;
 		//#else
 		//    return get_bits(s, 1);
@@ -346,7 +346,7 @@ namespace cscodec.h243.decoder
 				long ret = get_bits(16, message) << (n-16);
 				long ret2 = get_bits(n-16, message);
 
-				////System.out.println("get_bits_long(,"+n+","+message+"): "+ (ret | get_bits(n-16, message)) );        
+				////Console.WriteLine("get_bits_long(,"+n+","+message+"): "+ (ret | get_bits(n-16, message)) );        
 				return (ret | ret2);
 	//    #endif
 			}
@@ -518,7 +518,7 @@ namespace cscodec.h243.decoder
 				code = codes_base[codes_offset + i].code;
 				symbol = codes_base[codes_offset + i].symbol;
 
-        		//System.out.println("i="+i+" n="+n+" code="+code);
+        		//Console.WriteLine("i="+i+" n="+n+" code="+code);
 
 				if (n <= table_nb_bits) {
 					/* no need to add another table */
@@ -533,10 +533,10 @@ namespace cscodec.h243.decoder
 					}
 					for (k = 0; k < nb; k++) {
                 	
-                		//System.out.println("["+j+"]: code="+i+" n="+n);
+                		//Console.WriteLine("["+j+"]: code="+i+" n="+n);
                     
 						if (table_base[(int)(table_offset + j)][1] /*bits*/ != 0) {
-                    		//System.out.println("incorrect codes.");
+                    		//Console.WriteLine("incorrect codes.");
 							return -1;
 						}
 						table_base[(int)(table_offset + j)][1] = (short)n; //bits
@@ -566,7 +566,7 @@ namespace cscodec.h243.decoder
 					j = ((flags & INIT_VLC_LE)!=0) ? (bitswap_32(code_prefix) >> (32 - table_nb_bits)) : code_prefix;
 					table_base[(int)(table_offset + j)][1] = (short)-subtable_bits;
 
-					//System.out.println("["+j+"]: n="+codes_base[codes_offset + i].bits + table_nb_bits+"(subtable)");
+					//Console.WriteLine("["+j+"]: n="+codes_base[codes_offset + i].bits + table_nb_bits+"(subtable)");
                 
 					index = build_table(vlc, subtable_bits, k-i, codes_base, codes_offset+i, flags);
 					if (index < 0)
@@ -692,7 +692,7 @@ namespace cscodec.h243.decoder
 			   re_cache >>= (n);
 			   re_index += (n);
 
-			  // //System.out.println("get_vlc2(,"+n+","+message+"): "+ code);           
+			  // //Console.WriteLine("get_vlc2(,"+n+","+message+"): "+ code);           
 		   }
 
 			//CLOSE_READER(re, s)
@@ -735,7 +735,7 @@ namespace cscodec.h243.decoder
 	//        	CLOSE_READER(re, gb);
 				this.index= re_index;
 
-				//System.out.println("get_ue_golomb(,"+ff_golomb_vlc_len[(int)buf]+","+message+"): "+ (ff_ue_golomb_vlc_code[(int)buf]) );        
+				//Console.WriteLine("get_ue_golomb(,"+ff_golomb_vlc_len[(int)buf]+","+message+"): "+ (ff_ue_golomb_vlc_code[(int)buf]) );        
 				return ff_ue_golomb_vlc_code[(int)buf];
 			}else{
 				log= 2*CAVLCContext.av_log2(buf) - 31;
@@ -747,7 +747,7 @@ namespace cscodec.h243.decoder
 	//            CLOSE_READER(re, gb);
 				this.index= re_index;
 
-				//System.out.println("get_ue_golomb(,"+(32 - log)+","+message+"): "+ ((int)buf) );                    
+				//Console.WriteLine("get_ue_golomb(,"+(32 - log)+","+message+"): "+ ((int)buf) );                    
 				return (int)buf;
 			}
 		}
@@ -784,7 +784,7 @@ namespace cscodec.h243.decoder
 	//        CLOSE_READER(re, gb);
 			this.index= re_index;
 
-			//System.out.println("get_ue_golomb_31(,"+(ff_golomb_vlc_len[(int)buf])+","+message+"): "+ (ff_ue_golomb_vlc_code[(int)buf]) );               
+			//Console.WriteLine("get_ue_golomb_31(,"+(ff_golomb_vlc_len[(int)buf])+","+message+"): "+ (ff_ue_golomb_vlc_code[(int)buf]) );               
 			return ff_ue_golomb_vlc_code[(int)buf];
 		}
 
@@ -820,7 +820,7 @@ namespace cscodec.h243.decoder
 	//	    	CLOSE_READER(re, gb);
 				this.index= re_index;
 
-				//System.out.println("get_se_golomb(,"+(ff_golomb_vlc_len[(int)buf])+","+message+"): "+ (ff_se_golomb_vlc_code[(int)buf]) );               	        
+				//Console.WriteLine("get_se_golomb(,"+(ff_golomb_vlc_len[(int)buf])+","+message+"): "+ (ff_se_golomb_vlc_code[(int)buf]) );               	        
 				return ff_se_golomb_vlc_code[(int)buf];
 			}else{
 				log= 2*CAVLCContext.av_log2(buf) - 31;
@@ -835,7 +835,7 @@ namespace cscodec.h243.decoder
 				if((buf&1)!=0) buf= -(buf>>1);
 				else      buf=  (buf>>1);
 
-				//System.out.println("get_se_golomb(,"+(32 - log)+","+message+"): "+ ((int)buf) );               	        	        
+				//Console.WriteLine("get_se_golomb(,"+(32 - log)+","+message+"): "+ ((int)buf) );               	        	        
 				return (int)buf;
 			}
 		}

@@ -44,7 +44,7 @@ namespace cscodec.h243.util
 		}
 	
 		public int read(sbyte b[]) {
-			int cnt =  inputStream.read(b, 0, b.length);
+			int cnt =  inputStream.read(b, 0, b.Length);
 			count += cnt;
 			byteCount += cnt;
 			return cnt;

@@ -1,3 +1,5 @@
+using cscodec.h243.util;
+using System;
 namespace cscodec.h243.decoder
 {
 	public class H264Context {
@@ -177,8 +179,8 @@ namespace cscodec.h243.decoder
 		/**
 		 * Motion vector cache.
 		 */
-		public int[,,] mv_cache = new int[2, 5*8, 2]; // DECLARE_ALIGNED(16, int16_t, mv_cache)[2][5*8][2];
-		public int[,] ref_cache = new int[2, 5*8]; // DECLARE_ALIGNED(8, int8_t, ref_cache)[2][5*8];
+		public int[][][] mv_cache = Arrays.Create3D<int>(2, 5 * 8, 2); // DECLARE_ALIGNED(16, int16_t, mv_cache)[2][5*8][2];
+		public int[][] ref_cache = Arrays.Create2D<int>(2, 5 * 8); // DECLARE_ALIGNED(8, int8_t, ref_cache)[2][5*8];
 
 		/**
 		 * is 1 if the specific list MV&references are set to 0,0,-2.
@@ -214,8 +216,8 @@ namespace cscodec.h243.decoder
 		 */
 		public PictureParameterSet pps = new PictureParameterSet(); //FIXME move to Picture perhaps? (->no) do we need that?
 
-		public long[][][] dequant4_buffer = new long[6][52][16]; // uint32_t dequant4_buffer[6][52][16]; //FIXME should these be moved down?
-		public long[][][] dequant8_buffer = new long[2][52][64]; // uint32_t dequant8_buffer[2][52][64];
+		public long[][][] dequant4_buffer = Arrays.Create3D<long>(6, 52, 16); // uint32_t dequant4_buffer[6][52][16]; //FIXME should these be moved down?
+		public long[][][] dequant8_buffer = Arrays.Create3D<long>(2, 52, 64); // uint32_t dequant8_buffer[2][52][64];
 		public long[][][] dequant4_coeff = new long[16][][]; // uint32_t (*dequant4_coeff[6])[16];
 		public long[][][] dequant8_coeff = new long[64][][]; // uint32_t (*dequant8_coeff[2])[64];	
 	
@@ -239,17 +241,17 @@ namespace cscodec.h243.decoder
 		public int luma_log2_weight_denom;
 		public int chroma_log2_weight_denom;
 		//The following 2 can be changed to int8_t but that causes 10cpu cycles speedloss
-		public int[,,] luma_weight = new int[48, 2, 2];
-		public int[,,,] chroma_weight = new int[48, 2, 2, 2];
-		public int[,,] implicit_weight = new int[48, 48, 2];
+		public int[][][] luma_weight = Arrays.Create3D<int>(48, 2, 2);
+		public int[][][][] chroma_weight = Arrays.Create4D<int>(48, 2, 2, 2);
+		public int[][][] implicit_weight = Arrays.Create3D<int>(48, 48, 2);
 
 		public int direct_spatial_mv_pred;
 		public int col_parity;
 		public int col_fieldoff;
 		public int[] dist_scale_factor = new int[16];
-		public int[][] dist_scale_factor_field = new int[2][32];
-		public int[][] map_col_to_list0 = new int[2][16+32];
-		public int[][][] map_col_to_list0_field = new int[2][2][16+32];
+		public int[][] dist_scale_factor_field = Arrays.Create2D<int>(2, 32);
+		public int[][] map_col_to_list0 = Arrays.Create2D<int>(2, 16 + 32);
+		public int[][][] map_col_to_list0_field = Arrays.Create3D<int>(2, 2, 16 + 32);
 
 		/**
 		 * num_ref_idx_l0/1_active_minus1 + 1
@@ -257,10 +259,10 @@ namespace cscodec.h243.decoder
 		public long[] ref_count = new long[2];   // unsigned int ref_count[2];   ///< counts frames or fields, depending on current mb mode
 		public long list_count;
 		public int[] list_counts;            ///< Array of list_count per MB specifying the slice type
-		public AVFrame[,] ref_list = new AVFrame[2,48];         /**< 0..15: frame refs, 16..47: mbaff field refs.
+		public AVFrame[][] ref_list = Arrays.Create2D<AVFrame>(2, 48);         /**< 0..15: frame refs, 16..47: mbaff field refs.
 											  Reordered version of default_ref_list
 											  according to picture reordering in slice header */
-		public int[,,] ref2frm = new int[MAX_SLICES, 2, 64];  ///< reference to frame number lists, used in the loop filter, the first 2 are for -2,-1
+		public int[][][] ref2frm = Arrays.Create3D<int>(MAX_SLICES, 2, 64);  ///< reference to frame number lists, used in the loop filter, the first 2 are for -2,-1
 
 		//data partitioning
 		public GetBitContext intra_gb;
@@ -270,7 +272,7 @@ namespace cscodec.h243.decoder
 
 		public short[] mb = new short[16*24];
 		public short[] mb_luma_dc = new short[16];
-		public short[][] mb_chroma_dc = new short[2][4];
+		public short[][] mb_chroma_dc = Arrays.Create2D<short>(2, 4);
 		public short[] mb_padding = new short[256];        ///< as mb is addressed by scantable[i] and scantable is uint8_t we can either check that i is not too large or ensure that there is some unused stuff after mb
 
 		/**
@@ -288,7 +290,7 @@ namespace cscodec.h243.decoder
 		public int[]     chroma_pred_mode_table; // uint8_t     *chroma_pred_mode_table;
 		public int         last_qscale_diff;
 		public int[][][]     mvd_table = new int[2][][]; // uint8_t     (*mvd_table[2])[2];
-		public int[][][] mvd_cache = new int[2][5*8][2]; // DECLARE_ALIGNED(16, uint8_t, mvd_cache)[2][5*8][2];
+		public int[][][] mvd_cache = Arrays.Create3D<int>(2, 5 * 8, 2); // DECLARE_ALIGNED(16, uint8_t, mvd_cache)[2][5*8][2];
 		public int[]     direct_table; // uint8_t     *direct_table;
 		public int[]     direct_cache = new int[5*8]; // uint8_t     direct_cache[5*8];
 
@@ -377,7 +379,7 @@ namespace cscodec.h243.decoder
 
 		public AVFrame[] short_ref = new AVFrame[32];
 		public AVFrame[] long_ref = new AVFrame[32];
-		public AVFrame[,] default_ref_list = new AVFrame[2, 32]; ///< base reference list for all slices of a coded picture
+		public AVFrame[][] default_ref_list = Arrays.Create2D<AVFrame>(2, 32); ///< base reference list for all slices of a coded picture
 		public AVFrame[] delayed_pic = new AVFrame[MAX_DELAYED_PIC_COUNT+2]; //FIXME size?
 		public int outputed_poc;
 
@@ -530,11 +532,12 @@ namespace cscodec.h243.decoder
 			};
 	
 		public const int[][] default_scaling4 = {
-			{   6,13,20,28,
+			new int[] {   6,13,20,28,
 			   13,20,28,32,
 			   20,28,32,37,
 			   28,32,37,42
-			},{
+			},
+			new int[] {
 			   10,14,20,24,
 			   14,20,24,27,
 			   20,24,27,30,
@@ -542,7 +545,7 @@ namespace cscodec.h243.decoder
 			}};
 
 		public const int[][] default_scaling8 = {
-			{   6,10,13,16,18,23,25,27,
+			new int[] {   6,10,13,16,18,23,25,27,
 			   10,11,16,18,23,25,27,29,
 			   13,16,18,23,25,27,29,31,
 			   16,18,23,25,27,29,31,33,
@@ -550,7 +553,8 @@ namespace cscodec.h243.decoder
 			   23,25,27,29,31,33,36,38,
 			   25,27,29,31,33,36,38,40,
 			   27,29,31,33,36,38,40,42
-			},{
+			},
+			new int[] {
 				9,13,15,17,19,21,22,24,
 			   13,13,17,19,21,22,24,25,
 			   15,17,19,21,22,24,25,27,
@@ -648,7 +652,7 @@ namespace cscodec.h243.decoder
 			int is_b8x8 = (mb_type&MB_TYPE_8x8)!=0?1:0;
 			int sub_mb_type= MB_TYPE_L0L1;
 			int i8, i4;
-			int[] ref = new int[2];
+			int[] @ref = new int[2];
 			int[] mv = new int[2];
 			int list;
 
@@ -666,21 +670,21 @@ namespace cscodec.h243.decoder
 					refc = this.ref_cache[list][scan8[0] - 8 - 1];
 					C    = this. mv_cache[list][scan8[0] - 8 - 1];
 				}
-				ref[list] = Math.min(left_ref, Math.min(top_ref, refc));
-				if(ref[list] >= 0){
+				@ref[list] = Math.Min(left_ref, Math.Min(top_ref, refc));
+				if(@ref[list] >= 0){
 					//this is just pred_motion() but with the cases removed that cannot happen for direct blocks
 					int[] A= this.mv_cache[list][ scan8[0] - 1 ];
 					int[] B= this.mv_cache[list][ scan8[0] - 8 ];
 
-					int match_count= ((left_ref==ref[list])?1:0) + ((top_ref==ref[list])?1:0) + ((refc==ref[list])?1:0);
+					int match_count= ((left_ref==@ref[list])?1:0) + ((top_ref==@ref[list])?1:0) + ((refc==@ref[list])?1:0);
 					if(match_count > 1){ //most common
 						mv[list]= pack16to32(mid_pred(A[0], B[0], C[0]),
 											 mid_pred(A[1], B[1], C[1]) );
 					}else {
 						//assert(match_count==1);
-						if(left_ref==ref[list]){
+						if(left_ref==@ref[list]){
 							mv[list]= ((A[1] & 0x0000FFFF) << 16) | (A[0] & 0x0000FFFF);//AV_RN32A(A);
-						}else if(top_ref==ref[list]){
+						}else if(top_ref==@ref[list]){
 							mv[list]= ((B[1] & 0x0000FFFF) << 16) | (B[0] & 0x0000FFFF);//AV_RN32A(B);
 						}else{
 							mv[list]= ((C[1] & 0x0000FFFF) << 16) | (C[0] & 0x0000FFFF);//AV_RN32A(C);
@@ -689,22 +693,22 @@ namespace cscodec.h243.decoder
 				}else{
 					int mask= ~(MB_TYPE_L0 << (2*list));
 					mv[list] = 0;
-					ref[list] = -1;
+					@ref[list] = -1;
 					if(is_b8x8 == 0)
 						mb_type &= mask;
 					sub_mb_type &= mask;
 				}
 			}
-			if(ref[0] < 0 && ref[1] < 0){
-				ref[0] = ref[1] = 0;
+			if(@ref[0] < 0 && @ref[1] < 0){
+				@ref[0] = @ref[1] = 0;
 				if(is_b8x8 == 0)
 					mb_type |= MB_TYPE_L0L1;
 				sub_mb_type |= MB_TYPE_L0L1;
 			}
 
 			if(0 == (is_b8x8|mv[0]|mv[1])){
-				Rectangle.fill_rectangle_sign(this.ref_cache[0], scan8[0], 4, 4, 8, (int)ref[0], 1);
-				Rectangle.fill_rectangle_sign(this.ref_cache[1], scan8[0], 4, 4, 8, (int)ref[1], 1);
+				Rectangle.fill_rectangle_sign(this.ref_cache[0], scan8[0], 4, 4, 8, (int)@ref[0], 1);
+				Rectangle.fill_rectangle_sign(this.ref_cache[1], scan8[0], 4, 4, 8, (int)@ref[1], 1);
 				Rectangle.fill_rectangle_mv_cache(this.mv_cache[0], scan8[0], 4, 4, 8, 0, 4);
 				Rectangle.fill_rectangle_mv_cache(this.mv_cache[1], scan8[0], 4, 4, 8, 0, 4);
 				mb_type= (mb_type & ~(MB_TYPE_8x8|MB_TYPE_16x8|MB_TYPE_8x16|MB_TYPE_P1L0|MB_TYPE_P1L1))|MB_TYPE_16x16|MB_TYPE_DIRECT2;
@@ -808,15 +812,15 @@ namespace cscodec.h243.decoder
 							continue;
 						this.sub_mb_type[i8] = sub_mb_type;
 
-						Rectangle.fill_rectangle_sign(this.ref_cache[0], scan8[i8*4], 2, 2, 8, (int)ref[0], 1);
-						Rectangle.fill_rectangle_sign(this.ref_cache[1], scan8[i8*4], 2, 2, 8, (int)ref[1], 1);
+						Rectangle.fill_rectangle_sign(this.ref_cache[0], scan8[i8*4], 2, 2, 8, (int)@ref[0], 1);
+						Rectangle.fill_rectangle_sign(this.ref_cache[1], scan8[i8*4], 2, 2, 8, (int)@ref[1], 1);
 						if(0 == (mb_type_col[y8] & 7) && 0 == this.ref_list[1][0].long_ref
-						   && (   (l1ref0_base[l1ref0_offset + xy8] == 0 && Math.abs(l1mv0_base[l1mv0_offset + xy4][0]) <= 1 && Math.abs(l1mv0_base[l1mv0_offset + xy4][1]) <= 1)
-							   || (l1ref0_base[l1ref0_offset + xy8]  < 0 && l1ref1_base[l1ref1_offset + xy8] == 0 && Math.abs(l1mv1_base[l1mv1_offset + xy4][0]) <= 1 && Math.abs(l1mv1_base[l1mv1_offset + xy4][1]) <= 1))){
+						   && (   (l1ref0_base[l1ref0_offset + xy8] == 0 && Math.Abs(l1mv0_base[l1mv0_offset + xy4][0]) <= 1 && Math.Abs(l1mv0_base[l1mv0_offset + xy4][1]) <= 1)
+							   || (l1ref0_base[l1ref0_offset + xy8]  < 0 && l1ref1_base[l1ref1_offset + xy8] == 0 && Math.Abs(l1mv1_base[l1mv1_offset + xy4][0]) <= 1 && Math.Abs(l1mv1_base[l1mv1_offset + xy4][1]) <= 1))){
 							a=b=0;
-							if(ref[0] > 0)
+							if(@ref[0] > 0)
 								a= mv[0];
-							if(ref[1] > 0)
+							if(@ref[1] > 0)
 								b= mv[1];
 							n++;
 						}else{
@@ -831,16 +835,16 @@ namespace cscodec.h243.decoder
 				}else if(0 != (mb_type&MB_TYPE_16x16)){
 					int a,b;
 
-					Rectangle.fill_rectangle_sign(this.ref_cache[0], scan8[0], 4, 4, 8, (int)ref[0], 1);
-					Rectangle.fill_rectangle_sign(this.ref_cache[1], scan8[0], 4, 4, 8, (int)ref[1], 1);
+					Rectangle.fill_rectangle_sign(this.ref_cache[0], scan8[0], 4, 4, 8, (int)@ref[0], 1);
+					Rectangle.fill_rectangle_sign(this.ref_cache[1], scan8[0], 4, 4, 8, (int)@ref[1], 1);
 					if(0==(mb_type_col[0] & 7) && 0==this.ref_list[1][0].long_ref
-					   && (   (l1ref0_base[l1ref0_offset + 0] == 0 && Math.abs(l1mv0_base[l1mv0_offset + 0][0]) <= 1 && Math.abs(l1mv0_base[l1mv0_offset + 0][1]) <= 1)
-						   || (l1ref0_base[l1ref0_offset + 0]  < 0 && l1ref1_base[l1ref1_offset + 0] == 0 && Math.abs(l1mv1_base[l1mv1_offset + 0][0]) <= 1 && Math.abs(l1mv1_base[l1mv1_offset + 0][1]) <= 1
+					   && (   (l1ref0_base[l1ref0_offset + 0] == 0 && Math.Abs(l1mv0_base[l1mv0_offset + 0][0]) <= 1 && Math.Abs(l1mv0_base[l1mv0_offset + 0][1]) <= 1)
+						   || (l1ref0_base[l1ref0_offset + 0]  < 0 && l1ref1_base[l1ref1_offset + 0] == 0 && Math.Abs(l1mv1_base[l1mv1_offset + 0][0]) <= 1 && Math.Abs(l1mv1_base[l1mv1_offset + 0][1]) <= 1
 							   && this.x264_build>33))){
 						a=b=0;
-						if(ref[0] > 0)
+						if(@ref[0] > 0)
 							a= mv[0];
-						if(ref[1] > 0)
+						if(@ref[1] > 0)
 							b= mv[1];
 					}else{
 						a= mv[0];
@@ -860,8 +864,8 @@ namespace cscodec.h243.decoder
 
 						Rectangle.fill_rectangle_mv_cache(this.mv_cache[0], scan8[i8*4], 2, 2, 8, mv[0], 4);
 						Rectangle.fill_rectangle_mv_cache(this.mv_cache[1], scan8[i8*4], 2, 2, 8, mv[1], 4);
-						Rectangle.fill_rectangle_sign(this.ref_cache[0], scan8[i8*4], 2, 2, 8, (int)ref[0], 1);
-						Rectangle.fill_rectangle_sign(this.ref_cache[1], scan8[i8*4], 2, 2, 8, (int)ref[1], 1);
+						Rectangle.fill_rectangle_sign(this.ref_cache[0], scan8[i8*4], 2, 2, 8, (int)@ref[0], 1);
+						Rectangle.fill_rectangle_sign(this.ref_cache[1], scan8[i8*4], 2, 2, 8, (int)@ref[1], 1);
 
 						//assert(b8_stride==2);
 						/* col_zero_flag */
@@ -872,10 +876,10 @@ namespace cscodec.h243.decoder
 							int l1mv_offset= l1ref0_base[l1ref0_offset + i8] == 0 ? l1mv0_offset : l1mv1_offset;
 							if(0 != (sub_mb_type & MB_TYPE_16x16)){
 								int[] mv_col = l1mv_base[l1mv_offset + x8*3 + y8*3*b4_stride];
-								if(Math.abs(mv_col[0]) <= 1 && Math.abs(mv_col[1]) <= 1){
-									if(ref[0] == 0)
+								if(Math.Abs(mv_col[0]) <= 1 && Math.Abs(mv_col[1]) <= 1){
+									if(@ref[0] == 0)
 	                            		Rectangle.fill_rectangle_mv_cache(this.mv_cache[0], scan8[i8*4], 2, 2, 8, 0, 4);
-									if(ref[1] == 0)
+									if(@ref[1] == 0)
 	                            		Rectangle.fill_rectangle_mv_cache(this.mv_cache[1], scan8[i8*4], 2, 2, 8, 0, 4);
 									n+=4;
 								}
@@ -883,11 +887,11 @@ namespace cscodec.h243.decoder
 								int m=0;
 							for(i4=0; i4<4; i4++){
 								int[] mv_col = l1mv_base[l1mv_offset + x8*2 + (i4&1) + (y8*2 + (i4>>1))*b4_stride];
-								if(Math.abs(mv_col[0]) <= 1 && Math.abs(mv_col[1]) <= 1){
-									if(ref[0] == 0)
+								if(Math.Abs(mv_col[0]) <= 1 && Math.Abs(mv_col[1]) <= 1){
+									if(@ref[0] == 0)
 	                            		Arrays.fill(this.mv_cache[0][scan8[i8*4+i4]], 0, 2, 0);
 										//AV_ZERO32(this.mv_cache[0][scan8[i8*4+i4]]);
-									if(ref[1] == 0)
+									if(@ref[1] == 0)
 	                            		Arrays.fill(this.mv_cache[1][scan8[i8*4+i4]], 0, 2, 0);
 	                            		//AV_ZERO32(this.mv_cache[1][scan8[i8*4+i4]]);
 									m++;
@@ -1076,11 +1080,11 @@ namespace cscodec.h243.decoder
 				/* one-to-one mv scaling */
 
 				if(0 != (mb_type & MB_TYPE_16x16)){
-					int ref, mv0, mv1;
+					int @ref, mv0, mv1;
 
 					Rectangle.fill_rectangle_sign(this.ref_cache[1], scan8[0], 4, 4, 8, 0, 1);
 					if(0 != (mb_type_col[0] & 7)){
-						ref=mv0=mv1=0;
+						@ref=mv0=mv1=0;
 					}else{
 						int ref0 = l1ref0_base[l1ref0_offset + 0] >= 0 ? map_col_to_list0[0][l1ref0_base[l1ref0_offset + 0] + ref_offset]
 														: map_col_to_list0[1][l1ref1_base[l1ref1_offset + 0] + ref_offset];
@@ -1089,11 +1093,11 @@ namespace cscodec.h243.decoder
 						int[] mv_l0 = new int[2];
 						mv_l0[0] = (scale * mv_col[0] + 128) >> 8;
 						mv_l0[1] = (scale * mv_col[1] + 128) >> 8;
-						ref= ref0;
+						@ref= ref0;
 						mv0= pack16to32(mv_l0[0],mv_l0[1]);
 						mv1= pack16to32(mv_l0[0]-mv_col[0],mv_l0[1]-mv_col[1]);
 					}
-					Rectangle.fill_rectangle_sign(this.ref_cache[0], scan8[0], 4, 4, 8, ref, 1);
+					Rectangle.fill_rectangle_sign(this.ref_cache[0], scan8[0], 4, 4, 8, @ref, 1);
 					Rectangle.fill_rectangle_mv_cache(this.mv_cache[0], scan8[0], 4, 4, 8, mv0, 4);
 					Rectangle.fill_rectangle_mv_cache(this.mv_cache[1], scan8[0], 4, 4, 8, mv1, 4);
 				}else{
@@ -1258,7 +1262,7 @@ namespace cscodec.h243.decoder
 		 * @param mx the x component of the predicted motion vector
 		 * @param my the y component of the predicted motion vector
 		 */
-		public void pred_motion(int n, int part_width, int list, int ref, int[] mxmy /* {mx, my} as inout param */){
+		public void pred_motion(int n, int part_width, int list, int @ref, int[] mxmy /* {mx, my} as inout param */){
 			int index8= scan8[n];
 			int top_ref=      this.ref_cache[list][ index8 - 8 ];
 			int left_ref=     this.ref_cache[list][ index8 - 1 ];
@@ -1280,16 +1284,16 @@ namespace cscodec.h243.decoder
 			int[][] pC = new int[][] { C };
 			diagonal_ref= fetch_diagonal_mv(pC, index8, list, part_width);
 			C = pC[0];
-			match_count= ((diagonal_ref==ref)?1:0) + ((top_ref==ref)?1:0) + ((left_ref==ref)?1:0);
+			match_count= ((diagonal_ref==@ref)?1:0) + ((top_ref==@ref)?1:0) + ((left_ref==@ref)?1:0);
 			//tprintf(this.s.avctx, "pred_motion match_count=%d\n", match_count);
 			if(match_count > 1){ //most common
 				mxmy[0]= mid_pred(A[0], B[0], C[0]);
 				mxmy[1]= mid_pred(A[1], B[1], C[1]);
 			}else if(match_count==1){
-				if(left_ref==ref){
+				if(left_ref==@ref){
 					mxmy[0]= A[0];
 					mxmy[1]= A[1];
-				}else if(top_ref==ref){
+				}else if(top_ref==@ref){
 	        		mxmy[0]= B[0];
 	        		mxmy[1]= B[1];
 				}else{
@@ -1314,14 +1318,14 @@ namespace cscodec.h243.decoder
 		 * @param mx the x component of the predicted motion vector
 		 * @param my the y component of the predicted motion vector
 		 */
-		public /*inline*/ void pred_16x8_motion(int n, int list, int ref, int[] mxmy){
+		public /*inline*/ void pred_16x8_motion(int n, int list, int @ref, int[] mxmy){
 			if(n==0){
 				int top_ref=      this.ref_cache[list][ scan8[0] - 8 ];
 				int[] B= this.mv_cache[list][ scan8[0] - 8 ];
 
 				//tprintf(this.s.avctx, "pred_16x8: (%2d %2d %2d) at %2d %2d %d list %d\n", top_ref, B[0], B[1], h->s.mb_x, h->s.mb_y, n, list);
 
-				if(top_ref == ref){
+				if(top_ref == @ref){
 					mxmy[0]= B[0];
 					mxmy[1]= B[1];
 					return;
@@ -1332,7 +1336,7 @@ namespace cscodec.h243.decoder
 
 				//tprintf(this.s.avctx, "pred_16x8: (%2d %2d %2d) at %2d %2d %d list %d\n", left_ref, A[0], A[1], h->s.mb_x, h->s.mb_y, n, list);
 
-				if(left_ref == ref){
+				if(left_ref == @ref){
 	        		mxmy[0]= A[0];
 	        		mxmy[1]= A[1];
 					return;
@@ -1340,7 +1344,7 @@ namespace cscodec.h243.decoder
 			}
 
 			//RARE
-			pred_motion(n, 4, list, ref, mxmy);
+			pred_motion(n, 4, list, @ref, mxmy);
 		}
 	
 		/**
@@ -1349,14 +1353,14 @@ namespace cscodec.h243.decoder
 		 * @param mx the x component of the predicted motion vector
 		 * @param my the y component of the predicted motion vector
 		 */
-		public /*inline*/ void pred_8x16_motion(int n, int list, int ref, int[] mxmy) {
+		public /*inline*/ void pred_8x16_motion(int n, int list, int @ref, int[] mxmy) {
 			if(n==0){
 				int left_ref=      this.ref_cache[list][ scan8[0] - 1 ];
 				int[] A=  this.mv_cache[list][ scan8[0] - 1 ];
 
 				//tprintf(this.s.avctx, "pred_8x16: (%2d %2d %2d) at %2d %2d %d list %d\n", left_ref, A[0], A[1], h->s.mb_x, h->s.mb_y, n, list);
 
-				if(left_ref == ref){
+				if(left_ref == @ref){
 	        		mxmy[0]= A[0];
 	        		mxmy[1]= A[1];
 					return;
@@ -1370,7 +1374,7 @@ namespace cscodec.h243.decoder
 
 				//tprintf(this.s.avctx, "pred_8x16: (%2d %2d %2d) at %2d %2d %d list %d\n", diagonal_ref, C[0], C[1], h->s.mb_x, h->s.mb_y, n, list);
 
-				if(diagonal_ref == ref){
+				if(diagonal_ref == @ref){
 					mxmy[0]= C[0];
 					mxmy[1]= C[1];
 					return;
@@ -1378,7 +1382,7 @@ namespace cscodec.h243.decoder
 			}
 
 			//RARE
-			pred_motion(n, 2, list, ref, mxmy);
+			pred_motion(n, 2, list, @ref, mxmy);
 		}
 			
 		public void fill_decode_neighbors(int mb_type) {
@@ -1386,10 +1390,10 @@ namespace cscodec.h243.decoder
 			int topleft_xy, top_xy, topright_xy;
 			int[] left_xy = new int[2];
 			int[][] left_block_options = {
-				{0,1,2,3,7,10,8,11,7+0*8, 7+1*8, 7+2*8, 7+3*8, 2+0*8, 2+3*8, 2+1*8, 2+2*8},
-				{2,2,3,3,8,11,8,11,7+2*8, 7+2*8, 7+3*8, 7+3*8, 2+1*8, 2+2*8, 2+1*8, 2+2*8},
-				{0,0,1,1,7,10,7,10,7+0*8, 7+0*8, 7+1*8, 7+1*8, 2+0*8, 2+3*8, 2+0*8, 2+3*8},
-				{0,2,0,2,7,10,7,10,7+0*8, 7+2*8, 7+0*8, 7+2*8, 2+0*8, 2+3*8, 2+0*8, 2+3*8}
+				new int[]{0,1,2,3,7,10,8,11,7+0*8, 7+1*8, 7+2*8, 7+3*8, 2+0*8, 2+3*8, 2+1*8, 2+2*8},
+				new int[]{2,2,3,3,8,11,8,11,7+2*8, 7+2*8, 7+3*8, 7+3*8, 2+1*8, 2+2*8, 2+1*8, 2+2*8},
+				new int[]{0,0,1,1,7,10,7,10,7+0*8, 7+0*8, 7+1*8, 7+1*8, 2+0*8, 2+3*8, 2+0*8, 2+3*8},
+				new int[]{0,2,0,2,7,10,7,10,7+0*8, 7+2*8, 7+0*8, 7+2*8, 2+0*8, 2+3*8, 2+0*8, 2+3*8}
 			};
 
 			this.topleft_partition= -1;
@@ -1421,9 +1425,9 @@ namespace cscodec.h243.decoder
 					}
 				}else{
 					if(curr_mb_field_flag != 0){
-						topleft_xy  += s.mb_stride & (((s.current_picture.mb_type_base[s.current_picture.mb_type_offset + top_xy - 1]>>7)&1)-1);
-						topright_xy += s.mb_stride & (((s.current_picture.mb_type_base[s.current_picture.mb_type_offset + top_xy + 1]>>7)&1)-1);
-						top_xy      += s.mb_stride & (((s.current_picture.mb_type_base[s.current_picture.mb_type_offset + top_xy    ]>>7)&1)-1);
+						topleft_xy  += (int)(s.mb_stride & (((s.current_picture.mb_type_base[s.current_picture.mb_type_offset + top_xy - 1]>>7)&1)-1));
+						topright_xy += (int)(s.mb_stride & (((s.current_picture.mb_type_base[s.current_picture.mb_type_offset + top_xy + 1]>>7)&1)-1));
+						top_xy      += (int)(s.mb_stride & (((s.current_picture.mb_type_base[s.current_picture.mb_type_offset + top_xy    ]>>7)&1)-1));
 					}
 					if (left_mb_field_flag != curr_mb_field_flag) {
 						if (curr_mb_field_flag != 0) {
@@ -1673,8 +1677,8 @@ namespace cscodec.h243.decoder
 							int b8_xy= 4*left_xy[i] + 1;
 							//AV_COPY32(this.mv_cache[list][cache_idx  ], s.current_picture.motion_val[list][b_xy + this.b_stride*left_block[0+i*2]]);
 							//AV_COPY32(this.mv_cache[list][cache_idx+8], s.current_picture.motion_val[list][b_xy + this.b_stride*left_block[1+i*2]]);
-							System.arraycopy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list] +b_xy + this.b_stride*left_block[0+i*2]], 0, this.mv_cache[list][cache_idx  ], 0, 2);
-							System.arraycopy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list] +b_xy + this.b_stride*left_block[1+i*2]], 0, this.mv_cache[list][cache_idx+8], 0, 2);
+							Array.Copy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list] +b_xy + this.b_stride*left_block[0+i*2]], 0, this.mv_cache[list][cache_idx  ], 0, 2);
+							Array.Copy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list] +b_xy + this.b_stride*left_block[1+i*2]], 0, this.mv_cache[list][cache_idx+8], 0, 2);
 							this.ref_cache[list][cache_idx  ]= s.current_picture.ref_index[list][b8_xy + (left_block[0+i*2]&~1)];
 							this.ref_cache[list][cache_idx+8]= s.current_picture.ref_index[list][b8_xy + (left_block[1+i*2]&~1)];
 						}else{
@@ -1693,7 +1697,7 @@ namespace cscodec.h243.decoder
 							int b_xy= (int)this.mb2b_xy[left_xy[0]] + 3;
 							int b8_xy= 4*left_xy[0] + 1;
 							//AV_COPY32(this.mv_cache[list][scan8[0] - 1], s.current_picture.motion_val[list][b_xy + this.b_stride*left_block[0]]);
-							System.arraycopy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list] + b_xy + this.b_stride*left_block[0]],0,this.mv_cache[list][scan8[0] - 1],0,2);
+							Array.Copy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list] + b_xy + this.b_stride*left_block[0]],0,this.mv_cache[list][scan8[0] - 1],0,2);
 
 							this.ref_cache[list][scan8[0] - 1]= s.current_picture.ref_index[list][b8_xy + (left_block[0]&~1)];
 						}else{
@@ -1707,7 +1711,7 @@ namespace cscodec.h243.decoder
 	            			){
 						int b_xy= (int)this.mb2b_xy[topright_xy] + 3*this.b_stride;
 						//AV_COPY32(this.mv_cache[list][scan8[0] + 4 - 1*8], s.current_picture.motion_val[list][b_xy]);
-						System.arraycopy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list] + b_xy], 0, this.mv_cache[list][scan8[0] + 4 - 1*8], 0, 2);
+						Array.Copy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list] + b_xy], 0, this.mv_cache[list][scan8[0] + 4 - 1*8], 0, 2);
 						this.ref_cache[list][scan8[0] + 4 - 1*8]= s.current_picture.ref_index[list][4*topright_xy + 2];
 					}else{
 						//AV_ZERO32(this.mv_cache [list][scan8[0] + 4 - 1*8]);
@@ -1720,7 +1724,7 @@ namespace cscodec.h243.decoder
 							int b_xy = (int)this.mb2b_xy [topleft_xy] + 3 + this.b_stride + (this.topleft_partition & 2*this.b_stride);
 							int b8_xy= 4*topleft_xy + 1 + (this.topleft_partition & 2);
 							//AV_COPY32(this.mv_cache[list][scan8[0] - 1 - 1*8], s.current_picture.motion_val[list][b_xy]);
-							System.arraycopy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list] + b_xy], 0, this.mv_cache[list][scan8[0] - 1 - 1*8], 0, 2);
+							Array.Copy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list] + b_xy], 0, this.mv_cache[list][scan8[0] - 1 - 1*8], 0, 2);
 							this.ref_cache[list][scan8[0] - 1 - 1*8]= s.current_picture.ref_index[list][b8_xy];
 						}else{
 							//AV_ZERO32(this.mv_cache[list][scan8[0] - 1 - 1*8]);
@@ -1895,11 +1899,11 @@ namespace cscodec.h243.decoder
 			*/
 			//// DebugTool.dumpDebugFrameData(this, "BEFORE-write_back_non_zero_count");
 	    
-			System.arraycopy(non_zero_count_cache, 0+8*1, non_zero_count[mb_xy], 0, 8);
-			System.arraycopy(non_zero_count_cache, 0+8*2, non_zero_count[mb_xy], 8, 8);
-			System.arraycopy(non_zero_count_cache, 0+8*5, non_zero_count[mb_xy], 16, 4);
-			System.arraycopy(non_zero_count_cache, 4+8*3, non_zero_count[mb_xy], 20, 4);
-			System.arraycopy(non_zero_count_cache, 0+8*4, non_zero_count[mb_xy], 24, 8);	
+			Array.Copy(non_zero_count_cache, 0+8*1, non_zero_count[mb_xy], 0, 8);
+			Array.Copy(non_zero_count_cache, 0+8*2, non_zero_count[mb_xy], 8, 8);
+			Array.Copy(non_zero_count_cache, 0+8*5, non_zero_count[mb_xy], 16, 4);
+			Array.Copy(non_zero_count_cache, 4+8*3, non_zero_count[mb_xy], 20, 4);
+			Array.Copy(non_zero_count_cache, 0+8*4, non_zero_count[mb_xy], 24, 8);	
 	    
 			//// DebugTool.dumpDebugFrameData(this, "AFTER-write_back_non_zero_count");
 
@@ -1956,10 +1960,10 @@ namespace cscodec.h243.decoder
 						//AV_COPY16(mvd_dst + 3 + 2, mvd_src + 3 + 8*1);
 						//AV_COPY16(mvd_dst + 3 + 1, mvd_src + 3 + 8*2);
 	            		for(int k=0;k<4;k++)
-	            			System.arraycopy(mvd_src_base[mvd_src_offset + 8*3 +k],0, mvd_dst_base[mvd_dst_offset +k], 0, 2);
-	            		System.arraycopy(mvd_src_base[mvd_src_offset + 3 + 8*0],0, mvd_dst_base[mvd_dst_offset + 3 + 3],0, 2);
-	            		System.arraycopy(mvd_src_base[mvd_src_offset + 3 + 8*1],0, mvd_dst_base[mvd_dst_offset + 3 + 2],0, 2);
-	            		System.arraycopy(mvd_src_base[mvd_src_offset + 3 + 8*2],0, mvd_dst_base[mvd_dst_offset + 3 + 1],0, 2);
+	            			Array.Copy(mvd_src_base[mvd_src_offset + 8*3 +k],0, mvd_dst_base[mvd_dst_offset +k], 0, 2);
+	            		Array.Copy(mvd_src_base[mvd_src_offset + 3 + 8*0],0, mvd_dst_base[mvd_dst_offset + 3 + 3],0, 2);
+	            		Array.Copy(mvd_src_base[mvd_src_offset + 3 + 8*1],0, mvd_dst_base[mvd_dst_offset + 3 + 2],0, 2);
+	            		Array.Copy(mvd_src_base[mvd_src_offset + 3 + 8*2],0, mvd_dst_base[mvd_dst_offset + 3 + 1],0, 2);
 					}
 				}
 
@@ -1988,7 +1992,7 @@ namespace cscodec.h243.decoder
 			int index8= scan8[n];
 			int left= this.intra4x4_pred_mode_cache[index8 - 1];
 			int top = this.intra4x4_pred_mode_cache[index8 - 8];
-			int min= Math.min(left, top);
+			int min= Math.Min(left, top);
 
 			//tprintf(this.s.avctx, "mode:%d %d min:%d\n", left ,top, min);
 			if(min<0) return H264PredictionContext.DC_PRED;
@@ -2000,7 +2004,7 @@ namespace cscodec.h243.decoder
 			int[] mode_base = this.intra4x4_pred_mode;
 			int mode_offset = (int)this.mb2br_xy[this.mb_xy];
 			//AV_COPY32(mode, this.intra4x4_pred_mode_cache + 4 + 8*4);
-			System.arraycopy(this.intra4x4_pred_mode_cache, 4 + 8*4, mode_base, mode_offset, 4);
+			Array.Copy(this.intra4x4_pred_mode_cache, 4 + 8*4, mode_base, mode_offset, 4);
 			mode_base[mode_offset + 4]= this.intra4x4_pred_mode_cache[7+8*3];
 			mode_base[mode_offset + 5]= this.intra4x4_pred_mode_cache[7+8*2];
 			mode_base[mode_offset + 6]= this.intra4x4_pred_mode_cache[7+8*1];
@@ -2027,7 +2031,7 @@ namespace cscodec.h243.decoder
 			}
 
 			if((this.left_samples_available&0x08888)!=0x08888){
-				final int[] mask={0x08000,0x02000,0x080,0x020};
+				int[] mask={0x08000,0x02000,0x080,0x020};
 				for(i=0; i<4; i++){
 					if(0==(this.left_samples_available&mask[i])){
 						int status= left[ this.intra4x4_pred_mode_cache[scan8[0] + 8*i] ];
@@ -2100,12 +2104,12 @@ namespace cscodec.h243.decoder
 						top_border_base = this.top_borders[0][s.mb_x];
 						top_border_offset = 0;
 						//AV_COPY128(top_border, src_y + 15*linesize);
-						System.arraycopy(src_y_base, src_y_offset + 15*linesize, top_border_base, top_border_offset, 16);
+						Array.Copy(src_y_base, src_y_offset + 15*linesize, top_border_base, top_border_offset, 16);
 						//if(0!=simple || 0==MpegEncContext.CONFIG_GRAY || 0==(s.flags&MpegEncContext.CODEC_FLAG_GRAY)){
 							//AV_COPY64(top_border+16, src_cb+7*uvlinesize);
 							//AV_COPY64(top_border+24, src_cr+7*uvlinesize);
-							System.arraycopy(src_cb_base, src_cb_offset + 7*uvlinesize, top_border_base, top_border_offset + 16, 8);
-							System.arraycopy(src_cr_base, src_cr_offset + 7*uvlinesize, top_border_base, top_border_offset + 24, 8);
+							Array.Copy(src_cb_base, src_cb_offset + 7*uvlinesize, top_border_base, top_border_offset + 16, 8);
+							Array.Copy(src_cr_base, src_cr_offset + 7*uvlinesize, top_border_base, top_border_offset + 24, 8);
 						//}
 					}
 				}else if(0!=mb_mbaff){
@@ -2119,13 +2123,13 @@ namespace cscodec.h243.decoder
 			// There are two lines saved, the line above the the top macroblock of a pair,
 			// and the line above the bottom macroblock
 			//AV_COPY128(top_border, src_y + 16*linesize);
-			System.arraycopy(src_y_base, src_y_offset + 16*linesize, top_border_base, top_border_offset, 16);
+			Array.Copy(src_y_base, src_y_offset + 16*linesize, top_border_base, top_border_offset, 16);
 
 			//if(0!=simple || 0==MpegEncContext.CONFIG_GRAY || 0==(s.flags&MpegEncContext.CODEC_FLAG_GRAY)){
 				//AV_COPY64(top_border+16, src_cb+8*uvlinesize);
 				//AV_COPY64(top_border+24, src_cr+8*uvlinesize);
-				System.arraycopy(src_cb_base, src_cb_offset + 8*uvlinesize, top_border_base, top_border_offset + 16, 8);
-				System.arraycopy(src_cr_base, src_cr_offset + 8*uvlinesize, top_border_base, top_border_offset + 24, 8);
+				Array.Copy(src_cb_base, src_cb_offset + 8*uvlinesize, top_border_base, top_border_offset + 16, 8);
+				Array.Copy(src_cr_base, src_cr_offset + 8*uvlinesize, top_border_base, top_border_offset + 24, 8);
 			//}
 		}
 	
@@ -2146,7 +2150,7 @@ namespace cscodec.h243.decoder
 			int top_border_offset = 0;
 			int tmp;
 	    
-			////System.out.println("XChgBorder["+s.mb_x+","+s.mb_y+"]");
+			////Console.WriteLine("XChgBorder["+s.mb_x+","+s.mb_y+"]");
 
 			if(0==simple && 0!=mb_aff_frame){
 				if(0!=(s.mb_y&1)){
@@ -2258,7 +2262,7 @@ namespace cscodec.h243.decoder
 			int[] block_offset_base = this.block_offset;
 			int block_offset_offset = 0;
 
-			boolean transform_bypass = ((0==simple) && (s.qscale == 0 && this.sps.transform_bypass!=0));
+			bool transform_bypass = ((0==simple) && (s.qscale == 0 && this.sps.transform_bypass!=0));
 			/* is_h264 should always be true if SVQ3 is disabled. */
 			int is_h264 = 1; //!CONFIG_SVQ3_DECODER || simple || s.codec_id == CODEC_ID_H264;
 	    
@@ -2304,9 +2308,9 @@ namespace cscodec.h243.decoder
 							Rectangle.fill_rectangle_sign(ref_base, ref_offset, 4, 4, 8, (16+ref_base[ref_offset])^(s.mb_y&1), 1);
 						}else{
 							for(i=0; i<16; i+=4){
-								int ref = this.ref_cache[list][scan8[i]];
-								if(ref >= 0)
-									Rectangle.fill_rectangle_sign(this.ref_cache[list], scan8[i], 2, 2, 8, (16+ref)^(s.mb_y&1), 1);
+								int @ref = this.ref_cache[list][scan8[i]];
+								if(@ref >= 0)
+									Rectangle.fill_rectangle_sign(this.ref_cache[list], scan8[i], 2, 2, 8, (16+@ref)^(s.mb_y&1), 1);
 							}
 						}
 					}
@@ -2462,7 +2466,7 @@ namespace cscodec.h243.decoder
 								else{
 									//uint8_t dc_mapping[16] = { 0*16, 1*16, 4*16, 5*16, 2*16, 3*16, 6*16, 7*16,
 									//                                        8*16, 9*16,12*16,13*16,10*16,11*16,14*16,15*16};
-									final int[] dc_mapping = { 0*16, 1*16, 4*16, 5*16, 2*16, 3*16, 6*16, 7*16,
+									int[] dc_mapping = { 0*16, 1*16, 4*16, 5*16, 2*16, 3*16, 6*16, 7*16,
 																			8*16, 9*16,12*16,13*16,10*16,11*16,14*16,15*16};
 									for(i = 0; i < 16; i++)
 										this.mb[dc_mapping[i]] = this.mb_luma_dc[i];
@@ -2571,7 +2575,7 @@ namespace cscodec.h243.decoder
 		public void ff_h264_hl_decode_mb(){
 			int mb_xy= this.mb_xy;
 			int mb_type= (int)s.current_picture.mb_type_base[s.current_picture.mb_type_offset + mb_xy];
-			boolean is_complex = /*CONFIG_SMALL || */(this.is_complex !=0)|| (mb_type & MB_TYPE_INTRA_PCM)!=0 || s.qscale == 0;
+			bool is_complex = /*CONFIG_SMALL || */(this.is_complex !=0)|| (mb_type & MB_TYPE_INTRA_PCM)!=0 || s.qscale == 0;
 
 			if (is_complex)
 	    		hl_decode_mb_internal(0); //hl_decode_mb_complex();
@@ -2586,7 +2590,7 @@ namespace cscodec.h243.decoder
 			int mb_type=0;
 
 			Arrays.fill(non_zero_count[mb_xy], 0); // Fill 32 integers
-			Arrays.fill(non_zero_count_cache, 8, non_zero_count_cache.length, 0); // Fill 8*5 integers
+			Arrays.fill(non_zero_count_cache, 8, non_zero_count_cache.Length, 0); // Fill 8*5 integers
 
 			// DebugTool.dumpDebugFrameData(this, "Reset non_zero_count_cache to 0s.", false);
 
@@ -2673,11 +2677,11 @@ namespace cscodec.h243.decoder
 			5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8
 		};
 
-		const int[][] significant_coeff_flag_offset = {
+		const int[,] significant_coeff_flag_offset = {
 			  { 105+0, 105+15, 105+29, 105+44, 105+47, 402 },
 			  { 277+0, 277+15, 277+29, 277+44, 277+47, 436 }
 			};
-		const int[][] last_coeff_flag_offset = {
+		const int[,] last_coeff_flag_offset = {
 		  { 166+0, 166+15, 166+29, 166+44, 166+47, 417 },
 		  { 338+0, 338+15, 338+29, 338+44, 338+47, 451 }
 		};
@@ -2685,11 +2689,11 @@ namespace cscodec.h243.decoder
 			227+0, 227+10, 227+20, 227+30, 227+39, 426
 		};
 		const short[][] significant_coeff_flag_offset_8x8 = {
-		  { 0, 1, 2, 3, 4, 5, 5, 4, 4, 3, 3, 4, 4, 4, 5, 5,
+		  new short[] { 0, 1, 2, 3, 4, 5, 5, 4, 4, 3, 3, 4, 4, 4, 5, 5,
 			4, 4, 4, 4, 3, 3, 6, 7, 7, 7, 8, 9,10, 9, 8, 7,
 			7, 6,11,12,13,11, 6, 7, 8, 9,14,10, 9, 8, 6,11,
 		   12,13,11, 6, 9,14,10, 9,11,12,13,11,14,10,12 },
-		  { 0, 1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 7, 7, 8, 4, 5,
+		  new short[] { 0, 1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 7, 7, 8, 4, 5,
 			6, 9,10,10, 8,11,12,11, 9, 9,10,10, 8,11,12,11,
 			9, 9,10,10, 8,11,12,11, 9, 9,10,10, 8,13,13, 9,
 			9,10,10, 8,13,13, 9, 9,10,10,14,14,14,14,14 }
@@ -2702,9 +2706,9 @@ namespace cscodec.h243.decoder
 		const short[] coeff_abs_levelgt1_ctx = { 5, 5, 5, 5, 6, 7, 8, 9 };
 		const short[][] coeff_abs_level_transition = {
 		/* update node ctx after decoding a level=1 */
-			{ 1, 2, 3, 3, 4, 5, 6, 7 },
+			new short[]{ 1, 2, 3, 3, 4, 5, 6, 7 },
 		/* update node ctx after decoding a level>1 */
-			{ 4, 4, 4, 4, 5, 6, 7, 7 }
+			new short[]{ 4, 4, 4, 4, 5, 6, 7, 7 }
 		};
 
 		public /* inline */ int get_dct8x8_allowed(){
@@ -2936,7 +2940,7 @@ namespace cscodec.h243.decoder
 				if( 0 == ( ( top_type-1 )  & MB_TYPE_DIRECT2 ) )
 					ctx++;
 
-				boolean goto_decode_intra_mb = false;
+				bool goto_decode_intra_mb = false;
 				if( 0 == cabac.get_cabac_noinline( cabac_state, 27+ctx ) ){
 					mb_type= 0; /* B_Direct_16x16 */
 				}else if( 0 == cabac.get_cabac_noinline( cabac_state, 27+3 ) ) {
@@ -3093,7 +3097,7 @@ namespace cscodec.h243.decoder
 				int i, j; 
 				int[] sub_partition_count = new int[4];
 				int list;
-				int[][] ref = new int[2][4];
+				int[][] @ref = Arrays.Create2D<int>(2, 4);
 
 				if( slice_type_nos == FF_B_TYPE ) {
 					for( i = 0; i < 4; i++ ) {
@@ -3124,18 +3128,18 @@ namespace cscodec.h243.decoder
 							if((sub_mb_type[i] & MB_TYPE_DIRECT2) != 0) continue;
 							if(((sub_mb_type[i]) & (MB_TYPE_P0L0<<((0)+2*(list)) ) ) !=0) {
 								if( ref_count[list] > 1 ){
-									ref[list][i] = cabac.decode_cabac_mb_ref( this, list, 4*i );
-									if(ref[list][i] >= (int)ref_count[list]){
+									@ref[list][i] = cabac.decode_cabac_mb_ref( this, list, 4*i );
+									if(@ref[list][i] >= (int)ref_count[list]){
 									   // av_log(s.avctx, AV_LOG_ERROR, "Reference %d >= %d\n", ref[list][i], h->ref_count[list]);
 										return -1;
 									}
 								}else
-									ref[list][i] = 0;
+									@ref[list][i] = 0;
 							} else {
-								ref[list][i] = -1;
+								@ref[list][i] = -1;
 							}
 															   ref_cache[list][ scan8[4*i]+1 ]=
-							ref_cache[list][ scan8[4*i]+8 ]=ref_cache[list][ scan8[4*i]+9 ]= ref[list][i];
+							ref_cache[list][ scan8[4*i]+8 ]=ref_cache[list][ scan8[4*i]+9 ]= @ref[list][i];
 						}
 				}
 
@@ -3153,8 +3157,8 @@ namespace cscodec.h243.decoder
 
 						if( ((sub_mb_type[i]) & (MB_TYPE_P0L0<<((0)+2*(list)))) != 0 
 	                			&& ((sub_mb_type[i]&MB_TYPE_DIRECT2) == 0)){
-							int sub_mb_type= this.sub_mb_type[i];
-							int block_width= (sub_mb_type & (MB_TYPE_16x16|MB_TYPE_16x8))!=0 ? 2 : 1;
+							int _sub_mb_type= this.sub_mb_type[i];
+							int block_width= (_sub_mb_type & (MB_TYPE_16x16|MB_TYPE_16x8))!=0 ? 2 : 1;
 							for(j=0; j<sub_partition_count[i]; j++){
 								int mpx=0, mpy=0;
 								int mx=0, my=0;
@@ -3185,7 +3189,7 @@ namespace cscodec.h243.decoder
          
 								//tprintf(s.avctx, "final mv:%d %d\n", mx, my);
 
-								if(((sub_mb_type)&MB_TYPE_16x16)!=0) {
+								if(((_sub_mb_type)&MB_TYPE_16x16)!=0) {
 									mv_cache_base[mv_cache_offset + 1 ][0]=
 									mv_cache_base[mv_cache_offset + 8 ][0]= mv_cache_base[mv_cache_offset + 9 ][0]= mx;
 									mv_cache_base[mv_cache_offset + 1 ][1]=
@@ -3197,7 +3201,7 @@ namespace cscodec.h243.decoder
 									mvd_cache_base[mvd_cache_offset + 8 ][0]= mvd_cache_base[mvd_cache_offset + 9 ][0]= mpx;
 									mvd_cache_base[mvd_cache_offset + 1 ][1]=
 									mvd_cache_base[mvd_cache_offset + 8 ][1]= mvd_cache_base[mvd_cache_offset + 9 ][1]= mpy;
-								}else if(((sub_mb_type)&MB_TYPE_16x8)!=0) {
+								}else if(((_sub_mb_type)&MB_TYPE_16x8)!=0) {
 	                        		mv_cache_base[mv_cache_offset + 1 ][0]= mx;
 	                        		mv_cache_base[mv_cache_offset + 1 ][1]= my;
 
@@ -3205,7 +3209,7 @@ namespace cscodec.h243.decoder
 	    	                	
 	                        		mvd_cache_base[mvd_cache_offset + 1 ][0]=  mpx;
 	                        		mvd_cache_base[mvd_cache_offset + 1 ][1]= mpy;
-								}else if(((sub_mb_type)&MB_TYPE_8x16)!=0) {
+								}else if(((_sub_mb_type)&MB_TYPE_8x16)!=0) {
 	                        	
 	                        		mv_cache_base[mv_cache_offset + 8 ][0]= mx;
 	                        		mv_cache_base[mv_cache_offset + 8 ][1]= my;
@@ -3245,16 +3249,16 @@ namespace cscodec.h243.decoder
 				if((mb_type&MB_TYPE_16x16) != 0){
 					for(list=0; list<list_count; list++){
 	            		if(((mb_type) & (MB_TYPE_P0L0<<((0)+2*(list)))) != 0) {
-							int ref;
+							int @ref;
 							if(ref_count[list] > 1){
-								ref= cabac.decode_cabac_mb_ref(this, list, 0);
-								if(ref >= (int)ref_count[list]){
+								@ref= cabac.decode_cabac_mb_ref(this, list, 0);
+								if(@ref >= (int)ref_count[list]){
 									//av_log(s.avctx, AV_LOG_ERROR, "Reference %d >= %d\n", ref, h->ref_count[list]);
 									return -1;
 								}
 							}else
-								ref=0;
-							Rectangle.fill_rectangle_sign(ref_cache[list], scan8[0], 4, 4, 8, ref, 1);
+								@ref=0;
+							Rectangle.fill_rectangle_sign(ref_cache[list], scan8[0], 4, 4, 8, @ref, 1);
 						}
 					}
 					for(list=0; list<list_count; list++){
@@ -3296,16 +3300,16 @@ namespace cscodec.h243.decoder
 					for(list=0; list<list_count; list++){
 							for(i=0; i<2; i++){
 								if(((mb_type) & (MB_TYPE_P0L0<<((i)+2*(list)))) != 0){
-									int ref;
+									int @ref;
 									if(ref_count[list] > 1){
-										ref= cabac.decode_cabac_mb_ref( this, list, 8*i );
-										if(ref >= (int)ref_count[list]){
+										@ref= cabac.decode_cabac_mb_ref( this, list, 8*i );
+										if(@ref >= (int)ref_count[list]){
 											//av_log(s.avctx, AV_LOG_ERROR, "Reference %d >= %d\n", ref, h->ref_count[list]);
 											return -1;
 										}
 									}else
-										ref=0;
-									Rectangle.fill_rectangle_sign(ref_cache[list], scan8[0] + 16*i, 4, 2, 8, ref, 1);
+										@ref=0;
+									Rectangle.fill_rectangle_sign(ref_cache[list], scan8[0] + 16*i, 4, 2, 8, @ref, 1);
 								}else {
 	                        		// !!????????? Need Unsigned??
 	                        		Rectangle.fill_rectangle_sign(ref_cache[list], scan8[0] + 16*i, 4, 2, 8, (LIST_NOT_USED/*&0xFF*/), 1);
@@ -3359,16 +3363,16 @@ namespace cscodec.h243.decoder
 					for(list=0; list<list_count; list++){
 							for(i=0; i<2; i++){
 	    	            		if(((mb_type) & (MB_TYPE_P0L0<<((i)+2*(list)))) != 0) {
-									int ref;
+									int @ref;
 									if(ref_count[list] > 1){
-										ref= cabac.decode_cabac_mb_ref( this, list, 4*i );
-										if(ref >= (int)ref_count[list]){
+										@ref= cabac.decode_cabac_mb_ref( this, list, 4*i );
+										if(@ref >= (int)ref_count[list]){
 											//av_log(s.avctx, AV_LOG_ERROR, "Reference %d >= %d\n", ref, h->ref_count[list]);
 											return -1;
 										}
 									}else
-										ref=0;
-									Rectangle.fill_rectangle_sign(ref_cache[list], scan8[0] + 2*i, 2, 4, 8, ref, 1);
+										@ref=0;
+									Rectangle.fill_rectangle_sign(ref_cache[list], scan8[0] + 2*i, 2, 4, 8, @ref, 1);
 								}else {
 	                        		// !!!????????????? Need to be unsigned
 	                        		Rectangle.fill_rectangle_sign(ref_cache[list], scan8[0] + 2*i, 2, 4, 8, (LIST_NOT_USED/*&0xFF*/), 1);
@@ -3606,7 +3610,7 @@ namespace cscodec.h243.decoder
 					}
 				}else{
 					if(curr_mb_field_flag!=0){
-						top_xy      += s.mb_stride & (((s.current_picture.mb_type_base[s.current_picture.mb_type_offset + top_xy    ]>>7)&1)-1);
+						top_xy      += (int)(s.mb_stride & (((s.current_picture.mb_type_base[s.current_picture.mb_type_offset + top_xy    ]>>7)&1)-1));
 					}
 					if (left_mb_field_flag != curr_mb_field_flag) {
 						left_xy[1] += s.mb_stride;
@@ -3659,11 +3663,11 @@ namespace cscodec.h243.decoder
 			*/
 			// DebugTool.printDebugString("    ----mb_xy="+mb_xy+", top_xy="+top_xy+", left_xy[0]="+left_xy[0]+", left_xy[1]="+left_xy[1]+"\n");
 	    
-			System.arraycopy(this.non_zero_count[mb_xy], 0, this.non_zero_count_cache, 0+8*1, 8);
-			System.arraycopy(this.non_zero_count[mb_xy], 8, this.non_zero_count_cache, 0+8*2, 8);
-			System.arraycopy(this.non_zero_count[mb_xy], 16, this.non_zero_count_cache, 0+8*5, 4);
-			System.arraycopy(this.non_zero_count[mb_xy], 20, this.non_zero_count_cache, 4+8*3, 4);
-			System.arraycopy(this.non_zero_count[mb_xy], 24, this.non_zero_count_cache, 0+8*4, 8);
+			Array.Copy(this.non_zero_count[mb_xy], 0, this.non_zero_count_cache, 0+8*1, 8);
+			Array.Copy(this.non_zero_count[mb_xy], 8, this.non_zero_count_cache, 0+8*2, 8);
+			Array.Copy(this.non_zero_count[mb_xy], 16, this.non_zero_count_cache, 0+8*5, 4);
+			Array.Copy(this.non_zero_count[mb_xy], 20, this.non_zero_count_cache, 4+8*3, 4);
+			Array.Copy(this.non_zero_count[mb_xy], 24, this.non_zero_count_cache, 0+8*4, 8);
 
 			this.cbp= this.cbp_table[mb_xy];
 
@@ -3880,13 +3884,13 @@ namespace cscodec.h243.decoder
 							*/
 		            		//// DebugTool.printDebugString("    ---- fill_filter_caches CASE 5\n");
 
-							System.arraycopy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list]+ b_xy + this.b_stride*0], 0
+							Array.Copy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list]+ b_xy + this.b_stride*0], 0
 	                    			, this.mv_cache[list][scan8[0] - 1 + 0 ], 0, 2);
-							System.arraycopy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list]+ b_xy + this.b_stride*1], 0
+							Array.Copy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list]+ b_xy + this.b_stride*1], 0
 	                    			, this.mv_cache[list][scan8[0] - 1 + 8 ], 0, 2);
-							System.arraycopy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list]+ b_xy + this.b_stride*2], 0
+							Array.Copy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list]+ b_xy + this.b_stride*2], 0
 	                    			, this.mv_cache[list][scan8[0] - 1 + 16 ], 0, 2);
-							System.arraycopy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list]+ b_xy + this.b_stride*3], 0
+							Array.Copy(s.current_picture.motion_val_base[list][s.current_picture.motion_val_offset[list]+ b_xy + this.b_stride*3], 0
 	                    			, this.mv_cache[list][scan8[0] - 1 + 24 ], 0, 2);
 							this.ref_cache[list][scan8[0] - 1 + 0 ]=
 							this.ref_cache[list][scan8[0] - 1 + 8 ]= ref2frm_base[list][ref2frm_offset + s.current_picture.ref_index[list][b8_xy + 2*0]];
@@ -4252,7 +4256,7 @@ namespace cscodec.h243.decoder
         
 			if(0==v && this.ref_cache[0][b_idx]!=-1)
 				v= (( (((long)(this.mv_cache[0][b_idx][0] - this.mv_cache[0][bn_idx][0] + 3))&0x000000000000ffffl) >= 7l)?1:0) |
-				   ((Math.abs( this.mv_cache[0][b_idx][1] - this.mv_cache[0][bn_idx][1] ) >= mvy_limit)?1:0);
+				   ((Math.Abs( this.mv_cache[0][b_idx][1] - this.mv_cache[0][bn_idx][1] ) >= mvy_limit)?1:0);
 				// ??????????????????????????????
 			//// DebugTool.printDebugString(" -- v(2) = "+v
 			//		+", this.ref_cache[0][b_idx]="+(this.ref_cache[0][b_idx])
@@ -4266,7 +4270,7 @@ namespace cscodec.h243.decoder
 				if(0==v)
 					v = ((this.ref_cache[1][b_idx] != this.ref_cache[1][bn_idx])?1:0) |
 						( ( ( ((long)(this.mv_cache[1][b_idx][0] - this.mv_cache[1][bn_idx][0] + 3)) & 0x00ffffl) >= 7l) ?1:0) |
-						((Math.abs( this.mv_cache[1][b_idx][1] - this.mv_cache[1][bn_idx][1] ) >= mvy_limit)?1:0);
+						((Math.Abs( this.mv_cache[1][b_idx][1] - this.mv_cache[1][bn_idx][1] ) >= mvy_limit)?1:0);
 
 				//// DebugTool.printDebugString(" -- v(3) = "+v+"\n");
 
@@ -4276,9 +4280,9 @@ namespace cscodec.h243.decoder
 						return 1;
 					return
 						(( (((long)(this.mv_cache[0][b_idx][0] - this.mv_cache[1][bn_idx][0] + 3)) & 0x00ffffl) >= 7l)?1:0) |
-						((Math.abs( this.mv_cache[0][b_idx][1] - this.mv_cache[1][bn_idx][1] ) >= mvy_limit)?1:0) |
+						((Math.Abs( this.mv_cache[0][b_idx][1] - this.mv_cache[1][bn_idx][1] ) >= mvy_limit)?1:0) |
 						(( (((long)(this.mv_cache[1][b_idx][0] - this.mv_cache[0][bn_idx][0] + 3)) & 0x00ffffl) >= 7l)?1:0) |
-						((Math.abs( this.mv_cache[1][b_idx][1] - this.mv_cache[0][bn_idx][1] ) >= mvy_limit)?1:0);
+						((Math.Abs( this.mv_cache[1][b_idx][1] - this.mv_cache[0][bn_idx][1] ) >= mvy_limit)?1:0);
 				}
 			}
 
@@ -4315,18 +4319,18 @@ namespace cscodec.h243.decoder
 					int q1 = pix_base[pix_offset + 1];
 					int q2 = pix_base[pix_offset + 2];
 
-					if( Math.abs( p0 - q0 ) < alpha &&
-						Math.abs( p1 - p0 ) < beta &&
-						Math.abs( q1 - q0 ) < beta ) {
+					if( Math.Abs( p0 - q0 ) < alpha &&
+						Math.Abs( p1 - p0 ) < beta &&
+						Math.Abs( q1 - q0 ) < beta ) {
 						int tc = tc0;
 						int i_delta;
 
-						if( Math.abs( p2 - p0 ) < beta ) {
+						if( Math.Abs( p2 - p0 ) < beta ) {
 							if(tc0!=0)
 							pix_base[pix_offset + -2] = p1 + av_clip( ( p2 + ( ( p0 + q0 + 1 ) >> 1 ) - ( p1 << 1 ) ) >> 1, -tc0, tc0 );
 							tc++;
 						}
-						if( Math.abs( q2 - q0 ) < beta ) {
+						if( Math.Abs( q2 - q0 ) < beta ) {
 							if(tc0!=0)
 							pix_base[pix_offset + 1] = q1 + av_clip( ( q2 + ( ( p0 + q0 + 1 ) >> 1 ) - ( q1 << 1 ) ) >> 1, -tc0, tc0 );
 							tc++;
@@ -4346,12 +4350,12 @@ namespace cscodec.h243.decoder
 					int q1 = pix_base[pix_offset + 1];
 					int q2 = pix_base[pix_offset + 2];
 
-					if( Math.abs( p0 - q0 ) < alpha &&
-						Math.abs( p1 - p0 ) < beta &&
-						Math.abs( q1 - q0 ) < beta ) {
+					if( Math.Abs( p0 - q0 ) < alpha &&
+						Math.Abs( p1 - p0 ) < beta &&
+						Math.Abs( q1 - q0 ) < beta ) {
 
-						if(Math.abs( p0 - q0 ) < (( alpha >> 2 ) + 2 )){
-							if( Math.abs( p2 - p0 ) < beta)
+						if(Math.Abs( p0 - q0 ) < (( alpha >> 2 ) + 2 )){
+							if( Math.Abs( p2 - p0 ) < beta)
 							{
 								int p3 = pix_base[pix_offset + -4];
 								/* p0', p1', p2' */
@@ -4362,7 +4366,7 @@ namespace cscodec.h243.decoder
 								/* p0' */
 								pix_base[pix_offset + -1] = ( 2*p1 + p0 + q1 + 2 ) >> 2;
 							}
-							if( Math.abs( q2 - q0 ) < beta)
+							if( Math.Abs( q2 - q0 ) < beta)
 							{
 								int q3 = pix_base[pix_offset + 3];
 								/* q0', q1', q2' */
@@ -4410,9 +4414,9 @@ namespace cscodec.h243.decoder
 					int q0 = pix_base[pix_offset + 0];
 					int q1 = pix_base[pix_offset + 1];
 
-					if( Math.abs( p0 - q0 ) < alpha &&
-						Math.abs( p1 - p0 ) < beta &&
-						Math.abs( q1 - q0 ) < beta ) {
+					if( Math.Abs( p0 - q0 ) < alpha &&
+						Math.Abs( p1 - p0 ) < beta &&
+						Math.Abs( q1 - q0 ) < beta ) {
 						int i_delta = av_clip( (((q0 - p0 ) << 2) + (p1 - q1) + 4) >> 3, -tc, tc );
 
 						pix_base[pix_offset + -1] = av_clip_uint8( p0 + i_delta );    /* p0' */
@@ -4425,9 +4429,9 @@ namespace cscodec.h243.decoder
 					int q0 = pix_base[pix_offset + 0];
 					int q1 = pix_base[pix_offset + 1];
 
-					if( Math.abs( p0 - q0 ) < alpha &&
-						Math.abs( p1 - p0 ) < beta &&
-						Math.abs( q1 - q0 ) < beta ) {
+					if( Math.Abs( p0 - q0 ) < alpha &&
+						Math.Abs( p1 - p0 ) < beta &&
+						Math.Abs( q1 - q0 ) < beta ) {
 
 						pix_base[pix_offset + -1] = ( 2*p1 + p0 + q1 + 2 ) >> 2;   /* p0' */
 						pix_base[pix_offset + 0]  = ( 2*q1 + q0 + p1 + 2 ) >> 2;   /* q0' */
@@ -4449,9 +4453,9 @@ namespace cscodec.h243.decoder
 			// how often to recheck mv-based bS when iterating between edges
 			//static uint8_t mask_edge_tab[2][8]={{0,3,3,3,1,1,1,1},
 			//                                          {0,3,1,1,3,3,3,3}};
-			final int[][] mask_edge_tab ={{0,3,3,3,1,1,1,1},
+			int[,] mask_edge_tab ={{0,3,3,3,1,1,1,1},
 													  {0,3,1,1,3,3,3,3}};
-			int mask_edge = mask_edge_tab[dir][(mb_type>>3)&7];
+			int mask_edge = mask_edge_tab[dir,(mb_type>>3)&7];
 			int edges = ((mask_edge== 3 && (0==(this.cbp&15)) )? 1 : 4);
 
 			// how often to recheck mv-based bS when iterating along each edge
@@ -4716,13 +4720,14 @@ namespace cscodec.h243.decoder
 						}
 					};
 					*/
-					final int[][][] offset = {
-							{
-								{7+8*0, 7+8*0, 7+8*0, 7+8*0, 7+8*1, 7+8*1, 7+8*1, 7+8*1},
-								{7+8*2, 7+8*2, 7+8*2, 7+8*2, 7+8*3, 7+8*3, 7+8*3, 7+8*3},
-							},{
-								{7+8*0, 7+8*1, 7+8*2, 7+8*3, 7+8*0, 7+8*1, 7+8*2, 7+8*3},
-								{7+8*0, 7+8*1, 7+8*2, 7+8*3, 7+8*0, 7+8*1, 7+8*2, 7+8*3},
+					int[][][] offset = {
+							new int[][]{
+								new int[]{7+8*0, 7+8*0, 7+8*0, 7+8*0, 7+8*1, 7+8*1, 7+8*1, 7+8*1},
+								new int[]{7+8*2, 7+8*2, 7+8*2, 7+8*2, 7+8*3, 7+8*3, 7+8*3, 7+8*3},
+							},
+							new int[][]{
+								new int[]{7+8*0, 7+8*1, 7+8*2, 7+8*3, 7+8*0, 7+8*1, 7+8*2, 7+8*3},
+								new int[]{7+8*0, 7+8*1, 7+8*2, 7+8*3, 7+8*0, 7+8*1, 7+8*2, 7+8*3},
 							}
 						};
 
@@ -4962,7 +4967,7 @@ namespace cscodec.h243.decoder
 					// DebugTool.printDebugString(" ---- ff_h264_decode_mb_cavlc return "+ret+"\n");
 
 					mbCount++;
-					//System.out.println("Reading Macro-Block ("+ mbCount +" )");
+					//Console.WriteLine("Reading Macro-Block ("+ mbCount +" )");
 
 					if(ret>=0) ff_h264_hl_decode_mb();
 	            
@@ -5145,8 +5150,8 @@ namespace cscodec.h243.decoder
 			y_offset += 8*(s.mb_y >> mb_field_decoding_flag);
 		
 			if(list0!=0){
-				AVFrame ref= this.ref_list[0][ this.ref_cache[0][ scan8[n] ] ];
-				mc_dir_part(ref, n, square, chroma_height, delta, 0,
+				AVFrame @ref= this.ref_list[0][ this.ref_cache[0][ scan8[n] ] ];
+				mc_dir_part(@ref, n, square, chroma_height, delta, 0,
 						dest_y_base, dest_y_offset,
 						dest_cb_base, dest_cb_offset, 
 						dest_cr_base, dest_cr_offset, 
@@ -5158,8 +5163,8 @@ namespace cscodec.h243.decoder
 			}
 		
 			if(list1!=0){
-				AVFrame ref= this.ref_list[1][ this.ref_cache[1][ scan8[n] ] ];
-				mc_dir_part(ref, n, square, chroma_height, delta, 1,
+				AVFrame @ref= this.ref_list[1][ this.ref_cache[1][ scan8[n] ] ];
+				mc_dir_part(@ref, n, square, chroma_height, delta, 1,
 						dest_y_base, dest_y_offset,
 						dest_cb_base, dest_cb_offset, 
 						dest_cr_base, dest_cr_offset, 
@@ -5227,8 +5232,8 @@ namespace cscodec.h243.decoder
 			}else{
 				int list = (list1!=0 ? 1 : 0);
 				int refn = this.ref_cache[list][ scan8[n] ];
-				AVFrame ref= this.ref_list[list][refn];
-				mc_dir_part(ref, n, square, chroma_height, delta, list,
+				AVFrame @ref= this.ref_list[list][refn];
+				mc_dir_part(@ref, n, square, chroma_height, delta, list,
 						dest_y_base, dest_y_offset,
 						dest_cb_base, dest_cb_offset, 
 						dest_cr_base, dest_cr_offset, 
@@ -5441,7 +5446,7 @@ namespace cscodec.h243.decoder
 			//void **p = ptr;
 			if (min_size < size)
 				return;
-			min_size= Math.max(17*min_size/16 + 32, min_size);
+			min_size= Math.Max(17*min_size/16 + 32, min_size);
 			//av_free(*p);
 			param1[0] = new int[min_size];
 			//if (!*p) min_size = 0;
@@ -5468,23 +5473,23 @@ namespace cscodec.h243.decoder
 			// DebugTool.printDebugString("nal_unit_type = "+ this.nal_unit_type + "\n");
 			/*
 			switch(this.nal_unit_type) {
-				case NAL_SLICE: //System.out.println("((NAL_SLICE))"); break;
-				case NAL_DPA: //System.out.println("((NAL_DPA))"); break;
-				case NAL_DPB: //System.out.println("((NAL_DPB))"); break;
-				case NAL_DPC: //System.out.println("((NAL_DPC))"); break;
-				case NAL_IDR_SLICE: //System.out.println("((NAL_IDR_SLICE))"); break;
-				case NAL_SEI: //System.out.println("((NAL_SEI))"); break;
-				case NAL_SPS: //System.out.println("((NAL_SPS))"); break;
-				case NAL_PPS: //System.out.println("((NAL_PPS))"); break;
-				case NAL_AUD: //System.out.println("((NAL_AUD))"); break;
-				case NAL_END_SEQUENCE: //System.out.println("((NAL_END_SEQUENCE))"); break;
-				case NAL_END_STREAM: //System.out.println("((NAL_END_STREAM))"); break;
-				case NAL_FILLER_DATA: //System.out.println("((NAL_FILLER_DATA))"); break;
-				case NAL_SPS_EXT: //System.out.println("((NAL_SPS_EXT))"); break;
-				case NAL_AUXILIARY_SLICE: //System.out.println("((NAL_AUXILIARY_SLICE))"); break;
-				case NAL_FUA: //System.out.println("((NAL_FUA))"); break;
-				case NAL_FUB: //System.out.println("((NAL_FUB))"); break;
-				default: //System.out.println("((WARNING: UNKNOWN_SLICE))"); break;
+				case NAL_SLICE: //Console.WriteLine("((NAL_SLICE))"); break;
+				case NAL_DPA: //Console.WriteLine("((NAL_DPA))"); break;
+				case NAL_DPB: //Console.WriteLine("((NAL_DPB))"); break;
+				case NAL_DPC: //Console.WriteLine("((NAL_DPC))"); break;
+				case NAL_IDR_SLICE: //Console.WriteLine("((NAL_IDR_SLICE))"); break;
+				case NAL_SEI: //Console.WriteLine("((NAL_SEI))"); break;
+				case NAL_SPS: //Console.WriteLine("((NAL_SPS))"); break;
+				case NAL_PPS: //Console.WriteLine("((NAL_PPS))"); break;
+				case NAL_AUD: //Console.WriteLine("((NAL_AUD))"); break;
+				case NAL_END_SEQUENCE: //Console.WriteLine("((NAL_END_SEQUENCE))"); break;
+				case NAL_END_STREAM: //Console.WriteLine("((NAL_END_STREAM))"); break;
+				case NAL_FILLER_DATA: //Console.WriteLine("((NAL_FILLER_DATA))"); break;
+				case NAL_SPS_EXT: //Console.WriteLine("((NAL_SPS_EXT))"); break;
+				case NAL_AUXILIARY_SLICE: //Console.WriteLine("((NAL_AUXILIARY_SLICE))"); break;
+				case NAL_FUA: //Console.WriteLine("((NAL_FUA))"); break;
+				case NAL_FUB: //Console.WriteLine("((NAL_FUB))"); break;
+				default: //Console.WriteLine("((WARNING: UNKNOWN_SLICE))"); break;
 			} // switch
 			*/
 			/*
@@ -5547,9 +5552,9 @@ namespace cscodec.h243.decoder
 
 		//printf("decoding esc\n");
 			//memcpy(dst, src, i);
-			System.arraycopy(src_base, src_offset, dst, 0, i);
+			Array.Copy(src_base, src_offset, dst, 0, i);
 			si=di=i;
-			boolean flag1 = true;
+			bool flag1 = true;
 			while(si+2<length){
 				//remove escapes (very rare 1:2^22)
 				if(src_base[src_offset + si+2]>3){
@@ -5764,7 +5769,7 @@ namespace cscodec.h243.decoder
 			if(size<16)
 				return -1;
 
-			for(i=0; i<user_data.length-1 && i<size; i++){
+			for(i=0; i<user_data.Length-1 && i<size; i++){
 				user_data[i]= (int)s.gb.get_bits( 8,"user_data");
 			}
 
@@ -5830,12 +5835,12 @@ namespace cscodec.h243.decoder
 
 				type=0;
 				do{
-					type+= s.gb.show_bits(8);
+					type+= (int)s.gb.show_bits(8);
 				}while(s.gb.get_bits(8,"sei?") == 255);
 
 				size=0;
 				do{
-					size+= s.gb.show_bits(8);
+					size+= (int)s.gb.show_bits(8);
 				}while(s.gb.get_bits(8,"sei?") == 255);
 
 				switch(type){
@@ -5857,6 +5862,7 @@ namespace cscodec.h243.decoder
 					break;
 				default:
 	        		s.gb.skip_bits(8*size);
+						break;
 				}
 
 				//FIXME check bits here
@@ -5874,7 +5880,7 @@ namespace cscodec.h243.decoder
 										 * one
 										 */
 				// memcpy(factors, fallback_list, size*sizeof(uint8_t));
-				System.arraycopy(fallback_list, 0, factors, 0, size);
+				Array.Copy(fallback_list, 0, factors, 0, size);
 			else
 				for (i = 0; i < size; i++) {
 					if (next != 0)
@@ -5884,7 +5890,7 @@ namespace cscodec.h243.decoder
 												 * preset one
 												 */
 						// memcpy(factors, jvt_list, size*sizeof(uint8_t));
-						System.arraycopy(jvt_list, 0, factors, 0, size);
+						Array.Copy(jvt_list, 0, factors, 0, size);
 						break;
 					}
 					last = factors[scan[i]] = (next != 0) ? next : last;
@@ -5981,7 +5987,7 @@ namespace cscodec.h243.decoder
 					// DebugTool.printDebugString("    -- SPS: num = "+sps.sar.num+"\n");
 					// DebugTool.printDebugString("    -- SPS: den = "+sps.sar.den+"\n");
 	            
-				}else if(aspect_ratio_idc < pixel_aspect.length){
+				}else if(aspect_ratio_idc < pixel_aspect.Length){
 					sps.sar=  pixel_aspect[aspect_ratio_idc];
 				}else{
 					//av_log(this.s.avctx, AV_LOG_ERROR, "illegal aspect ratio\n");
@@ -6154,10 +6160,10 @@ namespace cscodec.h243.decoder
 			this.dequant_coeff_pps= -1; //contents of sps/pps can change even if id doesn't, so reinit
 			//memcpy(pps.scaling_matrix4, this.sps_buffers[(int)pps.sps_id].scaling_matrix4, sizeof(pps.scaling_matrix4));
 			//memcpy(pps.scaling_matrix8, this.sps_buffers[(int)pps.sps_id].scaling_matrix8, sizeof(pps.scaling_matrix8));
-			for(int k=0;k<this.sps_buffers[(int)pps.sps_id].scaling_matrix4.length;k++)
-	    		System.arraycopy(this.sps_buffers[(int)pps.sps_id].scaling_matrix4[k], 0, pps.scaling_matrix4[k], 0, this.sps_buffers[(int)pps.sps_id].scaling_matrix4[k].length);
-			for(int k=0;k<this.sps_buffers[(int)pps.sps_id].scaling_matrix8.length;k++)
-	    		System.arraycopy(this.sps_buffers[(int)pps.sps_id].scaling_matrix8[k], 0, pps.scaling_matrix8[k], 0, this.sps_buffers[(int)pps.sps_id].scaling_matrix8[k].length);
+			for(int k=0;k<this.sps_buffers[(int)pps.sps_id].scaling_matrix4.Length;k++)
+	    		Array.Copy(this.sps_buffers[(int)pps.sps_id].scaling_matrix4[k], 0, pps.scaling_matrix4[k], 0, this.sps_buffers[(int)pps.sps_id].scaling_matrix4[k].Length);
+			for(int k=0;k<this.sps_buffers[(int)pps.sps_id].scaling_matrix8.Length;k++)
+	    		Array.Copy(this.sps_buffers[(int)pps.sps_id].scaling_matrix8[k], 0, pps.scaling_matrix8[k], 0, this.sps_buffers[(int)pps.sps_id].scaling_matrix8[k].Length);
 	
 			if(s.gb.get_bits_count() < bit_length){
 				pps.transform_8x8_mode= (int)s.gb.get_bits1("transform_8x8_mode");
@@ -6222,13 +6228,13 @@ namespace cscodec.h243.decoder
 			sps.time_offset_length = 24;
 			sps.profile_idc= profile_idc;
 			sps.level_idc= level_idc;
-			//System.out.println("Decode SPS, Profile: "+profile_idc+", Level: "+level_idc);
+			//Console.WriteLine("Decode SPS, Profile: "+profile_idc+", Level: "+level_idc);
 
 			//memset(sps.scaling_matrix4, 16, sizeof(sps.scaling_matrix4));
 			//memset(sps.scaling_matrix8, 16, sizeof(sps.scaling_matrix8));
-			for(int k=0;k<sps.scaling_matrix4.length;k++)
+			for(int k=0;k<sps.scaling_matrix4.Length;k++)
 	    		Arrays.fill(sps.scaling_matrix4[k], 16);
-			for(int k=0;k<sps.scaling_matrix8.length;k++)
+			for(int k=0;k<sps.scaling_matrix8.Length;k++)
 	    		Arrays.fill(sps.scaling_matrix8[k], 16);
 
 			sps.scaling_matrix_present = 0;
@@ -6269,7 +6275,7 @@ namespace cscodec.h243.decoder
 				// DebugTool.printDebugString("SPS: offset_for_top_to_bottom_field = "+sps.offset_for_top_to_bottom_field+"\n");
 				// DebugTool.printDebugString("SPS: poc_cycle_length = "+sps.poc_cycle_length+"\n");
 	        
-				if(/*(unsigned)*/sps.poc_cycle_length >= sps.offset_for_ref_frame.length){
+				if(/*(unsigned)*/sps.poc_cycle_length >= sps.offset_for_ref_frame.Length){
 					//av_log(this.s.avctx, AV_LOG_ERROR, "poc_cycle_length overflow %u\n", sps.poc_cycle_length);
 					return -1;
 				}
@@ -6468,7 +6474,7 @@ namespace cscodec.h243.decoder
 				   ||(s.skip_frame >= MpegEncContext.AVDISCARD_NONREF && this.nal_ref_idc  == 0))
 					continue;
 
-			  boolean doAgain = false;
+			  bool doAgain = false;
 			  do {
 	    		  doAgain = false;
 				  //again:
@@ -6483,6 +6489,9 @@ namespace cscodec.h243.decoder
 							return -1;
 						}
 						idr(); //FIXME ensure we don't loose some frames if there is reordering
+
+						goto case NAL_SLICE;
+
 					case NAL_SLICE:
 		        		// DebugTool.printDebugString("Decoding NAL_SLICE...\n");
 
@@ -6515,7 +6524,7 @@ namespace cscodec.h243.decoder
 						   && (s.skip_frame < MpegEncContext.AVDISCARD_NONKEY || hx.slice_type_nos==FF_I_TYPE)
 						   && s.skip_frame < MpegEncContext.AVDISCARD_ALL){
 							if(s.hwaccel!=0) {
-		                		//System.out.println("Attempt to exec H/W Acceleration codes.");
+		                		//Console.WriteLine("Attempt to exec H/W Acceleration codes.");
 								//if (avctx->hwaccel->decode_slice(avctx, &buf[buf_index - consumed], consumed) < 0)
 								//    return -1;
 							}else
@@ -6603,6 +6612,7 @@ namespace cscodec.h243.decoder
 						break;
 					default:
 						//av_log(avctx, AV_LOG_DEBUG, "Unknown NAL code: %d (%d bits)\n", hx.nal_unit_type, bit_length);
+						break;
 					}
 
 	        		// DebugTool.printDebugString(" ---- context_count="+context_count+", max_contexts="+this.max_contexts+"\n");
@@ -6789,6 +6799,7 @@ namespace cscodec.h243.decoder
 					s.current_picture_ptr.mmco_reset=1;
 					break;
 				default: //assert(false);
+					break;
 				}
 			}
 
@@ -6959,11 +6970,11 @@ namespace cscodec.h243.decoder
 			AVRational a0= new AVRational(0,1);
 			AVRational a1= new AVRational(1,0);
 			int sign= ((num<0) ^ (den<0))?1:0;
-			long gcd= av_gcd(Math.abs(num), Math.abs(den));
+			long gcd= av_gcd(Math.Abs(num), Math.Abs(den));
 
 			if(gcd!=0){
-				num = Math.abs(num)/gcd;
-				den = Math.abs(den)/gcd;
+				num = Math.Abs(num)/gcd;
+				den = Math.Abs(den)/gcd;
 			}
 			if(num<=max && den<=max){
 				a1= new AVRational(num, den);
@@ -6978,7 +6989,7 @@ namespace cscodec.h243.decoder
 
 				if(a2n > max || a2d > max){
 					if(a1.num!=0) x= (max - a0.num) / a1.num;
-					if(a1.den!=0) x= Math.min(x, (max - a0.den) / a1.den);
+					if(a1.den!=0) x= Math.Min(x, (max - a0.den) / a1.den);
 
 					if (den*(2*x*a1.den + a0.den) > num*a1.den)
 						a1 =  new AVRational(x*a1.num + a0.num, x*a1.den + a0.den);
@@ -7010,8 +7021,8 @@ namespace cscodec.h243.decoder
 				}
 
 				for(q=0; q<52; q++){
-					int shift = this.div6[q];
-					int idx = this.rem6[q];
+					int shift = H264Context.div6[q];
+					int idx = H264Context.rem6[q];
 					for(x=0; x<64; x++)
 						this.dequant8_coeff[i][q][(x>>3)|((x&7)<<3)] =
 							((/*uint32_t*/int)H264Data.dequant8_coeff_init[idx][ H264Data.dequant8_coeff_init_scan[((x>>1)&12) | (x&3)] ] *
@@ -7105,7 +7116,7 @@ namespace cscodec.h243.decoder
 			this.intra4x4_pred_mode = new int[row_mb_num * 8];
 	    
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.non_zero_count    , big_mb_num * 32 * sizeof(uint8_t), fail)
-			this.non_zero_count = new int[big_mb_num][32];
+			this.non_zero_count = Arrays.Create2D<int>(big_mb_num, 32);
 
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.slice_table_base  , (big_mb_num+s.mb_stride) * sizeof(*this.slice_table_base), fail)
 			this.slice_table_base = new int[big_mb_num+s.mb_stride];
@@ -7117,10 +7128,10 @@ namespace cscodec.h243.decoder
 			this.chroma_pred_mode_table = new int[big_mb_num];
 
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.mvd_table[0], 16*row_mb_num * sizeof(uint8_t), fail);
-			this.mvd_table[0] = new int[8 * row_mb_num][2];
+			this.mvd_table[0] = Arrays.Create2D<int>(8 * row_mb_num, 2);
 
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.mvd_table[1], 16*row_mb_num * sizeof(uint8_t), fail);
-			this.mvd_table[1] = new int[8 * row_mb_num][2];
+			this.mvd_table[1] = Arrays.Create2D<int>(8 * row_mb_num, 2);
 
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.direct_table, 4*big_mb_num * sizeof(uint8_t) , fail);
 			this.direct_table = new int[4*big_mb_num];
@@ -7161,8 +7172,8 @@ namespace cscodec.h243.decoder
 		public int context_init(){
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.top_borders[0], this.s.mb_width * (16+8+8) * sizeof(uint8_t), fail)
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.top_borders[1], this.s.mb_width * (16+8+8) * sizeof(uint8_t), fail)
-			this.top_borders[0] = new int[this.s.mb_width][16+8+8];
-			this.top_borders[1] = new int[this.s.mb_width][16+8+8];
+			this.top_borders[0] = Arrays.Create2D<int>(this.s.mb_width, 16+8+8);
+			this.top_borders[1] = Arrays.Create2D<int>(this.s.mb_width, 16+8+8);
 
 			this.ref_cache[0][scan8[5 ]+1] = this.ref_cache[0][scan8[7 ]+1] = this.ref_cache[0][scan8[13]+1] =
 			this.ref_cache[1][scan8[5 ]+1] = this.ref_cache[1][scan8[7 ]+1] = this.ref_cache[1][scan8[13]+1] = PART_NOT_AVAILABLE;
@@ -7257,7 +7268,7 @@ namespace cscodec.h243.decoder
 		public static void clone_slice(H264Context dst, H264Context src)
 		{
 			//memcpy(dst.block_offset,     src.block_offset, sizeof(dst.block_offset));
-			System.arraycopy(src.block_offset,0,dst.block_offset,0,dst.block_offset.length);
+			Array.Copy(src.block_offset,0,dst.block_offset,0,dst.block_offset.Length);
 	    
 			dst.s.current_picture_ptr  = src.s.current_picture_ptr;
 			dst.s.current_picture      = src.s.current_picture;
@@ -7273,32 +7284,32 @@ namespace cscodec.h243.decoder
 
 			//memcpy(dst.short_ref,        src.short_ref,        sizeof(dst.short_ref));
 			//memcpy(dst.long_ref,         src.long_ref,         sizeof(dst.long_ref));
-			for(int i=0;i<src.short_ref.length;i++)
+			for(int i=0;i<src.short_ref.Length;i++)
 				src.short_ref[i].copyTo(dst.short_ref[i]);
 
-			for(int i=0;i<src.long_ref.length;i++)
+			for(int i=0;i<src.long_ref.Length;i++)
 				src.long_ref[i].copyTo(dst.long_ref[i]);
 	    
 			//memcpy(dst.default_ref_list, src.default_ref_list, sizeof(dst.default_ref_list));
 			//memcpy(dst.ref_list,         src.ref_list,         sizeof(dst.ref_list));
-			for(int i=0;i<src.default_ref_list.length;i++)
-				for(int j=0;j<src.default_ref_list[i].length;j++)
+			for(int i=0;i<src.default_ref_list.Length;i++)
+				for(int j=0;j<src.default_ref_list[i].Length;j++)
 		    		src.default_ref_list[i][j].copyTo(dst.default_ref_list[i][j]);
 
-			for(int i=0;i<src.ref_list.length;i++)
-				for(int j=0;j<src.ref_list[i].length;j++)
+			for(int i=0;i<src.ref_list.Length;i++)
+				for(int j=0;j<src.ref_list[i].Length;j++)
 		    		src.ref_list[i][j].copyTo(dst.ref_list[i][j]);
 
 			//memcpy(dst.dequant4_coeff,   src.dequant4_coeff,   sizeof(src.dequant4_coeff));
 			//memcpy(dst.dequant8_coeff,   src.dequant8_coeff,   sizeof(src.dequant8_coeff));
-			for(int i=0;i<src.dequant4_coeff.length;i++)
-				for(int j=0;j<src.dequant4_coeff[i].length;j++)
-					for(int k=0;k<src.dequant4_coeff[i][j].length;k++)
+			for(int i=0;i<src.dequant4_coeff.Length;i++)
+				for(int j=0;j<src.dequant4_coeff[i].Length;j++)
+					for(int k=0;k<src.dequant4_coeff[i][j].Length;k++)
 			    		dst.dequant4_coeff[i][j][k] = src.dequant4_coeff[i][j][k];
 
-			for(int i=0;i<src.dequant8_coeff.length;i++)
-				for(int j=0;j<src.dequant8_coeff[i].length;j++)
-					for(int k=0;k<src.dequant8_coeff[i][j].length;k++)
+			for(int i=0;i<src.dequant8_coeff.Length;i++)
+				for(int j=0;j<src.dequant8_coeff[i].Length;j++)
+					for(int k=0;k<src.dequant8_coeff[i][j].Length;k++)
 			    		dst.dequant8_coeff[i][j][k] = src.dequant8_coeff[i][j][k];
 	    
 		}
@@ -7374,7 +7385,7 @@ namespace cscodec.h243.decoder
 				s.current_picture_ptr.field_poc[0]= field_poc[0];
 			if(s.picture_structure != MpegEncContext.PICT_TOP_FIELD)
 				s.current_picture_ptr.field_poc[1]= field_poc[1];
-			cur.poc= Math.min(cur.field_poc[0], cur.field_poc[1]);
+			cur.poc= Math.Min(cur.field_poc[0], cur.field_poc[1]);
 
 			return 0;
 		}
@@ -7382,8 +7393,8 @@ namespace cscodec.h243.decoder
 		public int ff_h264_fill_default_ref_list(){
 			int i, len;
 	    
-			for(int p=0;p<this.default_ref_list.length;p++)
-	    		for(int k=0;k<this.default_ref_list[p].length;k++)
+			for(int p=0;p<this.default_ref_list.Length;p++)
+	    		for(int k=0;k<this.default_ref_list[p].Length;k++)
 	    			if(this.default_ref_list[p][k] == null)
 	    				this.default_ref_list[p][k] = new AVFrame();
 
@@ -7469,7 +7480,7 @@ namespace cscodec.h243.decoder
 						/*unsigned*/ int reordering_of_pic_nums_idc= s.gb.get_ue_golomb_31("reordering_of_pic_nums_idc");
 						/*unsigned*/ int pic_id;
 						int i;
-						AVFrame ref = null;
+						AVFrame @ref = null;
 
 						if(reordering_of_pic_nums_idc==3)
 							break;
@@ -7498,17 +7509,17 @@ namespace cscodec.h243.decoder
 								pic_structure = param[0];
 
 								for(i= this.short_ref_count-1; i>=0; i--){
-									ref = this.short_ref[i];
+									@ref = this.short_ref[i];
 									////assert(ref.reference);
 									////assert(!ref.long_ref);
 									if(
-										   ref.frame_num == frame_num &&
-										   (ref.reference & pic_structure)!=0
+										   @ref.frame_num == frame_num &&
+										   (@ref.reference & pic_structure)!=0
 									  )
 										break;
 								}
 								if(i>=0)
-									ref.pic_id= pred;
+									@ref.pic_id= pred;
 							}else{
 								int long_idx;
 								pic_id= s.gb.get_ue_golomb("long_term_pic_idx"); //long_term_pic_idx
@@ -7521,10 +7532,10 @@ namespace cscodec.h243.decoder
 									//av_log(this.s.avctx, AV_LOG_ERROR, "long_term_pic_idx overflow\n");
 									return -1;
 								}
-								ref = this.long_ref[long_idx];
+								@ref = this.long_ref[long_idx];
 								//assert(!(ref!=null && 0==ref.reference));
-								if(ref!=null && (ref.reference & pic_structure)!=0){
-									ref.pic_id= pic_id;
+								if(@ref!=null && (@ref.reference & pic_structure)!=0){
+									@ref.pic_id= pic_id;
 									//assert(ref.long_ref!=0);
 									i=0;
 								}else{
@@ -7538,13 +7549,13 @@ namespace cscodec.h243.decoder
 	                    		this.ref_list[list][index].resetToZero();
 							} else {
 								for(i=index; i+1<this.ref_count[list]; i++){
-									if(ref.long_ref == this.ref_list[list][i].long_ref && ref.pic_id == this.ref_list[list][i].pic_id)
+									if(@ref.long_ref == this.ref_list[list][i].long_ref && @ref.pic_id == this.ref_list[list][i].pic_id)
 										break;
 								}
 								for(; i > index; i--){
 									this.ref_list[list][i]= this.ref_list[list][i-1];
 								}
-								ref.copyTo(this.ref_list[list][index]);
+								@ref.copyTo(this.ref_list[list][index]);
 								if ((s.picture_structure != MpegEncContext.PICT_FRAME)){
 									AVFrame.pic_as_field(this.ref_list[list][index], pic_structure);
 								}
@@ -7675,7 +7686,7 @@ namespace cscodec.h243.decoder
 					int w= 32;
 					if(td!=0){
 						int tb = av_clip(cur_poc - poc0, -128, 127);
-						int tx = (16384 + (Math.abs(td) >> 1)) / td;
+						int tx = (16384 + (Math.Abs(td) >> 1)) / td;
 						int dist_scale_factor = (tb*tx + 32) >> 8;
 						if(dist_scale_factor >= -64 && dist_scale_factor <= 128)
 							w = 64 - dist_scale_factor;
@@ -7774,7 +7785,7 @@ namespace cscodec.h243.decoder
 				return 256;
 			}else{
 				int tb = av_clip(poc - poc0, -128, 127);
-				int tx = (16384 + (Math.abs(td) >> 1)) / td;
+				int tx = (16384 + (Math.Abs(td) >> 1)) / td;
 				return av_clip((tb*tx + 32) >> 6, -1024, 1023);
 			}
 		}	
@@ -7830,8 +7841,8 @@ namespace cscodec.h243.decoder
 		public void ff_h264_direct_ref_list_init(){
 		
 			//???????? The correct place to new ref_list objs??
-			for(int i=0;i<this.ref_list.length;i++)
-				for(int j=0;j<this.ref_list[i].length;j++) {
+			for(int i=0;i<this.ref_list.Length;i++)
+				for(int j=0;j<this.ref_list[i].Length;j++) {
 					if(this.ref_list[i][j]==null)
 						this.ref_list[i][j] = new AVFrame();
 				} // for
@@ -7851,8 +7862,8 @@ namespace cscodec.h243.decoder
 			if(s.picture_structure == MpegEncContext.PICT_FRAME){
 				//memcpy(cur.ref_count[1], cur.ref_count[0], sizeof(cur.ref_count[0]));
 				//memcpy(cur.ref_poc  [1], cur.ref_poc  [0], sizeof(cur.ref_poc  [0]));
-	    		System.arraycopy(cur.ref_count[0], 0, cur.ref_count[1], 0, cur.ref_count[0].length);
-	    		System.arraycopy(cur.ref_poc[0], 0, cur.ref_poc[1], 0, cur.ref_poc[0].length);
+	    		Array.Copy(cur.ref_count[0], 0, cur.ref_count[1], 0, cur.ref_count[0].Length);
+	    		Array.Copy(cur.ref_poc[0], 0, cur.ref_poc[1], 0, cur.ref_poc[0].Length);
 			}
 
 			cur.mbaff = this.mb_aff_frame;
@@ -7863,7 +7874,7 @@ namespace cscodec.h243.decoder
 				//?????????????????????????????
 				//int[] col_poc = this.ref_list[1].field_poc;
 				int[] col_poc = this.ref_list[1][0].field_poc;
-				this.col_parity= ((Math.abs(col_poc[0] - cur_poc) >= Math.abs(col_poc[1] - cur_poc)))?1:0;
+				this.col_parity= ((Math.Abs(col_poc[0] - cur_poc) >= Math.Abs(col_poc[1] - cur_poc)))?1:0;
 				ref1sidx=sidx= this.col_parity;
 			}else if(0==(s.picture_structure & this.ref_list[1][0].reference) && 0==this.ref_list[1][0].mbaff){ // FL . FL & differ parity
 				this.col_fieldoff= s.mb_stride*(2*(this.ref_list[1][0].reference) - 3);
@@ -7932,19 +7943,19 @@ namespace cscodec.h243.decoder
 
 			/*
 			if(slice_type == H264Context.FF_I_TYPE) {
-	    		//System.out.println("Decoding I-Slice.");
+	    		//Console.WriteLine("Decoding I-Slice.");
 			} else if(slice_type == H264Context.FF_P_TYPE) {
-				//System.out.println("Decoding P-Slice.");
+				//Console.WriteLine("Decoding P-Slice.");
 			} else if(slice_type == H264Context.FF_B_TYPE) {
-				//System.out.println("Decoding B-Slice.");
+				//Console.WriteLine("Decoding B-Slice.");
 			} else if(slice_type == H264Context.FF_S_TYPE) {
-				//System.out.println("Decoding S-Slice.");
+				//Console.WriteLine("Decoding S-Slice.");
 			} else if(slice_type == H264Context.FF_SI_TYPE) {
-				//System.out.println("Decoding SI-Slice.");
+				//Console.WriteLine("Decoding SI-Slice.");
 			} else if(slice_type == H264Context.FF_SP_TYPE) {
-				//System.out.println("Decoding SP-Slice.");
+				//Console.WriteLine("Decoding SP-Slice.");
 			} else if(slice_type == H264Context.FF_BI_TYPE) {
-				//System.out.println("Decoding BI-Slice.");
+				//Console.WriteLine("Decoding BI-Slice.");
 			} // if
 			*/
 	    
@@ -7991,11 +8002,11 @@ namespace cscodec.h243.decoder
 
 			h.b_stride=  s.mb_width*4;
 
-			s.width = (int)(16*s.mb_width - 2*Math.min(h.sps.crop_right, 7));
+			s.width = (int)(16*s.mb_width - 2*Math.Min(h.sps.crop_right, 7));
 			if(h.sps.frame_mbs_only_flag!=0)
-				s.height= (int)(16*s.mb_height - 2*Math.min(h.sps.crop_bottom, 7));
+				s.height= (int)(16*s.mb_height - 2*Math.Min(h.sps.crop_bottom, 7));
 			else
-				s.height= (int)(16*s.mb_height - 4*Math.min(h.sps.crop_bottom, 7));
+				s.height= (int)(16*s.mb_height - 4*Math.Min(h.sps.crop_bottom, 7));
 
 	   
 			if (s.context_initialized!=0
@@ -8384,7 +8395,7 @@ namespace cscodec.h243.decoder
 					}
 				}
 			}
-			h.qp_thresh= 15 + 52 - Math.min(h.slice_alpha_c0_offset, h.slice_beta_offset) - Math.max(Math.max(0, h.pps.chroma_qp_index_offset[0]), h.pps.chroma_qp_index_offset[1]);
+			h.qp_thresh= 15 + 52 - Math.Min(h.slice_alpha_c0_offset, h.slice_beta_offset) - Math.Max(Math.Max(0, h.pps.chroma_qp_index_offset[0]), h.pps.chroma_qp_index_offset[1]);
 	/*
 		#if 0 //FMO
 			if( h.pps.num_slice_groups > 1  && h.pps.mb_slice_group_map_type >= 3 && h.pps.mb_slice_group_map_type <= 5)
@@ -8405,14 +8416,14 @@ namespace cscodec.h243.decoder
 					if(h.ref_list[j][i].data_base[0]!=null){
 						int k;
 						//uint8_t *base= h.ref_list[j][i].base[0];
-						int[] base= h.ref_list[j][i].base[0];
+						int[] @base= h.ref_list[j][i].@base[0];
 						for(k=0; k<h.short_ref_count; k++)
-							if(h.short_ref[k].base[0] == base){
+							if(h.short_ref[k].@base[0] == @base){
 								id_list[i]= k;
 								break;
 							}
 						for(k=0; k<h.long_ref_count; k++)
-							if(h.long_ref[k]!=null && h.long_ref[k].base[0] == base){
+							if(h.long_ref[k]!=null && h.long_ref[k].@base[0] == @base){
 								id_list[i]= h.short_ref_count + k;
 								break;
 							}
@@ -8532,9 +8543,9 @@ namespace cscodec.h243.decoder
 
 			//memset(this.pps.scaling_matrix4, 16, 6*16*sizeof(uint8_t));
 			//memset(this.pps.scaling_matrix8, 16, 2*64*sizeof(uint8_t));
-			for(int i=0;i<this.pps.scaling_matrix4.length;i++)
+			for(int i=0;i<this.pps.scaling_matrix4.Length;i++)
 	    		Arrays.fill(this.pps.scaling_matrix4[i], 16);
-			for(int i=0;i<this.pps.scaling_matrix8.length;i++)
+			for(int i=0;i<this.pps.scaling_matrix8.Length;i++)
 	    		Arrays.fill(this.pps.scaling_matrix4[i], 16);
 		}	
 	
@@ -8550,32 +8561,32 @@ namespace cscodec.h243.decoder
 			// s.flags2= avctx.flags2;
 
 			/* end of stream, output what is still in the buffers */
-			boolean loop = true;
+			bool loop = true;
 			// out:
 			do {
 				loop = false;
 
 				if (buf_size == 0) {
-					AVFrame out;
+					AVFrame @out;
 					int i, out_idx;
 
 					// FIXME factorize this with the output code below
-					out = this.delayed_pic[0];
+					@out = this.delayed_pic[0];
 					out_idx = 0;
 					for (i = 1; this.delayed_pic[i] != null
 							&& 0 == this.delayed_pic[i].key_frame
 							&& 0 == this.delayed_pic[i].mmco_reset; i++)
-						if (this.delayed_pic[i].poc < out.poc) {
-							out = this.delayed_pic[i];
+						if (this.delayed_pic[i].poc < @out.poc) {
+							@out = this.delayed_pic[i];
 							out_idx = i;
 						}
 
 					for (i = out_idx; this.delayed_pic[i] != null; i++)
 						this.delayed_pic[i] = this.delayed_pic[i + 1];
 
-					if (out != null) {
+					if (@out != null) {
 						data_size[0] = 1;
-						out.copyTo(displayPicture);
+						@out.copyTo(displayPicture);
 					
 						// DebugTool.dumpFrameData(displayPicture);
 					}
@@ -8601,14 +8612,14 @@ namespace cscodec.h243.decoder
 						|| s.hurry_up != 0)
 					return 0;
 				// av_log(avctx, AV_LOG_ERROR, "no frame!\n");
-				//System.out.println("!!!! NO FRAME !!!!");
+				//Console.WriteLine("!!!! NO FRAME !!!!");
 				//return s.get_consumed_bytes(buf_index, buf_size); //-1;
 				return -1;
 			}
 
 			if (0 == (s.flags2 & MpegEncContext.CODEC_FLAG2_CHUNKS)
 					|| (s.mb_y >= s.mb_height && s.mb_height != 0)) {
-				AVFrame out = s.current_picture_ptr;
+				AVFrame @out = s.current_picture_ptr;
 				AVFrame cur = s.current_picture_ptr;
 				int i, pics, out_of_order, out_idx;
 
@@ -8722,30 +8733,30 @@ namespace cscodec.h243.decoder
 					if (cur.reference == 0)
 						cur.reference = DELAYED_PIC_REF;
 
-					out = this.delayed_pic[0];
+					@out = this.delayed_pic[0];
 					out_idx = 0;
 					for (i = 1; this.delayed_pic[i] != null
 							&& 0 == this.delayed_pic[i].key_frame
 							&& 0 == this.delayed_pic[i].mmco_reset; i++)
-						if (this.delayed_pic[i].poc < out.poc) {
-							out = this.delayed_pic[i];
+						if (this.delayed_pic[i].poc < @out.poc) {
+							@out = this.delayed_pic[i];
 							out_idx = i;
 						}
 					if (s.has_b_frames == 0
 							&& (this.delayed_pic[0].key_frame != 0 || this.delayed_pic[0].mmco_reset != 0))
 						this.outputed_poc = int.MinValue;
-					out_of_order = (out.poc < this.outputed_poc) ? 1 : 0;
+					out_of_order = (@out.poc < this.outputed_poc) ? 1 : 0;
 
 					if (this.sps.bitstream_restriction_flag != 0
 							&& s.has_b_frames >= this.sps.num_reorder_frames) {
 					} else if ((out_of_order != 0 && pics - 1 == s.has_b_frames && s.has_b_frames < MAX_DELAYED_PIC_COUNT)
-							|| (s.low_delay != 0 && ((this.outputed_poc != int.MinValue && out.poc > this.outputed_poc + 2) || cur.pict_type == FF_B_TYPE))) {
+							|| (s.low_delay != 0 && ((this.outputed_poc != int.MinValue && @out.poc > this.outputed_poc + 2) || cur.pict_type == FF_B_TYPE))) {
 						s.low_delay = 0;
 						s.has_b_frames++;
 					}
 
 					if (0 != out_of_order || pics > s.has_b_frames) {
-						out.reference &= ~DELAYED_PIC_REF;
+						@out.reference &= ~DELAYED_PIC_REF;
 						for (i = out_idx; this.delayed_pic[i] != null; i++)
 							this.delayed_pic[i] = this.delayed_pic[i + 1];
 					}
@@ -8757,8 +8768,8 @@ namespace cscodec.h243.decoder
 								&& (this.delayed_pic[0].key_frame != 0 || this.delayed_pic[0].mmco_reset != 0)) {
 							this.outputed_poc = int.MinValue;
 						} else
-							this.outputed_poc = out.poc;
-						out.copyTo(displayPicture);
+							this.outputed_poc = @out.poc;
+						@out.copyTo(displayPicture);
 					
 						// DebugTool.dumpFrameData(displayPicture);
 					} else {

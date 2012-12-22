@@ -22,6 +22,13 @@ namespace cscodec.h243.util
 			return Ret;
 		}
 
+		public static T[][][][] Create4D<T>(int Rank1, int Rank2, int Rank3, int Rank4)
+		{
+			var Ret = new T[Rank1][][][];
+			for (int n = 0; n < Rank1; n++) Ret[n] = Create3D<T>(Rank2, Rank3, Rank4);
+			return Ret;
+		}
+
 		public static bool equals(Array array1,
 				Array array2)
 		{

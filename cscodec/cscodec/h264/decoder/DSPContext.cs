@@ -21,8 +21,8 @@ namespace cscodec.h243.decoder
 		/*uint8_t*/ public int[] idct_permutation = new int[64];
 		public int idct_permutation_type;
 	
-		public static Ih264_qpel_mc_func[,] put_h264_qpel_pixels_tab = new Ih264_qpel_mc_func[4,16];
-		public static Ih264_qpel_mc_func[,] avg_h264_qpel_pixels_tab = new Ih264_qpel_mc_func[4,16];
+		public static Ih264_qpel_mc_func[][] put_h264_qpel_pixels_tab = Arrays.Create2D<Ih264_qpel_mc_func>(4,16);
+		public static Ih264_qpel_mc_func[][] avg_h264_qpel_pixels_tab = Arrays.Create2D<Ih264_qpel_mc_func>(4,16);
 
 		/* draw the edges of width 'w' of an image of size width, height */
 		//FIXME check that this is ok for mpeg4 interlaced
@@ -40,9 +40,9 @@ namespace cscodec.h243.decoder
 			last_line_offset = buf_offset + (height - 1) * wrap;
 			for(i=0;i<w;i++) {
 				/* top and bottom */
-	    		System.arraycopy(buf_base, buf_offset, buf_base, buf_offset - (i + 1) * wrap, width);
+	    		Array.Copy(buf_base, buf_offset, buf_base, buf_offset - (i + 1) * wrap, width);
 				//memcpy(buf - (i + 1) * wrap, buf, width);
-	    		System.arraycopy(last_line_base, last_line_offset, last_line_base, last_line_offset + (i + 1) * wrap, width);
+	    		Array.Copy(last_line_base, last_line_offset, last_line_base, last_line_offset + (i + 1) * wrap, width);
 				//memcpy(last_line + (i + 1) * wrap, last_line, width);
 			}
 			/* left and right */
@@ -437,7 +437,7 @@ namespace cscodec.h243.decoder
 	    		case 2:
 	    			for(i=0; i<h; i++)
 	    			{
-	    	    		System.arraycopy(src_base, src_offset, dst_base, dst_offset, 2);
+	    	    		Array.Copy(src_base, src_offset, dst_base, dst_offset, 2);
 	    				//AV_WN16(dst   , AV_RN16(src   ));
 						dst_offset+=dstStride;
 						src_offset+=srcStride;
@@ -446,7 +446,7 @@ namespace cscodec.h243.decoder
 				case 4:
 					for(i=0; i<h; i++)
 					{
-	    	    		System.arraycopy(src_base, src_offset, dst_base, dst_offset, 4);
+	    	    		Array.Copy(src_base, src_offset, dst_base, dst_offset, 4);
 						//AV_WN32(dst   , AV_RN32(src   ));
 						dst_offset+=dstStride;
 						src_offset+=srcStride;
@@ -457,7 +457,7 @@ namespace cscodec.h243.decoder
 					{
 						//AV_WN32(dst   , AV_RN32(src   ));
 						//AV_WN32(dst+4 , AV_RN32(src+4 ));
-	    	    		System.arraycopy(src_base, src_offset, dst_base, dst_offset, 8);
+	    	    		Array.Copy(src_base, src_offset, dst_base, dst_offset, 8);
 
 	    	    		dst_offset+=dstStride;
 						src_offset+=srcStride;
@@ -470,7 +470,7 @@ namespace cscodec.h243.decoder
 						//AV_WN32(dst+4 , AV_RN32(src+4 ));
 						//AV_WN32(dst+8 , AV_RN32(src+8 ));
 						//AV_WN32(dst+12, AV_RN32(src+12));
-	    	    		System.arraycopy(src_base, src_offset, dst_base, dst_offset, 16);
+	    	    		Array.Copy(src_base, src_offset, dst_base, dst_offset, 16);
 						dst_offset+=dstStride;
 						src_offset+=srcStride;
 					}
@@ -578,7 +578,7 @@ namespace cscodec.h243.decoder
 				case 2:
 					if(opcode == 0) { // PUT
 						for(int i=0;i<height;i++) {
-							System.arraycopy(src_base, src_offset, dst_base, dst_offset, 2);
+							Array.Copy(src_base, src_offset, dst_base, dst_offset, 2);
 							dst_offset += stride;
 							src_offset += stride;
 						} // for
@@ -597,7 +597,7 @@ namespace cscodec.h243.decoder
 				case 4:
 					if(opcode == 0) { // PUT
 						for(int i=0;i<height;i++) {
-							System.arraycopy(src_base, src_offset, dst_base, dst_offset, 4);
+							Array.Copy(src_base, src_offset, dst_base, dst_offset, 4);
 							dst_offset += stride;
 							src_offset += stride;
 						} // for
@@ -619,7 +619,7 @@ namespace cscodec.h243.decoder
 					if(opcode == 0) { // PUT
 						for(int i=0;i<height;i++) {
 							//// DebugTool.printDebugString("Copy offset: "+(src_offset-8208)+"=>"+(dst_offset-8208)+"\n");
-							System.arraycopy(src_base, src_offset, dst_base, dst_offset, 8);
+							Array.Copy(src_base, src_offset, dst_base, dst_offset, 8);
 							dst_offset += stride;
 							src_offset += stride;
 						} // for
@@ -1160,13 +1160,13 @@ namespace cscodec.h243.decoder
 			h264_qpel_hv_lowpass(0, size, halfHV, 0, tmp, 0, src_base, src_offset, size, size, stride);
 	    
 			// DebugTool.printDebugString("halfV:");
-			for(int i=0;i<halfV.length;i++) {
+			for(int i=0;i<halfV.Length;i++) {
 	    		// DebugTool.printDebugString(","+halfV[i]);
 			}
 			// DebugTool.printDebugString("\n");
 	    
 			// DebugTool.printDebugString("halfHV:");
-			for(int i=0;i<halfHV.length;i++) {
+			for(int i=0;i<halfHV.Length;i++) {
 	    		// DebugTool.printDebugString(","+halfHV[i]);
 			}
 			// DebugTool.printDebugString("\n");

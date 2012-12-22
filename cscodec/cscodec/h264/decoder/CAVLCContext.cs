@@ -1,3 +1,4 @@
+using cscodec.h243.util;
 namespace cscodec.h243.decoder
 {
 	public class CAVLCContext {
@@ -443,7 +444,7 @@ namespace cscodec.h243.decoder
 			//LAST_SKIP_BITS(re, gb, log);
 			re_index += (log);
 	    
-			//System.out.println("get_level_prefix(,"+log+"): "+ (log-1));
+			//Console.WriteLine("get_level_prefix(,"+log+"): "+ (log-1));
 			//CLOSE_READER(re, gb);
 			gb.index= re_index;
 
@@ -472,17 +473,17 @@ namespace cscodec.h243.decoder
 	        			chroma_dc_coeff_token_vlc.table_base, chroma_dc_coeff_token_vlc.table_offset,
 	        			H264Context.CHROMA_DC_COEFF_TOKEN_VLC_BITS, 1, "coeff_token_CROMA_DC");
 				total_coeff= coeff_token>>2;
-        		//System.out.println("get_vlc2(CHROMA_DC_COEFF_TOKEN) => total_coeff = " + total_coeff );
+        		//Console.WriteLine("get_vlc2(CHROMA_DC_COEFF_TOKEN) => total_coeff = " + total_coeff );
 			}else{
 				if(n == H264Context.LUMA_DC_BLOCK_INDEX){
 					total_coeff= pred_non_zero_count(h, 0);
-					//System.out.println("Prediected Non-Zero count = "+total_coeff);
+					//Console.WriteLine("Prediected Non-Zero count = "+total_coeff);
 					coeff_token= gb.get_vlc2( 
 	            			coeff_token_vlc[ coeff_token_table_index[total_coeff] ].table_base,
 	            			coeff_token_vlc[ coeff_token_table_index[total_coeff] ].table_offset,
 	            			H264Context.COEFF_TOKEN_VLC_BITS, 2, "coeff_token_LUMA_DC");
 					total_coeff= coeff_token>>2;
-	        		//System.out.println("get_vlc2(LUMA_DC_COEFF_TOKEN) => total_coeff = " + total_coeff );
+	        		//Console.WriteLine("get_vlc2(LUMA_DC_COEFF_TOKEN) => total_coeff = " + total_coeff );
 				}else{
 					total_coeff= pred_non_zero_count(h, n);
 
@@ -588,7 +589,7 @@ namespace cscodec.h243.decoder
 
 				//remaining coefficients have suffix_length > 0
 				for(i=trailing_ones+1;i<total_coeff;i++) {
-					final int[/*7*/] suffix_limit = {0,3,6,12,24,48, int.MaxValue };
+					int[/*7*/] suffix_limit = {0,3,6,12,24,48, int.MaxValue };
 					bitsi= (int)gb.show_bits(LEVEL_TAB_BITS);
 					level_code= cavlc_level_tab[suffix_length][bitsi][0];
 
@@ -662,8 +663,8 @@ namespace cscodec.h243.decoder
 	   
 			//!!????????????????????????????????? Magic about array resizing??
 			if(scantable_offset < 0) {
-	    		int[] new_scantable_base = new int[scantable_base.length + (-scantable_offset)];
-	    		System.arraycopy(scantable_base, 0, new_scantable_base, -scantable_offset, scantable_base.length);
+	    		int[] new_scantable_base = new int[scantable_base.Length + (-scantable_offset)];
+	    		Array.Copy(scantable_base, 0, new_scantable_base, -scantable_offset, scantable_base.Length);
 	    		scantable_base = new_scantable_base;
 	    		scantable_offset = 0;
 			}
@@ -677,12 +678,12 @@ namespace cscodec.h243.decoder
 	            		//????????????????????????????????????????/
 					   // run_before= gb.get_vlc2((run_vlc-1)[zeros_left].table, H264Context.RUN_VLC_BITS, 1);
 						run_before= gb.get_vlc2(run_vlc[zeros_left-1].table_base, run_vlc[zeros_left-1].table_offset, H264Context.RUN_VLC_BITS, 1, "RUN_VLC");
-		        		//System.out.println("get_vlc2(LUMA_RUN_VLC) => run_before = " + run_before );
+		        		//Console.WriteLine("get_vlc2(LUMA_RUN_VLC) => run_before = " + run_before );
 					}  else {
 						run_before= gb.get_vlc2(run7_vlc.table_base, run7_vlc.table_offset, H264Context.RUN7_VLC_BITS, 2, "RUN7_VLC");
-		        		//System.out.println("get_vlc2(LUMA_RUN_VLC7) => run_before = " + run_before );
+		        		//Console.WriteLine("get_vlc2(LUMA_RUN_VLC7) => run_before = " + run_before );
 					} // if
-					////System.out.println("run_before = "+run_before);
+					////Console.WriteLine("run_before = "+run_before);
 					zeros_left -= run_before;
 					scantable_offset -= 1 + run_before;
 					block_base[block_offset + scantable_base[scantable_offset]]= (short)level[i];
@@ -698,12 +699,12 @@ namespace cscodec.h243.decoder
 				for(i=1;i<total_coeff && zeros_left > 0;i++) {
 					if(zeros_left < 7) {
 						run_before= gb.get_vlc2(run_vlc[zeros_left-1].table_base, run_vlc[zeros_left-1].table_offset, H264Context.RUN_VLC_BITS, 1, "RUN_VLC");
-		        		//System.out.println("get_vlc2(CHROMA_RUN_VLC) => run_before = " + run_before );
+		        		//Console.WriteLine("get_vlc2(CHROMA_RUN_VLC) => run_before = " + run_before );
 					} else {
 						run_before= gb.get_vlc2(run7_vlc.table_base, run7_vlc.table_offset, H264Context.RUN7_VLC_BITS, 2, "RUN7_VLC");
-		        		//System.out.println("get_vlc2(CHROMA_RUN_VLC7) => run_before = " + run_before );
+		        		//Console.WriteLine("get_vlc2(CHROMA_RUN_VLC7) => run_before = " + run_before );
 					} // if
-					////System.out.println("run_before = "+run_before);
+					////Console.WriteLine("run_before = "+run_before);
 					zeros_left -= run_before;
 					scantable_offset -= (1 + run_before);
 					block_base[block_offset + scantable_base[scantable_offset]]= (short)((level[i] * qmul_base[qmul_offset + scantable_base[scantable_offset]] + 32)>>6);
@@ -889,7 +890,7 @@ namespace cscodec.h243.decoder
 				int i, j;
 				int[] sub_partition_count = new int[4];
 				int list;
-				int[][]ref = new int[2][4];
+				int[,] @ref = new int[2, 4];
 
 				if(h.slice_type_nos == H264Context.FF_B_TYPE){
 					for(i=0; i<4; i++){
@@ -903,10 +904,10 @@ namespace cscodec.h243.decoder
 					}
 					if( 0!=((h.sub_mb_type[0]|h.sub_mb_type[1]|h.sub_mb_type[2]|h.sub_mb_type[3])&H264Context.MB_TYPE_DIRECT2)) {
 	            		mb_type = h.ff_h264_pred_direct_motion(mb_type);
-						h.ref_cache[0][h.scan8[4]] =
-						h.ref_cache[1][h.scan8[4]] =
-						h.ref_cache[0][h.scan8[12]] =
-						h.ref_cache[1][h.scan8[12]] = H264Context.PART_NOT_AVAILABLE;
+						h.ref_cache[0,h.scan8[4]] =
+						h.ref_cache[1,h.scan8[4]] =
+						h.ref_cache[0,h.scan8[12]] =
+						h.ref_cache[1,h.scan8[12]] = H264Context.PART_NOT_AVAILABLE;
 					}
 				}else{
 					//assert(h.slice_type_nos == H264Context.FF_P_TYPE); //FIXME SP correct ?
@@ -938,10 +939,10 @@ namespace cscodec.h243.decoder
 									return -1;
 								}
 							}
-							ref[list][i]= tmp;
+							@ref[list,i]= tmp;
 						}else{
 						 //FIXME
-							ref[list][i] = -1;
+							@ref[list,i] = -1;
 						}
 					}
 				}
@@ -952,11 +953,11 @@ namespace cscodec.h243.decoder
 				for(list=0; list<h.list_count; list++){
 					for(i=0; i<4; i++){
 						if(0!=(h.sub_mb_type[i] & H264Context.MB_TYPE_DIRECT2)) {
-							h.ref_cache[list][ h.scan8[4*i] ] = h.ref_cache[list][ h.scan8[4*i]+1 ];
+							h.ref_cache[list, h.scan8[4*i] ] = h.ref_cache[list, h.scan8[4*i]+1 ];
 							continue;
 						}
-						h.ref_cache[list][ h.scan8[4*i]   ]=h.ref_cache[list][ h.scan8[4*i]+1 ]=
-						h.ref_cache[list][ h.scan8[4*i]+8 ]=h.ref_cache[list][ h.scan8[4*i]+9 ]= ref[list][i];
+						h.ref_cache[list, h.scan8[4*i]   ]=h.ref_cache[list, h.scan8[4*i]+1 ]=
+						h.ref_cache[list, h.scan8[4*i]+8 ]=h.ref_cache[list, h.scan8[4*i]+9 ]= @ref[list,i];
 
 						if(((h.sub_mb_type[i]) & (H264Context.MB_TYPE_P0L0<<((0)+2*(list)))) != 0 ) {//IS_DIR(h.sub_mb_type[i], 0, list)){
 							int sub_mb_type= h.sub_mb_type[i];
@@ -968,7 +969,7 @@ namespace cscodec.h243.decoder
 								int[][] mv_cache_base = h.mv_cache[list];
 								int my_cache_offset = h.scan8[index];
 								int[] mxmy = new int[2];
-								h.pred_motion(index, block_width, list, h.ref_cache[list][ h.scan8[index] ], mxmy);
+								h.pred_motion(index, block_width, list, h.ref_cache[list, h.scan8[index] ], mxmy);
 								mx = mxmy[0];
 								my = mxmy[1];
 								mx += s.gb.get_se_golomb("mx?");
@@ -996,14 +997,14 @@ namespace cscodec.h243.decoder
 							p[0] = p[1]=
 							p[8] = p[9]= 0;
 							*/
-	                		h.mv_cache[list][h.scan8[4*i] + 0][0] = (short)0;
-	                		h.mv_cache[list][h.scan8[4*i] + 1][0] = (short)0;
-	                		h.mv_cache[list][h.scan8[4*i] + 8][0] = (short)0;
-	                		h.mv_cache[list][h.scan8[4*i] + 9][0] = (short)0;
-	                		h.mv_cache[list][h.scan8[4*i] + 0][1] = (short)0;
-	                		h.mv_cache[list][h.scan8[4*i] + 1][1] = (short)0;
-	                		h.mv_cache[list][h.scan8[4*i] + 8][1] = (short)0;
-	                		h.mv_cache[list][h.scan8[4*i] + 9][1] = (short)0;
+	                		h.mv_cache[list,h.scan8[4*i] + 0][0] = (short)0;
+	                		h.mv_cache[list,h.scan8[4*i] + 1][0] = (short)0;
+	                		h.mv_cache[list,h.scan8[4*i] + 8][0] = (short)0;
+	                		h.mv_cache[list,h.scan8[4*i] + 9][0] = (short)0;
+	                		h.mv_cache[list,h.scan8[4*i] + 0][1] = (short)0;
+	                		h.mv_cache[list,h.scan8[4*i] + 1][1] = (short)0;
+	                		h.mv_cache[list,h.scan8[4*i] + 8][1] = (short)0;
+	                		h.mv_cache[list,h.scan8[4*i] + 9][1] = (short)0;
 						}
 					}
 				}

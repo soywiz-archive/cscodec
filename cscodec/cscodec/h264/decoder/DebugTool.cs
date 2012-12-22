@@ -1,18 +1,19 @@
+using System;
 namespace cscodec.h243.decoder
 {
 	public class DebugTool
 	{
 
-		public const boolean DEBUG_MODE = false;
+		public const bool DEBUG_MODE = false;
 		public static int logCount = 0;
 
-		public static void dumpDebugFrameData(H264Context h, String msg)
+		public static void dumpDebugFrameData(H264Context h, string msg)
 		{
 			if (!DEBUG_MODE) return;
 			dumpDebugFrameData(h, msg, true);
 		}
 
-		public static void dumpDebugFrameData(H264Context h, String msg, boolean incrementCounter) {
+		public static void dumpDebugFrameData(H264Context h, string msg, bool incrementCounter) {
 			if(!DEBUG_MODE) return;
 
 			try {
@@ -20,91 +21,91 @@ namespace cscodec.h243.decoder
 				if(incrementCounter)
 					logCount++;
 						
-				System.out.println("Dumping Decoder State("+msg+"): "+logCount+", Frame: "+h.frame_num);			
+				Console.WriteLine("Dumping Decoder State("+msg+"): "+logCount+", Frame: "+h.frame_num);			
 
 				// Dump all data inside decoder
-				System.out.print("ctx.non_zero_count_cache: ");
-				for(int i=0;i<h.non_zero_count_cache.length;i++) {
-					System.out.print(","+h.non_zero_count_cache[i]);
+				Console.Write("ctx.non_zero_count_cache: ");
+				for(int i=0;i<h.non_zero_count_cache.Length;i++) {
+					Console.Write(","+h.non_zero_count_cache[i]);
 				} // for
-				System.out.println();
+				Console.WriteLine();
 
-				//for(int j=0;j<h.non_zero_count.length;j++) {
+				//for(int j=0;j<h.non_zero_count.Length;j++) {
 				int j = h.mb_xy;
 				if(h.non_zero_count != null)
-				if(j>=0 && j<h.non_zero_count.length) {
-					System.out.print("ctx.non_zero_count["+j+"]: ");
-					for(int i=0;i<h.non_zero_count[j].length;i++) {
-						System.out.print(","+h.non_zero_count[j][i]);
+				if(j>=0 && j<h.non_zero_count.Length) {
+					Console.Write("ctx.non_zero_count["+j+"]: ");
+					for(int i=0;i<h.non_zero_count[j].Length;i++) {
+						Console.Write(","+h.non_zero_count[j][i]);
 					} // for i
-					System.out.println();
+					Console.WriteLine();
 				} // for j
 
 				// Dump all data inside decoder
-				System.out.print("edge_emu_buffer: ");
+				Console.Write("edge_emu_buffer: ");
 				for(int i=0;i<(h.s.width+64)*2*21 && logCount == 9537;i++) {
-					System.out.print(","+h.s.allocated_edge_emu_buffer[h.s.edge_emu_buffer_offset + i]);
+					Console.Write(","+h.s.allocated_edge_emu_buffer[h.s.edge_emu_buffer_offset + i]);
 				} // for
-				System.out.println();
+				Console.WriteLine();
 			
-				System.out.print("ctx.mv_cache[0]: ");
+				Console.Write("ctx.mv_cache[0]: ");
 				for(int i=0;i<40;i++) {
-					System.out.print(","+h.mv_cache[0][i][0]+","+h.mv_cache[0][i][1]);
+					Console.Write(","+h.mv_cache[0,i,0]+","+h.mv_cache[0,i,1]);
 				} // for
-				System.out.println();
+				Console.WriteLine();
 
-				System.out.print("ctx.mv_cache[1]: ");
+				Console.Write("ctx.mv_cache[1]: ");
 				for(int i=0;i<40;i++) {
-					System.out.print(","+h.mv_cache[1][i][0]+","+h.mv_cache[1][i][1]);
+					Console.Write(","+h.mv_cache[1,i,0]+","+h.mv_cache[1,i,1]);
 				} // for
-				System.out.println();
+				Console.WriteLine();
 
-				System.out.print("ctx.mvd_cache[0]: ");
+				Console.Write("ctx.mvd_cache[0]: ");
 				for(int i=0;i<40;i++) {
-					System.out.print(","+h.mvd_cache[0][i][0]+","+h.mvd_cache[0][i][1]);
+					Console.Write(","+h.mvd_cache[0][i][0]+","+h.mvd_cache[0][i][1]);
 				} // for
-				System.out.println();
+				Console.WriteLine();
 
-				System.out.print("ctx.mvd_cache[1]: ");
+				Console.Write("ctx.mvd_cache[1]: ");
 				for(int i=0;i<40;i++) {
-					System.out.print(","+h.mvd_cache[1][i][0]+","+h.mvd_cache[1][i][1]);
+					Console.Write(","+h.mvd_cache[1][i][0]+","+h.mvd_cache[1][i][1]);
 				} // for
-				System.out.println();
+				Console.WriteLine();
 
 				if(h.mvd_table[0] != null) {
-					System.out.print("ctx.mvd_table[0]: ");
+					Console.Write("ctx.mvd_table[0]: ");
 					for(int i=0;i<40;i++) {
-						System.out.print(","+h.mvd_table[0][i][0]+","+h.mvd_table[0][i][1]);
+						Console.Write(","+h.mvd_table[0][i][0]+","+h.mvd_table[0][i][1]);
 					} // for
-					System.out.println();
+					Console.WriteLine();
 	
-					System.out.print("ctx.mvd_table[1]: ");
+					Console.Write("ctx.mvd_table[1]: ");
 					for(int i=0;i<40;i++) {
-						System.out.print(","+h.mvd_table[1][i][0]+","+h.mvd_table[1][i][1]);
+						Console.Write(","+h.mvd_table[1][i][0]+","+h.mvd_table[1][i][1]);
 					} // for
-					System.out.println();
+					Console.WriteLine();
 				} // if
 			
-				System.out.print("ctx.ref_cache[0]: ");
+				Console.Write("ctx.ref_cache[0]: ");
 				for(int i=0;i<40;i++) {
-					System.out.print(","+h.ref_cache[0][i]+","+h.ref_cache[0][i]);
+					Console.Write(","+h.ref_cache[0,i]+","+h.ref_cache[0,i]);
 				} // for
-				System.out.println();
+				Console.WriteLine();
 			
-				System.out.print("ctx.ref_cache[1]: ");
+				Console.Write("ctx.ref_cache[1]: ");
 				for(int i=0;i<40;i++) {
-					System.out.print(","+h.ref_cache[1][i]+","+h.ref_cache[1][i]);
+					Console.Write(","+h.ref_cache[1,i]+","+h.ref_cache[1,i]);
 				} // for
-				System.out.println();
+				Console.WriteLine();
 
-				System.out.print("error_status_table: ");
+				Console.Write("error_status_table: ");
 				if(h.s.error_status_table != null)
-				for(int i=0;i</*h.s.error_status_table.length*/32 && h.s.error_status_table.length > 32;i++) {
-					System.out.print(","+h.s.error_status_table[i]);
+				for(int i=0;i</*h.s.error_status_table.Length*/32 && h.s.error_status_table.Length > 32;i++) {
+					Console.Write(","+h.s.error_status_table[i]);
 				} // for
-				System.out.println();
+				Console.WriteLine();
 			} catch(Exception e) {
-				e.printStackTrace();
+				Console.WriteLine(e);
 			} finally {
 			} // try
 		}
@@ -116,10 +117,12 @@ namespace cscodec.h243.decoder
 			
 				if(logCount==0) logCount++;
 			
-				System.out.print(msg);
+				Console.Write(msg);
 			} catch(Exception e) {
-				e.printStackTrace();
-			} finally {
+				Console.WriteLine(e);
+			}
+			finally
+			{
 			} // try
 		}
 
@@ -130,21 +133,23 @@ namespace cscodec.h243.decoder
 			
 				if(logCount==0) logCount++;
 
-				System.out.println("****** DUMPING FRAME DATA ******");			
+				Console.WriteLine("****** DUMPING FRAME DATA ******");			
 				int j = 0;
-				for(int i=0;i</*2000*/100/*frame.data_base[0].length-frame.data_offset[0]*/;i++) {
+				for(int i=0;i</*2000*/100/*frame.data_base[0].Length-frame.data_offset[0]*/;i++) {
 					if(i%40 == 0) {
-						System.out.println();
-						System.out.print("["+j+"]: ");					
+						Console.WriteLine();
+						Console.Write("["+j+"]: ");					
 						j++;
 					} // if
-					System.out.print(""+frame.data_base[0][frame.data_offset[0]+i/*/*+13338-1024+8*512*/]+",");
+					Console.Write(""+frame.data_base[0][frame.data_offset[0]+i/*/*+13338-1024+8*512*/]+",");
 				} // for
-				System.out.println();
+				Console.WriteLine();
 			
 			} catch(Exception e) {
-				e.printStackTrace();
-			} finally {
+				Console.WriteLine(e);
+			}
+			finally
+			{
 			} // try
 		
 		}

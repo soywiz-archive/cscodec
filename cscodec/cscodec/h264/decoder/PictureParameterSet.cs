@@ -1,3 +1,4 @@
+using cscodec.h243.util;
 using System;
 namespace cscodec.h243.decoder
 {
@@ -18,9 +19,9 @@ namespace cscodec.h243.decoder
 		public int constrained_intra_pred; ///< constrained_intra_pred_flag
 		public int redundant_pic_cnt_present; ///< redundant_pic_cnt_present_flag
 		public int transform_8x8_mode;     ///< transform_8x8_mode_flag
-		public int[,] scaling_matrix4 = new int[6,16];
-		public int[,] scaling_matrix8 = new int[2,64];
-		public int[,] chroma_qp_table = new int[2,64];  ///< pre-scaled (with chroma_qp_index_offset) version of qp_table
+		public int[][] scaling_matrix4 = Arrays.Create2D<int>(6, 16);
+		public int[][] scaling_matrix8 = Arrays.Create2D<int>(2, 64);
+		public int[][] chroma_qp_table = Arrays.Create2D<int>(2, 64);  ///< pre-scaled (with chroma_qp_index_offset) version of qp_table
 		public int chroma_qp_diff;
     
 		public void copyTo(PictureParameterSet pps) {
@@ -43,9 +44,9 @@ namespace cscodec.h243.decoder
 			pps.constrained_intra_pred = constrained_intra_pred; ///< constrained_intra_pred_flag
 			pps.redundant_pic_cnt_present = redundant_pic_cnt_present; ///< redundant_pic_cnt_present_flag
 			pps.transform_8x8_mode = transform_8x8_mode;     ///< transform_8x8_mode_flag
-			pps.scaling_matrix4 = (int[,])scaling_matrix4.Clone();
-			pps.scaling_matrix8 = (int[,])scaling_matrix8.Clone();
-			pps.chroma_qp_table = (int[,])chroma_qp_table.Clone();
+			pps.scaling_matrix4 = (int[][])scaling_matrix4.Clone();
+			pps.scaling_matrix8 = (int[][])scaling_matrix8.Clone();
+			pps.chroma_qp_table = (int[][])chroma_qp_table.Clone();
 			pps.chroma_qp_diff = chroma_qp_diff;
 		}
 		

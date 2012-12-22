@@ -40,19 +40,19 @@ namespace cscodec.h243.util
 				} // if
 				return result;
 			} // if
-			if(markPos == 0 && markLimit > localBuf.length) {
-				int newLength = localBuf.length * 2;
+			if(markPos == 0 && markLimit > localBuf.Length) {
+				int newLength = localBuf.Length * 2;
 				if(newLength > markLimit)
 					newLength = markLimit;
 				sbyte[] newBuf = new sbyte[newLength];
-				System.arraycopy(localBuf, 0, newBuf, 0, localBuf.length);
+				Array.Copy(localBuf, 0, newBuf, 0, localBuf.Length);
 				localBuf = buf = newBuf;
 			} else if(markPos > 0) {
-				System.arraycopy(localBuf, markPos, localBuf, 0, localBuf.length - markPos);
+				Array.Copy(localBuf, markPos, localBuf, 0, localBuf.Length - markPos);
 			} // if
 			pos -= markPos;
 			count = markPos = 0;
-			int bytesRead = localIn.read(localBuf,pos,localBuf.length - pos);
+			int bytesRead = localIn.read(localBuf,pos,localBuf.Length - pos);
 			count = bytesRead <= 0? pos: pos + bytesRead;
 			return bytesRead;
 		}
@@ -88,7 +88,7 @@ namespace cscodec.h243.util
 			int required;
 			if(pos < count) {
 				 int copyLength = count - pos >= length?length: count - pos;
-				 System.arraycopy(localBuf, pos, buffer, offset, copyLength);
+				 Array.Copy(localBuf, pos, buffer, offset, copyLength);
 				 pos += copyLength;
 				 if(copyLength == length || localIn.available() == 0)
 					 return copyLength;
@@ -100,7 +100,7 @@ namespace cscodec.h243.util
 
 			while(true) {
 				int read;
-				if(markPos == -1 && required > localBuf.length) {
+				if(markPos == -1 && required > localBuf.Length) {
 					read = localIn.read(buffer, offset, required);
 					if(read == -1)
 						return required == length?-1:length - required;
@@ -113,7 +113,7 @@ namespace cscodec.h243.util
 							throw new IOException();
 					} // if
 					read = count - pos >= required? required: count - pos;
-					System.arraycopy(localBuf, pos, buffer, offset, read);
+					Array.Copy(localBuf, pos, buffer, offset, read);
 					pos += read;
 				} // if
 				required -= read;

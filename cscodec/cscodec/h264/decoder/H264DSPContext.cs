@@ -182,19 +182,19 @@ namespace cscodec.h243.decoder
                 
 					// DebugTool.printDebugString("p={"+p0+","+p1+","+p2+"}, q={"+q0+","+q1+","+q2+"}, alpha="+alpha+", beta="+beta+", pix_offset="+pix_offset+", xstride="+xstride+"\n");
 
-					if( Math.abs( p0 - q0 ) < alpha &&
-                			Math.abs( p1 - p0 ) < beta &&
-                			Math.abs( q1 - q0 ) < beta ) {
+					if( Math.Abs( p0 - q0 ) < alpha &&
+                			Math.Abs( p1 - p0 ) < beta &&
+                			Math.Abs( q1 - q0 ) < beta ) {
 
 						int tc = tc0[i];
 						int i_delta;
 
-						if( Math.abs( p2 - p0 ) < beta ) {
+						if( Math.Abs( p2 - p0 ) < beta ) {
 							if(tc0[i] != 0)
 							pix[pix_offset -2*xstride] = p1 + av_clip( (( p2 + ( ( p0 + q0 + 1 ) >> 1 ) ) >> 1) - p1, -tc0[i], tc0[i] );
 							tc++;
 						}
-						if( Math.abs( q2 - q0 ) < beta ) {
+						if( Math.Abs( q2 - q0 ) < beta ) {
 							if(tc0[i] != 0)
 							pix[pix_offset +   xstride] = q1 + av_clip( (( q2 + ( ( p0 + q0 + 1 ) >> 1 ) ) >> 1) - q1, -tc0[i], tc0[i] );
 							tc++;
@@ -229,12 +229,12 @@ namespace cscodec.h243.decoder
 				 int q1 = pix[pix_offset +1*xstride];
 				 int q2 = pix[pix_offset +2*xstride];
 
-				if( Math.abs( p0 - q0 ) < alpha &&
-            			Math.abs( p1 - p0 ) < beta &&
-            			Math.abs( q1 - q0 ) < beta ) {
+				if( Math.Abs( p0 - q0 ) < alpha &&
+            			Math.Abs( p1 - p0 ) < beta &&
+            			Math.Abs( q1 - q0 ) < beta ) {
 
-					if(Math.abs( p0 - q0 ) < (( alpha >> 2 ) + 2 )){
-						if( Math.abs( p2 - p0 ) < beta)
+					if(Math.Abs( p0 - q0 ) < (( alpha >> 2 ) + 2 )){
+						if( Math.Abs( p2 - p0 ) < beta)
 						{
 							 int p3 = pix[pix_offset -4*xstride];
 							/* p0', p1', p2' */
@@ -245,7 +245,7 @@ namespace cscodec.h243.decoder
 							/* p0' */
 							pix[pix_offset -1*xstride] = ( 2*p1 + p0 + q1 + 2 ) >> 2;
 						}
-						if( Math.abs( q2 - q0 ) < beta)
+						if( Math.Abs( q2 - q0 ) < beta)
 						{
 							 int q3 = pix[pix_offset +3*xstride];
 							/* q0', q1', q2' */
@@ -290,9 +290,9 @@ namespace cscodec.h243.decoder
 					int q0 = pix[pix_offset];
 					int q1 = pix[pix_offset +1*xstride];
 
-					if( Math.abs( p0 - q0 ) < alpha &&
-                			Math.abs( p1 - p0 ) < beta &&
-                			Math.abs( q1 - q0 ) < beta ) {
+					if( Math.Abs( p0 - q0 ) < alpha &&
+                			Math.Abs( p1 - p0 ) < beta &&
+                			Math.Abs( q1 - q0 ) < beta ) {
 
 						int delta = av_clip( (((q0 - p0 ) << 2) + (p1 - q1) + 4) >> 3, -tc, tc );
 
@@ -322,9 +322,9 @@ namespace cscodec.h243.decoder
 				 int q0 = pix[pix_offset];
 				 int q1 = pix[pix_offset +1*xstride];
 
-				if( Math.abs( p0 - q0 ) < alpha &&
-            			Math.abs( p1 - p0 ) < beta &&
-            			Math.abs( q1 - q0 ) < beta ) {
+				if( Math.Abs( p0 - q0 ) < alpha &&
+            			Math.Abs( p1 - p0 ) < beta &&
+            			Math.Abs( q1 - q0 ) < beta ) {
 
 					pix[pix_offset -xstride] = ( 2*p1 + p0 + q1 + 2 ) >> 2;   /* p0' */
 					pix[pix_offset]        = ( 2*q1 + q0 + p1 + 2 ) >> 2;   /* q0' */

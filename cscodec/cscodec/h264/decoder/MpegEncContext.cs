@@ -2111,7 +2111,7 @@ namespace cscodec.h243.decoder
 				int field_pic= (this.picture_structure != PICT_FRAME)?1:0;
 				int[] offset = new int[4];
 
-				h= Math.min(h, (this.height>>field_pic) - y);
+				h= Math.Min(h, (this.height>>field_pic) - y);
 
 				if(field_pic !=0&& 0==(this.slice_flags&SLICE_FLAG_ALLOW_FIELD)){
 					h <<= 1;

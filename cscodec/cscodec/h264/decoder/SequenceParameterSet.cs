@@ -1,3 +1,4 @@
+using cscodec.h243.util;
 using System;
 namespace cscodec.h243.decoder
 {
@@ -66,8 +67,8 @@ namespace cscodec.h243.decoder
 		public int bitstream_restriction_flag;
 		public int num_reorder_frames;
 		public int scaling_matrix_present;
-		public int[,] scaling_matrix4 = new int[6,16];
-		public int[,] scaling_matrix8 = new int[2,64];
+		public int[][] scaling_matrix4 = Arrays.Create2D<int>(6, 16);
+		public int[][] scaling_matrix8 = Arrays.Create2D<int>(2, 64);
 		public int nal_hrd_parameters_present_flag;
 		public int vcl_hrd_parameters_present_flag;
 		public int pic_struct_present_flag;
@@ -123,8 +124,8 @@ namespace cscodec.h243.decoder
 			sps.bitstream_restriction_flag = bitstream_restriction_flag;
 			sps.num_reorder_frames = num_reorder_frames;
 			sps.scaling_matrix_present = scaling_matrix_present;
-			sps.scaling_matrix4 = (int[,])scaling_matrix4.Clone();
-			sps.scaling_matrix8 = (int[,])scaling_matrix8.Clone();
+			sps.scaling_matrix4 = (int[][])scaling_matrix4.Clone();
+			sps.scaling_matrix8 = (int[][])scaling_matrix8.Clone();
 			sps.nal_hrd_parameters_present_flag = nal_hrd_parameters_present_flag;
 			sps.vcl_hrd_parameters_present_flag = vcl_hrd_parameters_present_flag;
 			sps.pic_struct_present_flag = pic_struct_present_flag;
