@@ -799,7 +799,7 @@ namespace cscodec.h243.decoder
 			}
 
 			if(0!=(status & (MpegEncContext.AC_ERROR|MpegEncContext.DC_ERROR|MpegEncContext.MV_ERROR))) 
-	    		s.error_count= Integer.MAX_VALUE;
+	    		s.error_count= int.MaxValue;
 
 			if(mask == ~0x7F){
 				//memset(&s.error_status_table[start_xy], 0, (end_xy - start_xy) * sizeof(uint8_t));
@@ -812,7 +812,7 @@ namespace cscodec.h243.decoder
 			}
 
 			if(end_i == s.mb_num)
-				s.error_count= Integer.MAX_VALUE;
+				s.error_count= int.MaxValue;
 			else{
 				s.error_status_table[end_xy] &= mask;
 				s.error_status_table[end_xy] |= status;
@@ -824,7 +824,7 @@ namespace cscodec.h243.decoder
 				int prev_status= s.error_status_table[ s.mb_index2xy[start_i - 1] ];
 
 				prev_status &= ~ MpegEncContext.VP_START;
-				if(prev_status != (MpegEncContext.MV_END|MpegEncContext.DC_END|MpegEncContext.AC_END)) s.error_count= Integer.MAX_VALUE;
+				if(prev_status != (MpegEncContext.MV_END|MpegEncContext.DC_END|MpegEncContext.AC_END)) s.error_count= int.MaxValue;
 			}
 		}
 	

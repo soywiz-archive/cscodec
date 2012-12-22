@@ -1,3 +1,4 @@
+using System;
 namespace cscodec.h243.util
 {
 	public sealed class HashUtil {
@@ -7,12 +8,12 @@ namespace cscodec.h243.util
 	  * from fields. Using a non-zero value decreases collisons of <code>hashCode</code>
 	  * values.
 	  */
-	  public static final int SEED = 23;
+	  public const int SEED = 23;
 
 	  /**
 	  * booleans.
 	  */
-	  public static int hash( int aSeed, boolean aBoolean ) {
+	  public static int hash( int aSeed, bool aBoolean ) {
 	    return firstTerm( aSeed ) + ( aBoolean ? 1 : 0 );
 	  }
 
@@ -39,21 +40,21 @@ namespace cscodec.h243.util
 	  * longs.
 	  */
 	  public static int hash( int aSeed , long aLong ) {
-	    return firstTerm(aSeed)  + (int)( aLong ^ (aLong >>> 32) );
+	    return firstTerm(aSeed)  + (int)( aLong ^ (long)(((ulong)aLong) >> 32) );
 	  }
 
 	  /**
 	  * floats.
 	  */
 	  public static int hash( int aSeed , float aFloat ) {
-	    return hash( aSeed, Float.floatToIntBits(aFloat) );
+	    return hash( aSeed, BitConverter.ToInt32(BitConverter.GetBytes(aFloat), 0) );
 	  }
 
 	  /**
 	  * doubles.
 	  */
 	  public static int hash( int aSeed , double aDouble ) {
-	    return hash( aSeed, Double.doubleToLongBits(aDouble) );
+	    return hash( aSeed, BitConverter.DoubleToInt64Bits(aDouble) );
 	  }
 
 	  /**
@@ -68,11 +69,11 @@ namespace cscodec.h243.util
 	      result = hash(result, 0);
 	    }
 	    else if ( ! isArray(aObject) ) {
-	      result = hash(result, aObject.hashCode());
+	      result = hash(result, aObject.GetHashCode());
 	    }
 	    else {
 	      Object[] objAr = (Object[])aObject;
-	      int length = objAr.length;
+	      int length = objAr.Length;
 	      for ( int idx = 0; idx < length; ++idx ) {
 	        Object item = objAr[idx];
 	        //recursive call!
@@ -84,14 +85,14 @@ namespace cscodec.h243.util
 
 
 	  /// PRIVATE ///
-	  private static final int fODD_PRIME_NUMBER = 37;
+	  private static const int fODD_PRIME_NUMBER = 37;
 
 	  private static int firstTerm( int aSeed ){
 	    return fODD_PRIME_NUMBER * aSeed;
 	  }
 
-	  private static boolean isArray(Object aObject){
-	    return aObject.getClass().isArray();
+	  private static bool isArray(Object aObject){
+	    return aObject.GetType().IsArray;
 	  }
 	} 
 }

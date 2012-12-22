@@ -1,3 +1,5 @@
+using System;
+
 namespace cscodec.h243.util
 {
 	public class Buffer
@@ -7,16 +9,16 @@ namespace cscodec.h243.util
 		private int pos = 0;
 		private int mark = -1;
 
-		Buffer(int capacity, int limit_, int position, int mark_)
+		public Buffer(int capacity, int limit_, int position, int mark_)
 		{
-			if (capacity < 0) throw new IllegalArgumentException();
+			if (capacity < 0) throw new ArgumentException();
 			cap = capacity;
 			limit = limit_;
 			pos = position;
 			if (mark_ > 0)
 			{
 				if (mark_ > pos)
-					throw new IllegalArgumentException();
+					throw new ArgumentException();
 			} // if
 			mark = mark_;
 		}
@@ -36,12 +38,12 @@ namespace cscodec.h243.util
 			mark = -1;
 			return this;
 		}
-		public boolean hasRemaining() { return limit > pos; }
+		public bool hasRemaining() { return limit > pos; }
 		public int limit() { return limit; }
 		public Buffer limit(int newLimit)
 		{
 			if ((newLimit < 0) || (newLimit > cap))
-				throw new IllegalArgumentException();
+				throw new ArgumentException();
 			if (newLimit <= mark) mark = -1;
 			if (pos > newLimit) pos = newLimit - 1;
 			limit = newLimit;
@@ -52,7 +54,7 @@ namespace cscodec.h243.util
 		public Buffer position(int newPosition)
 		{
 			if ((newPosition < 0) || (newPosition > limit))
-				throw new IllegalArgumentException();
+				throw new ArgumentException();
 			if (newPosition <= mark) mark = -1;
 			pos = newPosition;
 			return this;
@@ -61,7 +63,7 @@ namespace cscodec.h243.util
 		public Buffer reset()
 		{
 			if (mark == -1)
-				throw new IllegalArgumentException();
+				throw new ArgumentException();
 			pos = mark;
 			return this;
 		}

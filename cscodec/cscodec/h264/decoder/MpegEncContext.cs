@@ -715,7 +715,7 @@ namespace cscodec.h243.decoder
 		public static int av_image_check_size(/*unsigned*/ int w, /*unsigned*/ int h, int log_offset, /*void **/MpegEncContext log_ctx) {
 			//ImgUtils imgutils = { &imgutils_class, log_offset, log_ctx };
 
-			if ((int)w>0 && (int)h>0 && (w+128)*(long)(h+128) < Integer.MAX_VALUE/8)
+			if ((int)w>0 && (int)h>0 && (w+128)*(long)(h+128) < int.MaxValue/8)
 				return 0;
 
 			//av_log(&imgutils, AV_LOG_ERROR, "Picture size %ux%u is invalid\n", w, h);
@@ -895,7 +895,7 @@ namespace cscodec.h243.decoder
 				return -1;
 
 			if ((desc.flags & ImageUtils.PIX_FMT_BITSTREAM)!=0) {
-				if (width > (Integer.MAX_VALUE -7) / (desc.comp[0].step_minus1+1))
+				if (width > (int.MaxValue -7) / (desc.comp[0].step_minus1+1))
 					return -1;
 				linesizes[0] = (width * (desc.comp[0].step_minus1+1) + 7) >> 3;
 				return 0;
@@ -905,7 +905,7 @@ namespace cscodec.h243.decoder
 			for (i = 0; i < 4; i++) {
 				int s = (max_step_comp[i] == 1 || max_step_comp[i] == 2) ? desc.log2_chroma_w : 0;
 				int shifted_w = ((width + (1 << s) - 1)) >> s;
-				if (max_step[i] > Integer.MAX_VALUE / shifted_w)
+				if (max_step[i] > int.MaxValue / shifted_w)
 					return -1;
 				linesizes[i] = max_step[i] * shifted_w;
 			}
@@ -933,7 +933,7 @@ namespace cscodec.h243.decoder
 
 			data_base[0] = ptr;
 			data_offset[0] = 0;
-			if (linesizes[0] > (Integer.MAX_VALUE - 1024) / height)
+			if (linesizes[0] > (int.MaxValue - 1024) / height)
 				return -1;
 			size[0] = linesizes[0] * height;
 
@@ -953,10 +953,10 @@ namespace cscodec.h243.decoder
 				data_base[i] = data_base[i-1];
 				data_offset[i] = data_offset[i-1] + size[i-1];
 				h = (height + (1 << s) - 1) >> s;
-				if (linesizes[i] > Integer.MAX_VALUE / h)
+				if (linesizes[i] > int.MaxValue / h)
 					return -1;
 				size[i] = h * linesizes[i];
-				if (total_size > Integer.MAX_VALUE - size[i])
+				if (total_size > int.MaxValue - size[i])
 					return -1;
 				total_size += size[i];
 			}
@@ -1297,7 +1297,7 @@ namespace cscodec.h243.decoder
         	
 			this.prev_pict_types[0]= (this.dropable!=0) ? H264Context.FF_B_TYPE : this.pict_type;
 			if(pic.age < PREV_PICT_TYPES_BUFFER_SIZE && this.prev_pict_types[pic.age] == H264Context.FF_B_TYPE)
-				pic.age= Integer.MAX_VALUE; // Skipped MBs in B-frames are quite rare in MPEG-1/2 and it is a bit tricky to skip them anyway.
+				pic.age= int.MaxValue; // Skipped MBs in B-frames are quite rare in MPEG-1/2 and it is a bit tricky to skip them anyway.
 
     		// DebugTool.printDebugString("     ----- ff_alloc_picture error OK.\n");            	
 			return 0;
@@ -1819,7 +1819,7 @@ namespace cscodec.h243.decoder
 					h.delayed_pic[i].reference= 0;
 				h.delayed_pic[i]= null;
 			}
-			h.outputed_poc= Integer.MIN_VALUE;
+			h.outputed_poc= int.MinValue;
 			h.prev_interlaced_frame = 1;
 			h.idr();
 			if(h.s.current_picture_ptr!=null)
@@ -2078,7 +2078,7 @@ namespace cscodec.h243.decoder
 			h.cavlc.ff_h264_decode_init_vlc();
 
 			h.thread_context[0] = h;
-			h.outputed_poc = Integer.MIN_VALUE;
+			h.outputed_poc = int.MinValue;
 			h.prev_poc_msb= 1<<16;
 			h.x264_build = -1;
 			SEIDecoder.ff_h264_reset_sei(h);

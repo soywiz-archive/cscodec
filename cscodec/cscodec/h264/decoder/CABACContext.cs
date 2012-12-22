@@ -698,7 +698,7 @@
 		public void renorm_cabac_decoder_once(){
         // DebugTool.printDebugString("renorm_cabac_decoder_once(1): low="+low+", range="+range+"\n");
 
-		int shift= (int)(range - 0x00000100)>>>31;
+		int shift= (int)(((uint)(range - 0x00000100))>>31);
 	    range<<= shift;
 	    low  <<= shift;
 
@@ -834,7 +834,7 @@
 			int ctx = 0;
 
 			ctx += (h.mb_field_decoding_flag & (/*!!*/h.s.mb_x)); //for FMO:(s.current_picture.mb_type[mba_xy]>>7)&(this.slice_table_base[this.slice_table_offset + mba_xy] == this.slice_num);
-			ctx += (h.s.current_picture.mb_type_base[h.s.current_picture.mb_type_offset + mbb_xy] >> 7) & (h.slice_table_base[h.slice_table_offset + mbb_xy] == h.slice_num ? 1 : 0);
+			ctx += (int)((h.s.current_picture.mb_type_base[h.s.current_picture.mb_type_offset + mbb_xy] >> 7) & (h.slice_table_base[h.slice_table_offset + mbb_xy] == h.slice_num ? 1 : 0));
 
 			return this.get_cabac_noinline(h.cabac_state, 70 + ctx);// &(this.cabac_state+70)[ctx] );
 		}
@@ -1025,15 +1025,15 @@
 		}
 
 		public int decode_cabac_mb_ref(H264Context h, int list, int n) {
-	    int refa = h.ref_cache[list][h.scan8[n] - 1];
-	    int refb = h.ref_cache[list][h.scan8[n] - 8];
+			int refa = h.ref_cache[list, H264Context.scan8[n] - 1];
+			int refb = h.ref_cache[list, H264Context.scan8[n] - 8];
 	    int @ref  = 0;
 	    int ctx  = 0;
 
 	    if( h.slice_type_nos == H264Context.FF_B_TYPE) {
-	        if( refa > 0 && 0 == (h.direct_cache[h.scan8[n] - 1]&(H264Context.MB_TYPE_DIRECT2>>1)) )
+			if (refa > 0 && 0 == (h.direct_cache[H264Context.scan8[n] - 1] & (H264Context.MB_TYPE_DIRECT2 >> 1)))
 	            ctx++;
-	        if( refb > 0 && 0 == (h.direct_cache[h.scan8[n] - 8]&(H264Context.MB_TYPE_DIRECT2>>1)) )
+			if (refb > 0 && 0 == (h.direct_cache[H264Context.scan8[n] - 8] & (H264Context.MB_TYPE_DIRECT2 >> 1)))
 	            ctx += 2;
 	    } else {
 	        if( refa > 0 )
@@ -1086,7 +1086,7 @@
 					if (k > 24)
 					{
 						//System.out.println("overflow in decode_cabac_mb_mvd");
-						return Integer.MIN_VALUE;
+						return int.MinValue;
 					}
 				}
 				while (k-- != 0)
@@ -1103,16 +1103,14 @@
 		// CABAC Decoder Functions
 		public void ff_h264_init_cabac_states(H264Context h)
 		{
-			int i;
-			sbyte[][] tab;
-
-			if (h.slice_type_nos == H264Context.FF_I_TYPE)
-				tab = cabac_context_init_I;
-			else
-				tab = cabac_context_init_PB[h.cabac_init_idc];
+			sbyte[][] tab =
+				(h.slice_type_nos == H264Context.FF_I_TYPE)
+				? cabac_context_init_I
+				: cabac_context_init_PB[h.cabac_init_idc]
+			;
 
 			/* calculate pre-state */
-			for (i = 0; i < 460; i++)
+			for (int i = 0; i < 460; i++)
 			{
 				int pre = 2 * (((tab[i][0] * h.s.qscale) >> 4) + tab[i][1]) - 127;
 				pre ^= pre >> 31;

@@ -71,7 +71,7 @@ namespace cscodec.h243.decoder
 		 2, 3, 2, 0,
 		};
 
-		public const int[][] coeff_token_len={
+		public const int[,] coeff_token_len={
 	//		static const uint8_t coeff_token_len[4][4*17]={
 		{
 			 1, 0, 0, 0,
@@ -103,7 +103,7 @@ namespace cscodec.h243.decoder
 		}
 		};
 
-		public const int[][] coeff_token_bits={
+		public const int[,] coeff_token_bits={
 	//		static const uint8_t coeff_token_bits[4][4*17]={
 		{
 			 1, 0, 0, 0,
@@ -135,7 +135,7 @@ namespace cscodec.h243.decoder
 		}
 		};
 
-		public const int[][] total_zeros_len= {
+		public const int[,] total_zeros_len= {
 	//		static const uint8_t total_zeros_len[16][16]= {
 			{1,3,3,4,4,5,5,6,6,7,7,8,8,9,9,9},
 			{3,3,3,3,3,4,4,4,4,5,5,6,6,6,6,0},
@@ -154,7 +154,7 @@ namespace cscodec.h243.decoder
 			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		};
 
-		public const int[][] total_zeros_bits= {
+		public const int[,] total_zeros_bits= {
 	//		static const uint8_t total_zeros_bits[16][16]= {
 			{1,3,2,3,2,3,2,3,2,3,2,3,2,3,2,1},
 			{7,6,5,4,3,5,4,3,2,3,2,3,2,1,0,0},
@@ -173,21 +173,21 @@ namespace cscodec.h243.decoder
 			{0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		};
 
-		public const int[][] chroma_dc_total_zeros_len= {
+		public const int[,] chroma_dc_total_zeros_len= {
 	//		static uint8_t chroma_dc_total_zeros_len[3][4]= {
 			{ 1, 2, 3, 3,},
 			{ 1, 2, 2, 0,},
 			{ 1, 1, 0, 0,},
 		};
 
-		public const int[][] chroma_dc_total_zeros_bits= {
+		public const int[,] chroma_dc_total_zeros_bits= {
 	//		static uint8_t chroma_dc_total_zeros_bits[3][4]= {
 			{ 1, 1, 1, 0,},
 			{ 1, 1, 0, 0,},
 			{ 1, 0, 0, 0,},
 		};
 
-		public const int[][] run_len={
+		public const int[,] run_len={
 	//		static uint8_t run_len[7][16]={
 			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 			{1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -198,7 +198,7 @@ namespace cscodec.h243.decoder
 			{3,3,3,3,3,3,3,4,5,6,7,8,9,10,11,0},
 		};
 
-		public const int[][] run_bits={
+		public const int[,] run_bits= new int[,]{
 	//		static uint8_t run_bits[7][16]={
 			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -461,7 +461,7 @@ namespace cscodec.h243.decoder
 				, int n, int[] scantable_base, int scantable_offset, long[] qmul_base, int qmul_offset, int max_coeff){
 	//			, int n, uint8_t *scantable, uint32_t *qmul, int max_coeff){
 			//MpegEncContext s = h.s;
-			final int[/*17*/] coeff_token_table_index= {0, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3};
+			int[/*17*/] coeff_token_table_index= {0, 0, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3};
 			int[] level = new int[16];
 			int zeros_left, coeff_token, total_coeff, i, trailing_ones, run_before;
 
@@ -588,7 +588,7 @@ namespace cscodec.h243.decoder
 
 				//remaining coefficients have suffix_length > 0
 				for(i=trailing_ones+1;i<total_coeff;i++) {
-					final int[/*7*/] suffix_limit = {0,3,6,12,24,48, Integer.MAX_VALUE };
+					final int[/*7*/] suffix_limit = {0,3,6,12,24,48, int.MaxValue };
 					bitsi= (int)gb.show_bits(LEVEL_TAB_BITS);
 					level_code= cavlc_level_tab[suffix_length][bitsi][0];
 

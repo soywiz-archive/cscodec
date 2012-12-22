@@ -1,3 +1,5 @@
+using cscodec.h243.util;
+using System;
 namespace cscodec.h243.decoder
 {
 	public class DSPContext {
@@ -19,8 +21,8 @@ namespace cscodec.h243.decoder
 		/*uint8_t*/ public int[] idct_permutation = new int[64];
 		public int idct_permutation_type;
 	
-		public static Ih264_qpel_mc_func[][] put_h264_qpel_pixels_tab = new Ih264_qpel_mc_func[4][16];
-		public static Ih264_qpel_mc_func[][] avg_h264_qpel_pixels_tab = new Ih264_qpel_mc_func[4][16];
+		public static Ih264_qpel_mc_func[,] put_h264_qpel_pixels_tab = new Ih264_qpel_mc_func[4,16];
+		public static Ih264_qpel_mc_func[,] avg_h264_qpel_pixels_tab = new Ih264_qpel_mc_func[4,16];
 
 		/* draw the edges of width 'w' of an image of size width, height */
 		//FIXME check that this is ok for mpeg4 interlaced
@@ -100,10 +102,10 @@ namespace cscodec.h243.decoder
 				src_x=1-block_w;
 			}
 
-			start_y= Math.max(0, -src_y);
-			start_x= Math.max(0, -src_x);
-			end_y= Math.min(block_h, h-src_y);
-			end_x= Math.min(block_w, w-src_x);
+			start_y= Math.Max(0, -src_y);
+			start_x= Math.Max(0, -src_x);
+			end_y= Math.Min(block_h, h-src_y);
+			end_x= Math.Min(block_w, w-src_x);
 	    
 			// DebugTool.printDebugString("start_x="+start_x+", start_y="+start_y+", end_x="+end_x+", end_y="+end_y+"\n");
 

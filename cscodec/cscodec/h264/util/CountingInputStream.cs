@@ -5,8 +5,8 @@ namespace cscodec.h243.util
 		private int count;
 		private long byteCount;
 	
-		public CountingInputStream(InputStream is) {
-			inputStream = is;
+		public CountingInputStream(InputStream @is) {
+			inputStream = @is;
 		}
 	
 		public long getByteCount() {
@@ -27,7 +27,7 @@ namespace cscodec.h243.util
 			return count;
 		}
 	
-		public long skip(long length) throws IOException {
+		public long skip(long length) {
 			long ret = inputStream.skip(length);
 			byteCount += length;
 			count += length;
@@ -35,7 +35,7 @@ namespace cscodec.h243.util
 		}
 
 		////
-		public int read() throws IOException {
+		public int read() {
 			// TODO Auto-generated method stub
 			int ret = inputStream.read();
 			count++;
@@ -43,25 +43,25 @@ namespace cscodec.h243.util
 			return ret;
 		}
 	
-		public int read(sbyte b[]) throws IOException  {
+		public int read(sbyte b[]) {
 			int cnt =  inputStream.read(b, 0, b.length);
 			count += cnt;
 			byteCount += cnt;
 			return cnt;
 		}
  
-		 public int read(sbyte b[], int off, int len) throws IOException  {
+		 public int read(sbyte b[], int off, int len) {
     		int cnt = inputStream.read(b, off, len);
  			count += cnt;
 			byteCount += cnt;
 			return cnt;
 		 }
   
-		 public int available() throws IOException  {
+		 public int available() {
     		 return inputStream.available();
 		 }
  
-		 public void close() throws IOException  {
+		 public void close() {
     		 inputStream.close();
 		 }
  

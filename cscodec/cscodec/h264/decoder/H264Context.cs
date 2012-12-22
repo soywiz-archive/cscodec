@@ -177,8 +177,8 @@ namespace cscodec.h243.decoder
 		/**
 		 * Motion vector cache.
 		 */
-		public int[][][] mv_cache = new int[2][5*8][2]; // DECLARE_ALIGNED(16, int16_t, mv_cache)[2][5*8][2];
-		public int[][] ref_cache = new int[2][5*8]; // DECLARE_ALIGNED(8, int8_t, ref_cache)[2][5*8];
+		public int[,,] mv_cache = new int[2, 5*8, 2]; // DECLARE_ALIGNED(16, int16_t, mv_cache)[2][5*8][2];
+		public int[,] ref_cache = new int[2, 5*8]; // DECLARE_ALIGNED(8, int8_t, ref_cache)[2][5*8];
 
 		/**
 		 * is 1 if the specific list MV&references are set to 0,0,-2.
@@ -239,9 +239,9 @@ namespace cscodec.h243.decoder
 		public int luma_log2_weight_denom;
 		public int chroma_log2_weight_denom;
 		//The following 2 can be changed to int8_t but that causes 10cpu cycles speedloss
-		public int[][][] luma_weight = new int[48][2][2];
-		public int[][][][] chroma_weight = new int[48][2][2][2];
-		public int[][][] implicit_weight = new int[48][48][2];
+		public int[,,] luma_weight = new int[48, 2, 2];
+		public int[,,,] chroma_weight = new int[48, 2, 2, 2];
+		public int[,,] implicit_weight = new int[48, 48, 2];
 
 		public int direct_spatial_mv_pred;
 		public int col_parity;
@@ -257,10 +257,10 @@ namespace cscodec.h243.decoder
 		public long[] ref_count = new long[2];   // unsigned int ref_count[2];   ///< counts frames or fields, depending on current mb mode
 		public long list_count;
 		public int[] list_counts;            ///< Array of list_count per MB specifying the slice type
-		public AVFrame[][] ref_list = new AVFrame[2][48];         /**< 0..15: frame refs, 16..47: mbaff field refs.
+		public AVFrame[,] ref_list = new AVFrame[2,48];         /**< 0..15: frame refs, 16..47: mbaff field refs.
 											  Reordered version of default_ref_list
 											  according to picture reordering in slice header */
-		public int[][][] ref2frm = new int[MAX_SLICES][2][64];  ///< reference to frame number lists, used in the loop filter, the first 2 are for -2,-1
+		public int[,,] ref2frm = new int[MAX_SLICES, 2, 64];  ///< reference to frame number lists, used in the loop filter, the first 2 are for -2,-1
 
 		//data partitioning
 		public GetBitContext intra_gb;
@@ -377,7 +377,7 @@ namespace cscodec.h243.decoder
 
 		public AVFrame[] short_ref = new AVFrame[32];
 		public AVFrame[] long_ref = new AVFrame[32];
-		public AVFrame[][] default_ref_list = new AVFrame[2][32]; ///< base reference list for all slices of a coded picture
+		public AVFrame[,] default_ref_list = new AVFrame[2, 32]; ///< base reference list for all slices of a coded picture
 		public AVFrame[] delayed_pic = new AVFrame[MAX_DELAYED_PIC_COUNT+2]; //FIXME size?
 		public int outputed_poc;
 
@@ -473,7 +473,7 @@ namespace cscodec.h243.decoder
 		public int next_slice_index;
 		public long svq3_watermark_key;
 	
-		public const int[]/*uint8_t*/ ff_alternate_horizontal_scan = {
+		static public readonly int[]/*uint8_t*/ ff_alternate_horizontal_scan = {
 				0,  1,   2,  3,  8,  9, 16, 17,
 				10, 11,  4,  5,  6,  7, 15, 14,
 				13, 12, 19, 18, 24, 25, 32, 33,
@@ -484,7 +484,7 @@ namespace cscodec.h243.decoder
 				52, 53, 54, 55, 60, 61, 62, 63,
 			};
 
-		public const int[]/*uint8_t*/ ff_alternate_vertical_scan = {
+		static public readonly int[]/*uint8_t*/ ff_alternate_vertical_scan = {
 				0,  8,  16, 24,  1,  9,  2, 10,
 				17, 25, 32, 40, 48, 56, 57, 49,
 				41, 33, 26, 18,  3, 11,  4, 12,
@@ -497,7 +497,7 @@ namespace cscodec.h243.decoder
 	
 		//////////////////////////////////
 		// Decoder for H.264 Symbols
-		public const short[] scan8 = {
+		static public readonly short[] scan8 = {
 			 4+1*8, 5+1*8, 4+2*8, 5+2*8,
 			 6+1*8, 7+1*8, 6+2*8, 7+2*8,
 			 4+3*8, 5+3*8, 4+4*8, 5+4*8,
@@ -507,7 +507,7 @@ namespace cscodec.h243.decoder
 			 1+4*8, 2+4*8,
 			 1+5*8, 2+5*8,
 			 4+5*8, 5+5*8, 6+5*8
-			};
+		};
 	
 		public const AVRational[] pixel_aspect = {
 			 new AVRational(0, 1),
@@ -6294,7 +6294,7 @@ namespace cscodec.h243.decoder
 			sps.gaps_in_frame_num_allowed_flag= (int)s.gb.get_bits1("gaps_in_frame_num_allowed_flag");
 			sps.mb_width = s.gb.get_ue_golomb("mb_width") + 1;
 			sps.mb_height= s.gb.get_ue_golomb("mb_height") + 1;
-			if(/*(unsigned)*/sps.mb_width >= Integer.MAX_VALUE/16 || /*(unsigned)*/sps.mb_height >= Integer.MAX_VALUE/16 ||
+			if(/*(unsigned)*/sps.mb_width >= int.MaxValue/16 || /*(unsigned)*/sps.mb_height >= int.MaxValue/16 ||
 			   MpegEncContext.av_image_check_size(16*sps.mb_width, 16*sps.mb_height, 0, this.s)!=0){
 				//av_log(this.s.avctx, AV_LOG_ERROR, "mb_width/height overflow\n");
 				return -1;
@@ -6917,7 +6917,7 @@ namespace cscodec.h243.decoder
 			if(tmp!=0) return (int)(((tmp ^ a.den ^ b.den)>>63)|1);
 			else if(b.den!=0 && a.den!=0) return 0;
 			else if(a.num!=0 && b.num!=0) return (a.num>>31) - (b.num>>31);
-			else                    return Integer.MIN_VALUE;
+			else                    return int.MinValue;
 		}
 			
 		public void free_tables(){
@@ -7222,7 +7222,7 @@ namespace cscodec.h243.decoder
 				s.current_picture_ptr.reference= 0;
 
 			s.current_picture_ptr.field_poc[0]=
-			s.current_picture_ptr.field_poc[1]= Integer.MAX_VALUE;
+			s.current_picture_ptr.field_poc[1]= int.MaxValue;
 			//assert(s.current_picture_ptr.long_ref==0);
 
     		// DebugTool.printDebugString("     ----- ff_h264_frame_start OK.\n");	    
@@ -8614,8 +8614,8 @@ namespace cscodec.h243.decoder
 
 				this.field_end();
 
-				if (cur.field_poc[0] == Integer.MAX_VALUE
-						|| cur.field_poc[1] == Integer.MAX_VALUE) {
+				if (cur.field_poc[0] == int.MaxValue
+						|| cur.field_poc[1] == int.MaxValue) {
 					/* Wait for second field. */
 					data_size[0] = 0;
 
@@ -8733,13 +8733,13 @@ namespace cscodec.h243.decoder
 						}
 					if (s.has_b_frames == 0
 							&& (this.delayed_pic[0].key_frame != 0 || this.delayed_pic[0].mmco_reset != 0))
-						this.outputed_poc = Integer.MIN_VALUE;
+						this.outputed_poc = int.MinValue;
 					out_of_order = (out.poc < this.outputed_poc) ? 1 : 0;
 
 					if (this.sps.bitstream_restriction_flag != 0
 							&& s.has_b_frames >= this.sps.num_reorder_frames) {
 					} else if ((out_of_order != 0 && pics - 1 == s.has_b_frames && s.has_b_frames < MAX_DELAYED_PIC_COUNT)
-							|| (s.low_delay != 0 && ((this.outputed_poc != Integer.MIN_VALUE && out.poc > this.outputed_poc + 2) || cur.pict_type == FF_B_TYPE))) {
+							|| (s.low_delay != 0 && ((this.outputed_poc != int.MinValue && out.poc > this.outputed_poc + 2) || cur.pict_type == FF_B_TYPE))) {
 						s.low_delay = 0;
 						s.has_b_frames++;
 					}
@@ -8755,7 +8755,7 @@ namespace cscodec.h243.decoder
 						if (out_idx == 0
 								&& this.delayed_pic[0] != null
 								&& (this.delayed_pic[0].key_frame != 0 || this.delayed_pic[0].mmco_reset != 0)) {
-							this.outputed_poc = Integer.MIN_VALUE;
+							this.outputed_poc = int.MinValue;
 						} else
 							this.outputed_poc = out.poc;
 						out.copyTo(displayPicture);
