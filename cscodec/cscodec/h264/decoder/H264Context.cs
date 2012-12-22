@@ -3070,7 +3070,7 @@ namespace cscodec.h243.decoder
 					} else {
 						for( i = 0; i < 16; i++ ) {
 							int pred = pred_intra_mode( i );
-							intra4x4_pred_mode_cache[ scan8[i] ] = (byte)cabac.decode_cabac_mb_intra4x4_pred_mode( this, pred );
+							intra4x4_pred_mode_cache[ scan8[i] ] = (sbyte)cabac.decode_cabac_mb_intra4x4_pred_mode( this, pred );
 
 						//av_log( s.avctx, AV_LOG_ERROR, "i4x4 pred=%d mode=%d\n", pred, h->intra4x4_pred_mode_cache[ scan8[i] ] );
 						}

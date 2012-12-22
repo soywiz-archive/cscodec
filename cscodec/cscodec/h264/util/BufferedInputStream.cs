@@ -1,7 +1,7 @@
 namespace cscodec.h243.util
 {
 	public class BufferedInputStream : FilterInputStream{
-		protected volatile byte[] buf;
+		protected volatile sbyte[] buf;
 		protected int count;
 		protected int markLimit;
 		protected int markPos = -1;
@@ -9,12 +9,12 @@ namespace cscodec.h243.util
 
 		public BufferedInputStream(InputStream is) {
 			super(is);
-			buf = new byte[8912];
+			buf = new sbyte[8912];
 		}
 
 		public BufferedInputStream(InputStream is, int size) {
 			super(is);
-			buf = new byte[size];
+			buf = new sbyte[size];
 		}
 	
 		public synchronized int available() throws IOException {
@@ -30,7 +30,7 @@ namespace cscodec.h243.util
 				local.close();
 		}
 	
-		private int fillBuf(InputStream localIn, byte[] localBuf) throws IOException {
+		private int fillBuf(InputStream localIn, sbyte[] localBuf) throws IOException {
 			if(markPos == -1 || (pos - markPos >= markLimit)) {
 				int result = localIn.read(localBuf);
 				if(result > 0) {
@@ -44,7 +44,7 @@ namespace cscodec.h243.util
 				int newLength = localBuf.length * 2;
 				if(newLength > markLimit)
 					newLength = markLimit;
-				byte[] newBuf = new byte[newLength];
+				sbyte[] newBuf = new sbyte[newLength];
 				System.arraycopy(localBuf, 0, newBuf, 0, localBuf.length);
 				localBuf = buf = newBuf;
 			} else if(markPos > 0) {
@@ -65,7 +65,7 @@ namespace cscodec.h243.util
 		public boolean markSupported() { return true; }
 	
 		public synchronized int read() throws IOException {
-			byte[] localBuf = buf;
+			sbyte[] localBuf = buf;
 			InputStream localIn = inputStream;
 			if(pos >= count && fillBuf(localIn, localBuf) == -1) {
 				return -1;
@@ -79,8 +79,8 @@ namespace cscodec.h243.util
 			return -1;
 		}
 	
-		public synchronized int read(byte[] buffer,int offset,int length) throws IOException {
-			byte[] localBuf = buf;
+		public synchronized int read(sbyte[] buffer,int offset,int length) throws IOException {
+			sbyte[] localBuf = buf;
 			if(localBuf==null) throw new IOException();
 			if(length == 0) return 0;
 			InputStream localIn = inputStream;
@@ -133,7 +133,7 @@ namespace cscodec.h243.util
 		}
 	
 		public synchronized long skip(long amount) throws IOException {
-			byte[] localBuf = buf;
+			sbyte[] localBuf = buf;
 			InputStream localIn = inputStream;
 			if(localBuf == null)
 				throw new IOException();

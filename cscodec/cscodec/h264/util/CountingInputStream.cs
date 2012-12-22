@@ -43,14 +43,14 @@ namespace cscodec.h243.util
 			return ret;
 		}
 	
-		public int read(byte b[]) throws IOException  {
+		public int read(sbyte b[]) throws IOException  {
 			int cnt =  inputStream.read(b, 0, b.length);
 			count += cnt;
 			byteCount += cnt;
 			return cnt;
 		}
  
-		 public int read(byte b[], int off, int len) throws IOException  {
+		 public int read(sbyte b[], int off, int len) throws IOException  {
     		int cnt = inputStream.read(b, off, len);
  			count += cnt;
 			byteCount += cnt;

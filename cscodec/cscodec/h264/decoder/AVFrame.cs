@@ -1,3 +1,4 @@
+using System;
 namespace cscodec.h243.decoder
 {
 	public class AVFrame {
@@ -243,8 +244,8 @@ namespace cscodec.h243.decoder
 		 public int pic_id;                 /**< h264 pic_num (short -> no wrap version of pic_num,
 										  pic_num & max_pic_num; long -> long_pic_num) */
 		 public int long_ref;               ///< 1->long term reference 0->short term reference
-		 public int[][][] ref_poc = new int[2][2][16];      ///< h264 POCs of the frames used as reference (FIXME need per slice)
-		 public int[][] ref_count = new int[2][2];        ///< number of entries in ref_poc              (FIXME need per slice)
+		 public int[,,] ref_poc = new int[2, 2, 16];      ///< h264 POCs of the frames used as reference (FIXME need per slice)
+		 public int[,] ref_count = new int[2, 2];        ///< number of entries in ref_poc              (FIXME need per slice)
 		 public int mbaff;                  ///< h264 1 -> MBAFF frame 0-> not MBAFF
 
 		 public int mb_var_sum;             ///< sum of MB variance for current frame
@@ -277,17 +278,17 @@ namespace cscodec.h243.decoder
     		 } // for
     		 ret.dct_coeff = dct_coeff;
     		 ret.display_picture_number = display_picture_number;
-    		 System.arraycopy(error, 0, ret.error, 0, error.Length);
-    		 System.arraycopy(field_poc, 0, ret.field_poc, 0, field_poc.Length);
+			 Array.Copy(error, 0, ret.error, 0, error.Length);
+			 Array.Copy(field_poc, 0, ret.field_poc, 0, field_poc.Length);
     		 ret.frame_num = frame_num;
     		 ret.imageWidth = imageWidth;
     		 ret.imageHeight = imageHeight;
     		 ret.imageWidthWOEdge = imageWidthWOEdge;
     		 ret.imageHeightWOEdge = imageHeightWOEdge;
     		 ret.interlaced_frame = interlaced_frame;
-    		 System.arraycopy(interpolated, 0, ret.interpolated, 0, interpolated.Length);
+			 Array.Copy(interpolated, 0, ret.interpolated, 0, interpolated.Length);
     		 ret.key_frame = key_frame;
-    		 System.arraycopy(linesize, 0, ret.linesize, 0, linesize.Length);
+			 Array.Copy(linesize, 0, ret.linesize, 0, linesize.Length);
     		 ret.long_ref = long_ref;
     		 ret.mb_cmp_score = mb_cmp_score;
     		 ret.mb_mean = mb_mean;
@@ -302,8 +303,8 @@ namespace cscodec.h243.decoder
     		 ret.mmco_reset = mmco_reset;
     		 ret.motion_subsample_log2 = motion_subsample_log2;
     		 //??????????????? Can we copy it at this depth?
-    		 System.arraycopy(motion_val_base, 0, ret.motion_val_base, 0, motion_val_base.Length);
-    		 System.arraycopy(motion_val_offset, 0, ret.motion_val_offset, 0, motion_val_offset.Length);
+			 Array.Copy(motion_val_base, 0, ret.motion_val_base, 0, motion_val_base.Length);
+			 Array.Copy(motion_val_offset, 0, ret.motion_val_offset, 0, motion_val_offset.Length);
     		 ret.opaque = opaque;
     		 ret.palette_has_changed = palette_has_changed;
     		 ret.pan_scan = pan_scan;
@@ -317,12 +318,9 @@ namespace cscodec.h243.decoder
     		 ret.qscale_type = qscale_type;
     		 ret.qstride = qstride;
     		 ret.quality = quality;
-    		 for(int i=0;i<ref_count.Length;i++)
-    			 System.arraycopy(ref_count[i], 0, ret.ref_count[i], 0, ref_count[i].Length);
-    		 System.arraycopy(ref_index, 0, ret.ref_index, 0, ref_index.Length);
-    		 for(int i=0;i<ref_poc.Length;i++)
-    			 for(int j=0;j<ref_poc[i].Length;j++)
-    	    		 System.arraycopy(ref_poc[i][j], 0, ret.ref_poc[i][j], 0, ref_poc[i][j].Length);
+			 Buffer.BlockCopy(ref_count, 0, ret.ref_count, 0, 2 * 2);
+			 Array.Copy(ref_index, 0, ret.ref_index, 0, ref_index.Length);
+			 Buffer.BlockCopy(ref_poc, 0, ret.ref_poc, 0, 2 * 2 * 16);
     		 ret.reference = reference;
     		 ret.reordered_opaque = reordered_opaque;
     		 ret.repeat_pict = repeat_pict;

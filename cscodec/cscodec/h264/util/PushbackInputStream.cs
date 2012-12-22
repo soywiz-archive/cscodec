@@ -2,18 +2,18 @@ namespace cscodec.h243.util
 {
 	public class PushbackInputStream : FilterInputStream {
 
-		protected byte[] buf;
+		protected sbyte[] buf;
 		protected int pos;
 
 		public PushbackInputStream(InputStream is) {
 			super(is);
-			buf = (is == null)?null:new byte[1];
+			buf = (is == null)?null:new sbyte[1];
 			pos = 1;
 		}
 	
 		public PushbackInputStream(InputStream is, int size) {
 			super(is);
-			buf = (is == null)?null:new byte[size];
+			buf = (is == null)?null:new sbyte[size];
 			pos = size;
 		}
 	
@@ -41,7 +41,7 @@ namespace cscodec.h243.util
 			return inputStream.read();
 		}
 	
-		public int read(byte[] buffer, int offset, int len) throws IOException {
+		public int read(sbyte[] buffer, int offset, int len) throws IOException {
 			if(buf==null)
 				throw new IOException();
 			int copiedBytes = 0;
@@ -79,11 +79,11 @@ namespace cscodec.h243.util
 			return numSkipped;	
 		}
 	
-		public void unread(byte[] buffer) throws IOException {
+		public void unread(sbyte[] buffer) throws IOException {
 			unread(buffer,0,buffer.length);
 		}
 	
-		public void unread(byte[] buffer, int offset, int length) throws IOException {
+		public void unread(sbyte[] buffer, int offset, int length) throws IOException {
 			if(length > pos)
 				throw new IOException();
 			System.arraycopy(buffer, offset, buf, pos - length, length);
@@ -93,7 +93,7 @@ namespace cscodec.h243.util
 		public void unread(int oneByte) throws IOException {
 			if(buf == null)
 				throw new IOException();
-			buf[--pos] = (byte)oneByte;
+			buf[--pos] = (sbyte)oneByte;
 		}
 	
 		public void mark(int limit) { return; } // Not Support.

@@ -21,12 +21,12 @@ namespace cscodec.h243.util
 			return ret;
 		}
 	
-		public int read(byte b[]) throws IOException  {
+		public int read(sbyte b[]) throws IOException  {
 			int cnt =  inputStream.read(b);
 			return cnt;
 		}
  
-		 public int read(byte b[], int off, int len) throws IOException  {
+		 public int read(sbyte b[], int off, int len) throws IOException  {
     		int cnt = inputStream.read(b, off, len);
 			return cnt;
 		 }

@@ -41,14 +41,60 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="acctab.cs" />
-    <Compile Include="bitstream.cs" />
-    <Compile Include="get_bits.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="utils.cs" />
-    <Compile Include="wma\wma.cs" />
-    <Compile Include="wma\wmadata.cs" />
-    <Compile Include="wma\wmadec.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="h264\decoder\AVComponentDescriptor.cs" />
+    <Compile Include="h264\decoder\AVFrame.cs" />
+    <Compile Include="h264\decoder\AVPacket.cs" />
+    <Compile Include="h264\decoder\AVPanScan.cs" />
+    <Compile Include="h264\decoder\AVPicture.cs" />
+    <Compile Include="h264\decoder\AVPixFmtDescriptor.cs" />
+    <Compile Include="h264\decoder\AVRational.cs" />
+    <Compile Include="h264\decoder\CABACContext.cs" />
+    <Compile Include="h264\decoder\CAVLCContext.cs" />
+    <Compile Include="h264\decoder\CAVLCTables.cs" />
+    <Compile Include="h264\decoder\DebugTool.cs" />
+    <Compile Include="h264\decoder\DSPContext.cs" />
+    <Compile Include="h264\decoder\ErrorResilience.cs" />
+    <Compile Include="h264\decoder\GetBitContext.cs" />
+    <Compile Include="h264\decoder\H264Context.cs" />
+    <Compile Include="h264\decoder\H264Data.cs" />
+    <Compile Include="h264\decoder\H264Decoder.cs" />
+    <Compile Include="h264\decoder\H264DSPContext.cs" />
+    <Compile Include="h264\decoder\H264PredictionContext.cs" />
+    <Compile Include="h264\decoder\ImageUtils.cs" />
+    <Compile Include="h264\decoder\IMbInfo.cs" />
+    <Compile Include="h264\decoder\InternalBuffer.cs" />
+    <Compile Include="h264\decoder\LoopFilter.cs" />
+    <Compile Include="h264\decoder\MMCO.cs" />
+    <Compile Include="h264\decoder\MotionEstContext.cs" />
+    <Compile Include="h264\decoder\MpegEncContext.cs" />
+    <Compile Include="h264\decoder\ParseContext.cs" />
+    <Compile Include="h264\decoder\PictureParameterSet.cs" />
+    <Compile Include="h264\decoder\PixFmtYUV420P.cs" />
+    <Compile Include="h264\decoder\PMbInfo.cs" />
+    <Compile Include="h264\decoder\PutBitContext.cs" />
+    <Compile Include="h264\decoder\Rectangle.cs" />
+    <Compile Include="h264\decoder\RL_VLC_ELEM.cs" />
+    <Compile Include="h264\decoder\ScanTable.cs" />
+    <Compile Include="h264\decoder\SEIDecoder.cs" />
+    <Compile Include="h264\decoder\SequenceParameterSet.cs" />
+    <Compile Include="h264\decoder\VLC.cs" />
+    <Compile Include="h264\decoder\VLCcode.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="h264\README.txt" />
+    <Compile Include="h264\util\Arrays.cs" />
+    <Compile Include="h264\util\Buffer.cs" />
+    <Compile Include="h264\util\BufferedInputStream.cs" />
+    <Compile Include="h264\util\CountingInputStream.cs" />
+    <Compile Include="h264\util\FilterInputStream.cs" />
+    <Compile Include="h264\util\Frame.cs" />
+    <Compile Include="h264\util\FrameUtils.cs" />
+    <Compile Include="h264\util\HashUtil.cs" />
+    <Compile Include="h264\util\IOUtils.cs" />
+    <Compile Include="h264\util\PushbackInputStream.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
