@@ -43,15 +43,9 @@ namespace cscodec.h243.decoder
 			pps.constrained_intra_pred = constrained_intra_pred; ///< constrained_intra_pred_flag
 			pps.redundant_pic_cnt_present = redundant_pic_cnt_present; ///< redundant_pic_cnt_present_flag
 			pps.transform_8x8_mode = transform_8x8_mode;     ///< transform_8x8_mode_flag
-			pps.scaling_matrix4 = new int[6][16];
-			for(int i=0;i<6;i++)
-        		System.arraycopy(scaling_matrix4[i], 0, pps.scaling_matrix4[i], 0, 16);
-			pps.scaling_matrix8 = new int[2][64];
-			pps.chroma_qp_table = new int[2][64];  ///< pre-scaled (with chroma_qp_index_offset) version of qp_table
-			for(int i=0;i<2;i++)
-        		System.arraycopy(scaling_matrix8[i], 0, pps.scaling_matrix8[i], 0, 64);
-			for(int i=0;i<2;i++)
-        		System.arraycopy(chroma_qp_table[i], 0, pps.chroma_qp_table[i], 0, 64);
+			pps.scaling_matrix4 = (int[,])scaling_matrix4.Clone();
+			pps.scaling_matrix8 = (int[,])scaling_matrix8.Clone();
+			pps.chroma_qp_table = (int[,])chroma_qp_table.Clone();
 			pps.chroma_qp_diff = chroma_qp_diff;
 		}
 		

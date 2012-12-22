@@ -5,7 +5,7 @@ namespace cscodec.h243.decoder
 		public const int MAX_NEG_CROP = 1024;
 		public static int[] ff_cropTbl = new int[256 + 2 * MAX_NEG_CROP];
 	
-		static {
+		static H264DSPContext() {
 			int i;
 			for(i=0;i<256;i++) ff_cropTbl[i + MAX_NEG_CROP] = i;
 			for(i=0;i<MAX_NEG_CROP;i++) {
@@ -69,14 +69,17 @@ namespace cscodec.h243.decoder
 				dst[dst_offset + 15] = av_clip_uint8( (src[src_offset + 15]*weights + dst[dst_offset + 15]*weightd + offset) >> (log2_denom+1));
 			} 
 		}
-	
-		public interface IH264WeightFunctionStub {
-			public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset);
-		}
 
-		public interface IH264BiWeightFunctionStub {
-			public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset);
-		}
+		public delegate void IH264WeightFunctionStub(int []block, int block_offset, int stride, int log2_denom, int weight, int offset);
+		public delegate void IH264BiWeightFunctionStub(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset);
+
+		//public interface IH264WeightFunctionStub {
+		//	public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset);
+		//}
+		//
+		//public interface IH264BiWeightFunctionStub {
+		//	public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset);
+		//}
 	
 		public H264DSPContext() {
 		
@@ -84,109 +87,69 @@ namespace cscodec.h243.decoder
 	
 		/* weighted MC */
 		public IH264WeightFunctionStub[] weight_h264_pixels_tab = new IH264WeightFunctionStub[] {
-    		new IH264WeightFunctionStub() {
-    			public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) {
-    				weight_h264_pixels_c(16, 16, block, block_offset, stride, log2_denom, weight, offset);
-    			}
+    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+    			weight_h264_pixels_c(16, 16, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		new IH264WeightFunctionStub() {
-    			public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) {
-    				weight_h264_pixels_c(16, 8, block, block_offset, stride, log2_denom, weight, offset);
-    			}
+    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+   				weight_h264_pixels_c(16, 8, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		new IH264WeightFunctionStub() {
-    			public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) {
-    				weight_h264_pixels_c(8, 16, block, block_offset, stride, log2_denom, weight, offset);
-    			}
+    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+   				weight_h264_pixels_c(8, 16, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		new IH264WeightFunctionStub() {
-    			public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) {
-    				weight_h264_pixels_c(8, 8, block, block_offset, stride, log2_denom, weight, offset);
-    			}
+    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+   				weight_h264_pixels_c(8, 8, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		new IH264WeightFunctionStub() {
-    			public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) {
-    				weight_h264_pixels_c(8, 4, block, block_offset, stride, log2_denom, weight, offset);
-    			}
+    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+   				weight_h264_pixels_c(8, 4, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		new IH264WeightFunctionStub() {
-    			public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) {
-    				weight_h264_pixels_c(4, 8, block, block_offset, stride, log2_denom, weight, offset);
-    			}
+    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+   				weight_h264_pixels_c(4, 8, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		new IH264WeightFunctionStub() {
-    			public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) {
-    				weight_h264_pixels_c(4, 4, block, block_offset, stride, log2_denom, weight, offset);
-    			}
+    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+   				weight_h264_pixels_c(4, 4, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		new IH264WeightFunctionStub() {
-    			public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) {
-    				weight_h264_pixels_c(4, 2, block, block_offset, stride, log2_denom, weight, offset);
-    			}
+    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+   				weight_h264_pixels_c(4, 2, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		new IH264WeightFunctionStub() {
-    			public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) {
-    				weight_h264_pixels_c(2, 4, block, block_offset, stride, log2_denom, weight, offset);
-    			}
+    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+   				weight_h264_pixels_c(2, 4, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		new IH264WeightFunctionStub() {
-    			public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) {
-    				weight_h264_pixels_c(2, 2, block, block_offset, stride, log2_denom, weight, offset);
-    			}
+    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+   				weight_h264_pixels_c(2, 2, block, block_offset, stride, log2_denom, weight, offset);
     		},
 		};
     
 		public IH264BiWeightFunctionStub[] biweight_h264_pixels_tab = new IH264BiWeightFunctionStub[] {
-        		new IH264BiWeightFunctionStub() {
-        			public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
-        				biweight_h264_pixels_c(16, 16, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
-        			}
-        		},
-        		new IH264BiWeightFunctionStub() {
-        			public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
-        				biweight_h264_pixels_c(16, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
-        			}
-        		},
-        		new IH264BiWeightFunctionStub() {
-        			public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
-        				biweight_h264_pixels_c(8, 16, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
-        			}
-        		},
-        		new IH264BiWeightFunctionStub() {
-        			public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
-        				biweight_h264_pixels_c(8, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
-        			}
-        		},
-        		new IH264BiWeightFunctionStub() {
-        			public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
-        				biweight_h264_pixels_c(8, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
-        			}
-        		},
-        		new IH264BiWeightFunctionStub() {
-        			public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
-        				biweight_h264_pixels_c(4, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
-        			}
-        		},
-        		new IH264BiWeightFunctionStub() {
-        			public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
-        				biweight_h264_pixels_c(4, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
-        			}
-        		},
-        		new IH264BiWeightFunctionStub() {
-        			public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
-        				biweight_h264_pixels_c(4, 2, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
-        			}
-        		},
-        		new IH264BiWeightFunctionStub() {
-        			public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
-        				biweight_h264_pixels_c(2, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
-        			}
-        		},
-        		new IH264BiWeightFunctionStub() {
-        			public void h264_biweight_func(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
-        				biweight_h264_pixels_c(2, 2, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
-        			}
-        		},    		
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        			biweight_h264_pixels_c(16, 16, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
+        	},
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        			biweight_h264_pixels_c(16, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
+        	},
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        			biweight_h264_pixels_c(8, 16, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
+        	},
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        			biweight_h264_pixels_c(8, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
+        	},
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        			biweight_h264_pixels_c(8, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
+        	},
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        			biweight_h264_pixels_c(4, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
+        	},
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        			biweight_h264_pixels_c(4, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
+        	},
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        			biweight_h264_pixels_c(4, 2, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
+        	},
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        			biweight_h264_pixels_c(2, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
+        	},
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        			biweight_h264_pixels_c(2, 2, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
+        	},    		
 		};
 
 		public static int av_clip(int a, int amin, int amax) {
@@ -576,7 +539,7 @@ namespace cscodec.h243.decoder
 		public void h264_luma_dc_dequant_idct(short[] output, int output_offset, short[] input/*align 16*/, int input_offset, int qmul) {
 			int i;
 			int[] temp = new int[16];
-			final short[] x_offset={0, 2*16, 8*16, 10*16};
+			short[] x_offset={0, 2*16, 8*16, 10*16};
 
 			for(i=0; i<4; i++){
 				int z0= input[input_offset + 4*i+0] + input[input_offset + 4*i+1];

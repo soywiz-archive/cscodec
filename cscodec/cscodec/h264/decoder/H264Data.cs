@@ -136,7 +136,7 @@ namespace cscodec.h243.decoder
 		new IMbInfo(H264Context.MB_TYPE_INTRA_PCM , -1, -1),
 		};
 
-		public const short[][] dequant4_coeff_init = {
+		public const short[,] dequant4_coeff_init = {
 		  {10,13,16},
 		  {11,14,18},
 		  {13,16,20},
@@ -148,7 +148,7 @@ namespace cscodec.h243.decoder
 		public const short[] dequant8_coeff_init_scan = {
 		  0,3,4,3, 3,1,5,1, 4,5,2,5, 3,1,5,1
 		};
-		public const short[][] dequant8_coeff_init = {
+		public const short[,] dequant8_coeff_init = {
 		  {20,18,32,19,25,24},
 		  {22,19,35,21,28,26},
 		  {26,23,42,24,33,31},

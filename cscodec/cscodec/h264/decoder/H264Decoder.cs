@@ -20,7 +20,7 @@ namespace cscodec.h243.decoder
 		 * encoder and a decoder can share the same name).
 		 * This is the primary way to find a codec from the user perspective.
 		 */
-		public String name = "h264";
+		public string name = "h264";
 		public int id = H264PredictionContext.CODEC_ID_H264;
 		//public int priv_data_size;
 
@@ -60,7 +60,7 @@ namespace cscodec.h243.decoder
 		 * Descriptive name for the codec, meant to be more human readable than name.
 		 * You should use the NULL_IF_CONFIG_SMALL() macro to define it.
 		 */
-		public String long_name = "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10";
+		public string long_name = "H.264 / AVC / MPEG-4 AVC / MPEG-4 part 10";
 		public int[] supported_samplerates;       ///< array of supported audio samplerates, or NULL if unknown, array is terminated by 0
 		public int[] sample_fmts; ///< array of supported sample formats, or NULL if unknown, array is terminated by -1
 		public long[] channel_layouts;         ///< array of support channel layouts, or NULL if unknown. array is terminated by 0

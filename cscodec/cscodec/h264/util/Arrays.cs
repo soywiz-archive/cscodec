@@ -3,6 +3,25 @@ namespace cscodec.h243.util
 {
 	public class Arrays
 	{
+		public static T[] Create1D<T>(int Rank1)
+		{
+			return new T[Rank1];
+		}
+
+		public static T[][] Create2D<T>(int Rank1, int Rank2)
+		{
+			var Ret = new T[Rank1][];
+			for (int n = 0; n < Rank1; n++) Ret[n] = Create1D<T>(Rank2);
+			return Ret;
+		}
+
+		public static T[][][] Create3D<T>(int Rank1, int Rank2, int Rank3)
+		{
+			var Ret = new T[Rank1][][];
+			for (int n = 0; n < Rank1; n++) Ret[n] = Create2D<T>(Rank2, Rank3);
+			return Ret;
+		}
+
 		public static bool equals(Array array1,
 				Array array2)
 		{

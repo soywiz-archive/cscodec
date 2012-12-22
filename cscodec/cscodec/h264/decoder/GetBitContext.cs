@@ -1,3 +1,5 @@
+using cscodec.h243.util;
+using System;
 namespace cscodec.h243.decoder
 {
 	// This class is implemented using #ifdef ALT_BITSTREAM_READER and #ifdef ALT_BITSTREAM_READER_LE
@@ -107,11 +109,12 @@ namespace cscodec.h243.decoder
 		public long cache1;
 		public int size_in_bits;
 
-		public const long bitswap_32(long x) {
+		static public long bitswap_32(long _x) {
+			ulong x = (ulong)_x;
 			return av_reverse[(int)(x&0x0FF)]<<24
-				 | av_reverse[(int)((x>>>8)&0x0FF)]<<16
-				 | av_reverse[(int)((x>>>16)&0x0FF)]<<8
-				 | av_reverse[(int)(x>>>24)];
+				 | av_reverse[(int)((x>>8)&0x0FF)]<<16
+				 | av_reverse[(int)((x>>16)&0x0FF)]<<8
+				 | av_reverse[(int)(x>>24)];
 		}
     
 		// Copy ctor??
@@ -215,7 +218,7 @@ namespace cscodec.h243.decoder
 		 * reads 1-17 bits.
 		 * Note, the alt bitstream reader can read up to 25 bits, but the libmpeg2 reader can't
 		 */
-		public /*inline*/ long get_bits(int n, String message){
+		public /*inline*/ long get_bits(int n, string message){
 			long tmp;
 			//OPEN_READER(re, s)
 			int re_index= this.index;
@@ -298,7 +301,7 @@ namespace cscodec.h243.decoder
 			this.index= re_index;
 		}
 
-		public /*inline*/ long get_bits1(String message){
+		public /*inline*/ long get_bits1(string message){
 		//#ifdef ALT_BITSTREAM_READER
 			int index= this.index;
 			int result= this.buffer[ this.buffer_offset + (index>>3) ];
@@ -333,7 +336,7 @@ namespace cscodec.h243.decoder
 		/**
 		 * reads 0-32 bits.
 		 */
-		public /*inline*/ long get_bits_long(int n, String message){
+		public /*inline*/ long get_bits_long(int n, string message){
 			if(n<=MIN_CACHE_BITS) return get_bits(n, message);
 			else{
 	//    #ifdef ALT_BITSTREAM_READER_LE
@@ -368,11 +371,11 @@ namespace cscodec.h243.decoder
 			}
 		}
     
-		public /*inline*/ long check_marker(String msg)
+		public /*inline*/ long check_marker(string msg)
 		{
 			long bit= get_bits1(msg);
 			if(bit == 0)
-				System.err.println("Marker bit missing: " + msg);
+				Console.Error.WriteLine("Marker bit missing: " + msg);
 
 			return bit;
 		}
@@ -450,8 +453,8 @@ namespace cscodec.h243.decoder
 					return 0;
 				} 
 				vlc.table_allocated += (1 << vlc.bits);
-				short[][/*2*/] newTab = new short[2 * vlc.table_allocated][2];
-				for(int i=0;i<vlc.table_base.length;i++) {
+				short[][/*2*/] newTab = Arrays.Create2D<short>(2 * vlc.table_allocated, 2);
+				for(int i=0;i<vlc.table_base.Length;i++) {
             		newTab[i][0] = vlc.table_base[i][0];
             		newTab[i][1] = vlc.table_base[i][1];
 				} // for i
@@ -557,9 +560,9 @@ namespace cscodec.h243.decoder
 							break;
 						codes_base[codes_offset + k].bits = n;
 						codes_base[codes_offset + k].code = code << table_nb_bits;
-						subtable_bits = Math.max(subtable_bits, n);
+						subtable_bits = Math.Max(subtable_bits, n);
 					}
-					subtable_bits = Math.min(subtable_bits, table_nb_bits);
+					subtable_bits = Math.Min(subtable_bits, table_nb_bits);
 					j = ((flags & INIT_VLC_LE)!=0) ? (bitswap_32(code_prefix) >> (32 - table_nb_bits)) : code_prefix;
 					table_base[(int)(table_offset + j)][1] = (short)-subtable_bits;
 

@@ -1,3 +1,5 @@
+using cscodec.h243.util;
+using System;
 namespace cscodec.h243.decoder
 {
 	public class ImageUtils
@@ -719,7 +721,7 @@ namespace cscodec.h243.decoder
 				av_image_copy_plane(dst_base[0], dst_offset[0], dst_linesizes[0], src_base[0], src_offset[0],
 						src_linesizes[0], width, height);
 				/* copy the palette */
-				System.arraycopy(src_base[1], src_offset[1], dst_base[1], dst_offset[1], 4 * 256);
+				Array.Copy(src_base[1], src_offset[1], dst_base[1], dst_offset[1], 4 * 256);
 				// memcpy(dst_data[1], src_data[1], 4*256);
 			}
 			else
@@ -727,7 +729,7 @@ namespace cscodec.h243.decoder
 				int i, planes_nb = 0;
 
 				for (i = 0; i < desc.nb_components; i++)
-					planes_nb = Math.max(planes_nb, desc.comp[i].plane + 1);
+					planes_nb = Math.Max(planes_nb, desc.comp[i].plane + 1);
 
 				for (i = 0; i < planes_nb; i++)
 				{
@@ -759,7 +761,7 @@ namespace cscodec.h243.decoder
 			for (; height > 0; height--)
 			{
 				//memcpy(dst, src, bytewidth);
-				System.arraycopy(src, src_offset, dst, dst_offset, bytewidth);
+				Array.Copy(src, src_offset, dst, dst_offset, bytewidth);
 				dst_offset += dst_linesize;
 				src_offset += src_linesize;
 			}
@@ -768,8 +770,8 @@ namespace cscodec.h243.decoder
 		public static int av_image_get_linesize(/*enum PixelFormat*/int pix_fmt, int width, int plane)
 		{
 			AVPixFmtDescriptor desc = av_pix_fmt_descriptors[pix_fmt];
-			int max_step[] = new int[4];       /* max pixel step for each plane */
-			int max_step_comp[] = new int[4];       /* the component for each plane which has the max pixel step */
+			int[] max_step = new int[4];       /* max pixel step for each plane */
+			int[] max_step_comp = new int[4];       /* the component for each plane which has the max pixel step */
 			int s;
 
 			if ((desc.flags & PIX_FMT_BITSTREAM)!=0)

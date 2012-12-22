@@ -1,3 +1,4 @@
+using cscodec.h243.util;
 namespace cscodec.h243.decoder
 {
 	public class MpegEncContext {
@@ -97,7 +98,7 @@ namespace cscodec.h243.decoder
 		public const int CODEC_FLAG_H263P_SLICE_STRUCT =0x10000000;
 		public const int CODEC_FLAG_INTERLACED_ME  =0x20000000; ///< interlaced motion estimation
 		public const int CODEC_FLAG_SVCD_SCAN_OFFSET =0x40000000; ///< Will reserve space for SVCD scan offset user data.
-		public const int CODEC_FLAG_CLOSED_GOP     =0x80000000;
+		public const int CODEC_FLAG_CLOSED_GOP     =unchecked((int)0x80000000);
 		public const int CODEC_FLAG2_FAST          =0x00000001; ///< Allow non spec compliant speedup tricks.
 		public const int CODEC_FLAG2_STRICT_GOP    =0x00000002; ///< Strictly enforce GOP size.
 		public const int CODEC_FLAG2_NO_OUTPUT     =0x00000004; ///< Skip bitstream encoding.
@@ -275,7 +276,7 @@ namespace cscodec.h243.decoder
 		public const int SLICE_FLAG_ALLOW_PLANE    =0x0004; ///< allow draw_horiz_band() with 1 component at a time (SVQ1)
 	
 		public const int EDGE_WIDTH = 16;
-		public const long AV_NOPTS_VALUE          = (0x8000000000000000l);
+		public const long AV_NOPTS_VALUE          = unchecked((long)(0x8000000000000000L));
 		public const int AV_TIME_BASE            =1000000;
 		//public const int AV_TIME_BASE_Q          (AVRational){1, AV_TIME_BASE}
 	
@@ -822,10 +823,11 @@ namespace cscodec.h243.decoder
 					w_align = 64;
 					h_align = 64;
 				}
-				/*
-				 * ????????????????// case PIX_FMT_RGB555: if(this.codec_id ==
-				 * H264PredictionContext.CODEC_ID_RPZA){ w_align=4; h_align=4; }
-				 */
+				break;
+			/*
+			 * ????????????????// case PIX_FMT_RGB555: if(this.codec_id ==
+			 * H264PredictionContext.CODEC_ID_RPZA){ w_align=4; h_align=4; }
+			 */
 			case PIX_FMT_PAL8:
 			case PIX_FMT_BGR8:
 			case PIX_FMT_RGB8:
@@ -1043,15 +1045,15 @@ namespace cscodec.h243.decoder
 			//(*picture_number)++;
 			this.internal_buffer[INTERNAL_BUFFER_SIZE].last_pic_num++;
 
-			if(buf.base[0]!=null && (buf.width != w || buf.height != h || buf.pix_fmt != this.pix_fmt)){
+			if(buf.@base[0]!=null && (buf.width != w || buf.height != h || buf.pix_fmt != this.pix_fmt)){
 				for(i=0; i<4; i++){
 					//av_freep(&buf.base[i]);
-					buf.base[i]= null;
+					buf.@base[i]= null;
 					buf.data_offset[i] = 0;
 				}
 			}
 
-			if(buf.base[0]!=null){
+			if(buf.@base[0]!=null){
 				pic.age= this.internal_buffer[INTERNAL_BUFFER_SIZE].last_pic_num - buf.last_pic_num;
 				buf.last_pic_num= this.internal_buffer[INTERNAL_BUFFER_SIZE].last_pic_num;
 			}else{
@@ -1106,10 +1108,10 @@ namespace cscodec.h243.decoder
 				buf.last_pic_num= -256*256*256*64;
 				//memset(buf.base, 0, sizeof(buf.base));
 				//memset(buf.data, 0, sizeof(buf.data));
-				for(int k=0;k<buf.base.length;k++)
-            		buf.base[k] = null;
+				for(int k=0;k<buf.@base.Length;k++)
+            		buf.@base[k] = null;
             		//Arrays.fill(buf.base[k], 0);
-				for(int k=0;k<buf.data_offset.length;k++)
+				for(int k=0;k<buf.data_offset.Length;k++)
             		buf.data_offset[k] = 0;
 				//	Arrays.fill(buf.data[k], 0);
 
@@ -1120,10 +1122,10 @@ namespace cscodec.h243.decoder
 					buf.linesize[i]= picture.linesize[i];
 
 					//buf.base[i]= av_malloc(size[i]+16); //FIXME 16
-					buf.base[i] = new int[size[i]+16];
-					if(buf.base[i]==null) return -1;
+					buf.@base[i] = new int[size[i]+16];
+					if(buf.@base[i]==null) return -1;
 					//memset(buf.base[i], 128, size[i]);
-					Arrays.fill(buf.base[i], 0, size[i], 128);
+					Arrays.fill(buf.@base[i], 0, size[i], 128);
 
 					// no edge if EDGE EMU or not planar YUV
 					if((this.flags&CODEC_FLAG_EMU_EDGE)!=0 || 0==size[2])
@@ -1133,7 +1135,7 @@ namespace cscodec.h243.decoder
 						  //+ FFALIGN((buf.linesize[i]*EDGE_WIDTH>>v_shift) + (EDGE_WIDTH>>h_shift), stride_align[i]);
 				}
 				if(size[1]!=0 && 0==size[2])
-					ff_set_systematic_pal2(buf.base[1], buf.data_offset[1], this.pix_fmt);
+					ff_set_systematic_pal2(buf.@base[1], buf.data_offset[1], this.pix_fmt);
 				buf.width  = this.width;
 				buf.height = this.height;
 				buf.pix_fmt= this.pix_fmt;
@@ -1142,8 +1144,8 @@ namespace cscodec.h243.decoder
 			pic.type= FF_BUFFER_TYPE_INTERNAL;
 
 			for(i=0; i<4; i++){
-				pic.base[i]= buf.base[i];
-				pic.data_base[i]= buf.base[i];
+				pic.@base[i]= buf.@base[i];
+				pic.data_base[i]= buf.@base[i];
 				pic.data_offset[i]= buf.data_offset[i];
 				pic.linesize[i]= buf.linesize[i];
 			}
@@ -1260,7 +1262,7 @@ namespace cscodec.h243.decoder
 				if(this.out_format == FMT_H264){
 					for(i=0; i<2; i++){
 						//FF_ALLOCZ_OR_GOTO(this.avctx, pic.motion_val_base[i], 2 * (b4_array_size+4)  * sizeof(int16_t), fail)
-                		pic.motion_val_base[i] = new int[(b4_array_size+4)][2];
+						pic.motion_val_base[i] = Arrays.Create2D<int>(b4_array_size + 4, 2);
            
 						pic.motion_val_offset[i]= 4;
                     
@@ -1523,7 +1525,7 @@ namespace cscodec.h243.decoder
 			return fmt[i];
 		}    
     
-		public static int init_duplicate_context(MpegEncContext s, MpegEncContext base){
+		public static int init_duplicate_context(MpegEncContext s, MpegEncContext @base){
 			//int y_size = s.b8_stride * (2 * s.mb_height + 1);
 			//int c_size = s.mb_stride * (s.mb_height + 1);
 			//int yc_size = y_size + 2 * c_size;
@@ -1553,7 +1555,7 @@ namespace cscodec.h243.decoder
 			// FF_ALLOCZ_OR_GOTO(s.avctx, s.blocks, 64*12*2 * sizeof(DCTELEM), fail)
 
 			//s.blocks = new short[64*12*2];?? Size seems not sync
-			s.blocks = new short[2][12][64];
+			s.blocks = Arrays.Create3D<short>(2, 12, 64);
 			s.block= s.blocks[0];
 			s.pblocks_offset = new int[12];
 			for(i=0;i<12;i++){
@@ -1839,7 +1841,7 @@ namespace cscodec.h243.decoder
 			buf = null; /* avoids warning */
 			for(i=0; i<this.internal_buffer_count; i++){ //just 3-5 checks so is not worth to optimize
 				buf= this.internal_buffer[i];
-				if(buf.base[0] == pic.data_base[0] && buf.data_offset[0] == pic.data_offset[0])
+				if (buf.@base[0] == pic.data_base[0] && buf.data_offset[0] == pic.data_offset[0])
 					break;
 			}
 			////assert(i < s->internal_buffer_count);
@@ -2263,7 +2265,7 @@ namespace cscodec.h243.decoder
 			for(i=0; i<INTERNAL_BUFFER_SIZE; i++){
 				InternalBuffer buf= this.internal_buffer[i];
 				for(j=0; j<4; j++){
-	        		buf.base[j] = null;
+					buf.@base[j] = null;
 					buf.data_offset[j]= 0;
 				}
 			}
