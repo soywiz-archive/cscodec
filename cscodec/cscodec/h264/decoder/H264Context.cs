@@ -7912,8 +7912,8 @@ namespace cscodec.h243.decoder
 
 			s.dropable= (h.nal_ref_idc == 0)?1:0;
 
-			s.me.qpel_put= s.dsp.put_h264_qpel_pixels_tab;
-			s.me.qpel_avg= s.dsp.avg_h264_qpel_pixels_tab;
+			s.me.qpel_put = DSPContext.put_h264_qpel_pixels_tab;
+			s.me.qpel_avg= DSPContext.avg_h264_qpel_pixels_tab;
 
 			first_mb_in_slice= s.gb.get_ue_golomb("first_mb_in_slice");
 

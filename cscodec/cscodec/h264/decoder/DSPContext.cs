@@ -200,24 +200,26 @@ namespace cscodec.h243.decoder
 		/**
 		 * h264 Qpel MC
 		 */
-		public interface Ih264_qpel_mc_func {
-			//public void h264_qpel_mc_func(uint8_t *dst/*align 8*/, uint8_t *src/*align 1*/, int stride);
-			public void h264_qpel_mc_func(
-					int[] dst_base/*align 8*/, int dst_offset,
-					int[] src_base/*align 1*/, int src_offset, 
-					int stride);
-		}
+		public delegate void Ih264_qpel_mc_func(int[] dst_base/*align 8*/, int dst_offset, int[] src_base/*align 1*/, int src_offset, int stride);
+		//public interface Ih264_qpel_mc_func {
+		//	//public void h264_qpel_mc_func(uint8_t *dst/*align 8*/, uint8_t *src/*align 1*/, int stride);
+		//	public void h264_qpel_mc_func(
+		//			int[] dst_base/*align 8*/, int dst_offset,
+		//			int[] src_base/*align 1*/, int src_offset, 
+		//			int stride);
+		//}
 	
 		/**
 		 * h264 Chroma MC
 		 */
-		public interface Ih264_chroma_mc_func {
-			//public void h264_chroma_mc_func(uint8_t *dst/*align 8*/, uint8_t *src/*align 1*/, int srcStride, int h, int x, int y);
-			public void h264_chroma_mc_func(
-					int[] dst_base/*align 8*/, int dst_offset,
-					int[] src_base/*align 1*/, int src_offset, 
-					int srcStride, int h, int x, int y);
-		}
+		public delegate void Ih264_chroma_mc_func(int[] dst_base/*align 8*/, int dst_offset, int[] src_base/*align 1*/, int src_offset, int srcStride, int h, int x, int y);
+		//public interface Ih264_chroma_mc_func {
+		//	//public void h264_chroma_mc_func(uint8_t *dst/*align 8*/, uint8_t *src/*align 1*/, int srcStride, int h, int x, int y);
+		//	public void h264_chroma_mc_func(
+		//			int[] dst_base/*align 8*/, int dst_offset,
+		//			int[] src_base/*align 1*/, int src_offset, 
+		//			int srcStride, int h, int x, int y);
+		//}
 	
 		private static int OP_AVG(int a, int b) { return (((a)+(((b) + 32)>>6)+1)>>1); }
 		private static int OP_PUT(int a, int b) { return (((b) + 32)>>6); }
@@ -480,12 +482,12 @@ namespace cscodec.h243.decoder
 	
 		public static long rnd_avg32(long a, long b) {
 			//return (long)( ((a | b)&0xffffffffl) - (( ((a ^ b)&0xffffffffl) & ((~((0x01)*0xffffffff01010101l)) >>> 1))) );
-			a = a&0xffffffffl;
-			b = b&0xffffffffl;
-			long remainder = (a^b) & 0x01010101l;
+			a = a&0xffffffffL;
+			b = b&0xffffffffL;
+			long remainder = (a^b) & 0x01010101L;
 			a = a & (~remainder);
 			b = b & (~remainder);		
-			long ret = ( (a + b) >>> 1 ) + remainder;
+			long ret = (long)( ((ulong)(a + b)) >> 1 ) + remainder;
 			return ret;
 		}
 	
@@ -510,10 +512,10 @@ namespace cscodec.h243.decoder
 					else // AVG
 						c = rnd_avg32(c, rnd_avg32(a, b));
 								
-					dst_base[dst_offset + i*dst_stride] = (int)(c & 0x000000ffl);
-					dst_base[dst_offset + i*dst_stride +1] = (int)((c & 0x0000ff00l)>>>8);
-					dst_base[dst_offset + i*dst_stride +2] = (int)((c & 0x00ff0000l)>>>16);
-					dst_base[dst_offset + i*dst_stride +3] = (int)((c & 0xff000000l)>>>24);
+					dst_base[dst_offset + i*dst_stride] = (int)(c & 0x000000ffL);
+					dst_base[dst_offset + i*dst_stride +1] = (int)(((ulong)(c & 0x0000ff00L))>>8);
+					dst_base[dst_offset + i*dst_stride +2] = (int)(((ulong)(c & 0x00ff0000L))>>16);
+					dst_base[dst_offset + i*dst_stride +3] = (int)(((ulong)(c & 0xff000000L))>>24);
 					//a= AV_RN32(&src1[i*src_stride1+4]);
 					//b= AV_RN32(&src2[i*src_stride2+4]);
 					a = ((long)src1_base[4+ src1_offset + i*src_stride1] << 0)|((long)src1_base[4+ src1_offset + i*src_stride1 +1] << 8)|((long)src1_base[4+ src1_offset + i*src_stride1 +2] << 16)|((long)src1_base[4+ src1_offset + i*src_stride1 +3] << 24);
@@ -524,10 +526,10 @@ namespace cscodec.h243.decoder
 					else // AVG
 						c = rnd_avg32(c, rnd_avg32(a, b));
 				
-					dst_base[4+ dst_offset + i*dst_stride] = (int)(c & 0x000000ffl);
-					dst_base[4+ dst_offset + i*dst_stride +1] = (int)((c & 0x0000ff00l)>>>8);
-					dst_base[4+ dst_offset + i*dst_stride +2] = (int)((c & 0x00ff0000l)>>>16);
-					dst_base[4+ dst_offset + i*dst_stride +3] = (int)((c & 0xff000000l)>>>24);
+					dst_base[4+ dst_offset + i*dst_stride] = (int)(c & 0x000000ffL);
+					dst_base[4+ dst_offset + i*dst_stride +1] = (int)(((ulong)(c & 0x0000ff00L))>>8);
+					dst_base[4+ dst_offset + i*dst_stride +2] = (int)(((ulong)(c & 0x00ff0000L))>>16);
+					dst_base[4+ dst_offset + i*dst_stride +3] = (int)(((ulong)(c & 0xff000000L))>>24);
 				} // for
 			} // if
 			else if(size==4) {
@@ -542,10 +544,10 @@ namespace cscodec.h243.decoder
 						c = rnd_avg32(a, b);
 					else // AVG
 						c = rnd_avg32(c, rnd_avg32(a, b));
-					dst_base[dst_offset + i*dst_stride] = (int)(c & 0x000000ffl);
-					dst_base[dst_offset + i*dst_stride +1] = (int)((c & 0x0000ff00l)>>>8);
-					dst_base[dst_offset + i*dst_stride +2] = (int)((c & 0x00ff0000l)>>>16);
-					dst_base[dst_offset + i*dst_stride +3] = (int)((c & 0xff000000l)>>>24);
+					dst_base[dst_offset + i*dst_stride] = (int)(c & 0x000000ffL);
+					dst_base[dst_offset + i*dst_stride +1] = (int)(((ulong)(c & 0x0000ff00L))>>8);
+					dst_base[dst_offset + i*dst_stride +2] = (int)(((ulong)(c & 0x00ff0000L))>>16);
+					dst_base[dst_offset + i*dst_stride +3] = (int)(((ulong)(c & 0xff000000L))>>24);
 				}			
 			} // if
 			else if(size==2) {
@@ -560,8 +562,8 @@ namespace cscodec.h243.decoder
 						c = rnd_avg32(a, b);
 					else // AVG
 						c = rnd_avg32(c, rnd_avg32(a, b));
-					dst_base[dst_offset + i*dst_stride] = (int)(c & 0x000000ffl);
-					dst_base[dst_offset + i*dst_stride +1] = (int)((c & 0x0000ff00l)>>>8);
+					dst_base[dst_offset + i*dst_stride] = (int)(c & 0x000000ffL);
+					dst_base[dst_offset + i*dst_stride +1] = (int)(((ulong)(c & 0x0000ff00L))>>8);
 				}			
 			} // if
 			else if(size==16) {
@@ -587,8 +589,8 @@ namespace cscodec.h243.decoder
 							long a = (src_base[src_offset] << 0)|(src_base[src_offset+1] << 8);
 							long b = (dst_base[dst_offset] << 0)|(dst_base[dst_offset+1] << 8);
 							b = rnd_avg32(b, a);
-							dst_base[dst_offset] = (int)(b & 0x000000ffl);
-							dst_base[dst_offset+1] = (int)((b & 0x0000ff00l)>>>8);
+							dst_base[dst_offset] = (int)(b & 0x000000ffL);
+							dst_base[dst_offset+1] = (int)(((ulong)(b & 0x0000ff00L))>>8);
 							dst_offset += stride;
 							src_offset += stride;
 						} // for
@@ -606,10 +608,10 @@ namespace cscodec.h243.decoder
 							long a = (src_base[src_offset] << 0)|(src_base[src_offset+1] << 8)|(src_base[src_offset+2] << 16)|(src_base[src_offset+3] << 24);
 							long b = (dst_base[dst_offset] << 0)|(dst_base[dst_offset+1] << 8)|(dst_base[dst_offset+2] << 16)|(dst_base[dst_offset+3] << 24);
 							b = rnd_avg32(b, a);
-							dst_base[dst_offset] = (int)(b & 0x000000ffl);
-							dst_base[dst_offset+1] = (int)((b & 0x0000ff00l)>>>8);
-							dst_base[dst_offset+2] = (int)((b & 0x00ff0000l)>>>16);
-							dst_base[dst_offset+3] = (int)((b & 0xff000000l)>>>24);
+							dst_base[dst_offset] = (int)(b & 0x000000ffL);
+							dst_base[dst_offset+1] = (int)(((ulong)(b & 0x0000ff00L))>>8);
+							dst_base[dst_offset+2] = (int)(((ulong)(b & 0x00ff0000L))>>16);
+							dst_base[dst_offset+3] = (int)(((ulong)(b & 0xff000000L))>>24);
 							dst_offset += stride;
 							src_offset += stride;
 						} // for
@@ -629,17 +631,17 @@ namespace cscodec.h243.decoder
 							long b = (dst_base[dst_offset] << 0)|(dst_base[dst_offset+1] << 8)|(dst_base[dst_offset+2] << 16)|(dst_base[dst_offset+3] << 24);
 							b = rnd_avg32(b, a);
 							dst_base[dst_offset] = (int)(b & 0x000000ff);
-							dst_base[dst_offset+1] = (int)((b & 0x0000ff00l)>>>8);
-							dst_base[dst_offset+2] = (int)((b & 0x00ff0000l)>>>16);
-							dst_base[dst_offset+3] = (int)((b & 0xff000000l)>>>24);
+							dst_base[dst_offset+1] = (int)(((ulong)(b & 0x0000ff00L))>>8);
+							dst_base[dst_offset+2] = (int)(((ulong)(b & 0x00ff0000L))>>16);
+							dst_base[dst_offset+3] = (int)(((ulong)(b & 0xff000000L))>>24);
 						
 							a = (src_base[4+ src_offset] << 0)|(src_base[4+ src_offset+1] << 8)|(src_base[4+ src_offset+2] << 16)|(src_base[4+ src_offset+3] << 24);
 							b = (dst_base[4+ dst_offset] << 0)|(dst_base[4+ dst_offset+1] << 8)|(dst_base[4+ dst_offset+2] << 16)|(dst_base[4+ dst_offset+3] << 24);
 							b = rnd_avg32(b, a);
-							dst_base[4+ dst_offset] = (int)(b & 0x000000ffl);
-							dst_base[4+ dst_offset+1] = (int)((b & 0x0000ff00l)>>>8);
-							dst_base[4+ dst_offset+2] = (int)((b & 0x00ff0000l)>>>16);
-							dst_base[4+ dst_offset+3] = (int)((b & 0xff000000l)>>>24);						
+							dst_base[4+ dst_offset] = (int)(b & 0x000000ffL);
+							dst_base[4+ dst_offset+1] = (int)(((ulong)(b & 0x0000ff00L))>>8);
+							dst_base[4+ dst_offset+2] = (int)(((ulong)(b & 0x00ff0000L))>>16);
+							dst_base[4+ dst_offset+3] = (int)(((ulong)(b & 0xff000000L))>>24);						
 						
 							dst_offset += stride;
 							src_offset += stride;
@@ -661,7 +663,7 @@ namespace cscodec.h243.decoder
 			try {
 				return cm_base[cm_offset + (((b) + 512)>>10)];
 			} catch(Exception e) {
-				e.printStackTrace();
+				Console.Error.WriteLine(e);
 				return 0;
 			} // try
 			}
@@ -1261,35 +1263,22 @@ namespace cscodec.h243.decoder
 			// For JAVA software decoder, use simple IDCT Scanline:
 			this.idct_permutation_type= FF_NO_IDCT_PERM;        
         
-			put_h264_qpel_pixels_tab[0][ 0] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				pixels_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride,16);	
-    			}
+			throw(new NotImplementedException("DSPContext Check!"));
+#if false
+			put_h264_qpel_pixels_tab[0][ 1] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
+   				h264_qpel_mc10_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride); 
 			}; 
-			put_h264_qpel_pixels_tab[0][ 1] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc10_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
+			put_h264_qpel_pixels_tab[0][ 2] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
+   				h264_qpel_mc20_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
 			}; 
-			put_h264_qpel_pixels_tab[0][ 2] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc20_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
+			put_h264_qpel_pixels_tab[0][ 3] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
+    			h264_qpel_mc30_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
 			}; 
-			put_h264_qpel_pixels_tab[0][ 3] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc30_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
+			put_h264_qpel_pixels_tab[0][ 4] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
+   				h264_qpel_mc01_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
 			}; 
-			put_h264_qpel_pixels_tab[0][ 4] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc01_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[0][ 5] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc11_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
+			put_h264_qpel_pixels_tab[0][ 5] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
+   				h264_qpel_mc11_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
 			}; 
 			put_h264_qpel_pixels_tab[0][ 6] = new Ih264_qpel_mc_func() {
     			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
@@ -1584,7 +1573,11 @@ namespace cscodec.h243.decoder
     				h264_qpel_mc33_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
     			}
 			}; 
+#endif
+			///////////////////////////////////////////////////////////////////////////////////////
 
+			// avg_h264_qpel_pixels_tab[0][ 0]
+#if false
 			avg_h264_qpel_pixels_tab[0][ 0] = new Ih264_qpel_mc_func() {
     			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
     				pixels_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride, 16); 
@@ -1827,7 +1820,9 @@ namespace cscodec.h243.decoder
     				h264_qpel_mc33_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
     			}
 			}; 
+#endif
     	
+#if false
 			put_h264_chroma_pixels_tab[0]= new Ih264_chroma_mc_func() {
         		public void h264_chroma_mc_func(
     					int[] dst_base/*align 8*/, int dst_offset,
@@ -1852,6 +1847,11 @@ namespace cscodec.h243.decoder
         			put_h264_chroma_mc2_c(dst_base, dst_offset, src_base, src_offset, srcStride, h, x, y);
         		}
 			};
+#endif
+
+			///////////////////////////
+
+#if false
 			avg_h264_chroma_pixels_tab[0]= new Ih264_chroma_mc_func() {
         		public void h264_chroma_mc_func(
     					int[] dst_base/*align 8*/, int dst_offset,
@@ -1876,6 +1876,7 @@ namespace cscodec.h243.decoder
         			avg_h264_chroma_mc2_c(dst_base, dst_offset, src_base, src_offset, srcStride, h, x, y);
         		}
 			};
+#endif
         
 			switch(this.idct_permutation_type){
 			case FF_NO_IDCT_PERM:

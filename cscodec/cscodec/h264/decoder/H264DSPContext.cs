@@ -120,34 +120,34 @@ namespace cscodec.h243.decoder
 		};
     
 		public IH264BiWeightFunctionStub[] biweight_h264_pixels_tab = new IH264BiWeightFunctionStub[] {
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
         			biweight_h264_pixels_c(16, 16, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
         			biweight_h264_pixels_c(16, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
         			biweight_h264_pixels_c(8, 16, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
         			biweight_h264_pixels_c(8, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
         			biweight_h264_pixels_c(8, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
         			biweight_h264_pixels_c(4, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
         			biweight_h264_pixels_c(4, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
         			biweight_h264_pixels_c(4, 2, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
         			biweight_h264_pixels_c(2, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) {
+        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
         			biweight_h264_pixels_c(2, 2, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},    		
 		};
