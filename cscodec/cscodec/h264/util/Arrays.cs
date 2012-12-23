@@ -3,6 +3,34 @@ namespace cscodec.h243.util
 {
 	public class Arrays
 	{
+		public static T[][] ConvertDimensional<T>(T[,] In)
+		{
+			int Length1 = In.GetLength(0);
+			int Length2 = In.GetLength(1);
+			var Out = Create2D<T>(Length1, Length2);
+			for (int a = 0; a < Length1; a++)
+			for (int b = 0; b < Length2; b++)
+			{
+				Out[a][b] = In[a, b];
+			}
+			return Out;
+		}
+
+		public static T[][][] ConvertDimensional<T>(T[,,] In)
+		{
+			int Length1 = In.GetLength(0);
+			int Length2 = In.GetLength(1);
+			int Length3 = In.GetLength(2);
+			var Out = Create3D<T>(Length1, Length2, Length3);
+			for (int a = 0; a < Length1; a++)
+			for (int b = 0; b < Length2; b++)
+			for (int c = 0; c < Length3; c++)
+			{
+				Out[a][b][c] = In[a, b, c];
+			}
+			return Out;
+		}
+
 		public static T[] Create1D<T>(int Rank1)
 		{
 			return new T[Rank1];

@@ -319,9 +319,9 @@ namespace cscodec.h243.decoder
     		 ret.qscale_type = qscale_type;
     		 ret.qstride = qstride;
     		 ret.quality = quality;
-			 Buffer.BlockCopy(ref_count, 0, ret.ref_count, 0, 2 * 2);
+			 System.Buffer.BlockCopy(ref_count, 0, ret.ref_count, 0, 2 * 2);
 			 Array.Copy(ref_index, 0, ret.ref_index, 0, ref_index.Length);
-			 Buffer.BlockCopy(ref_poc, 0, ret.ref_poc, 0, 2 * 2 * 16);
+			 System.Buffer.BlockCopy(ref_poc, 0, ret.ref_poc, 0, 2 * 2 * 16);
     		 ret.reference = reference;
     		 ret.reordered_opaque = reordered_opaque;
     		 ret.repeat_pict = repeat_pict;

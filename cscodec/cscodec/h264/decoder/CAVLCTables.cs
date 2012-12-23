@@ -21,7 +21,7 @@ namespace cscodec.h243.decoder
 			return output;
 		}
 
-		public const short[,] chroma_dc_coeff_token_vlc_table = {
+		public const short[][] chroma_dc_coeff_token_vlc_table = Arrays.ConvertDimensional(new short[,]{
 			   {19, 7, 2}, 
 			   {18, 8, 1}, 
 			   {17, 8, 1}, 
@@ -36,10 +36,10 @@ namespace cscodec.h243.decoder
 			   {10, 3, 32}, 
 			   {0, 2, 64}, 
 			   {5, 1, 128}, 
-			};
+			});
 
-		public const short[][,] coeff_token_vlc_table = {
-				new short[,]{
+		public const short[][][] coeff_token_vlc_table = {
+			Arrays.ConvertDimensional(new short[,]{
 			   {256, -8, 1}, 
 			   {512, -2, 1}, 
 			   {516, -1, 1}, 
@@ -107,8 +107,8 @@ namespace cscodec.h243.decoder
 			   {22, 1, 1}, 
 			   {17, 1, 1}, 
 			   {12, 1, 1}, 
-				}, 
-				new short[,]{
+				}), 
+			Arrays.ConvertDimensional(new short[,]{
 			   {256, -6, 1}, 
 			   {320, -3, 1}, 
 			   {328, -1, 1}, 
@@ -176,8 +176,8 @@ namespace cscodec.h243.decoder
 			   {30, 1, 1}, 
 			   {29, 1, 1}, 
 			   {24, 1, 1}, 
-				}, 
-				new short[,]{
+				}), 
+			Arrays.ConvertDimensional(new short[,]{
 			   {256, -2, 1}, 
 			   {260, -2, 1}, 
 			   {264, -2, 1}, 
@@ -249,8 +249,8 @@ namespace cscodec.h243.decoder
 			   {50, 1, 1}, 
 			   {45, 1, 1}, 
 			   {40, 1, 1}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {4, 6, 4}, 
 			   {5, 6, 4}, 
 			   {-1, 0, 4}, 
@@ -315,29 +315,29 @@ namespace cscodec.h243.decoder
 			   {65, 6, 4}, 
 			   {66, 6, 4}, 
 			   {67, 6, 4}, 
-				}, 
+				}), 
 			};
 
-		public const short[][,] chroma_dc_total_zeros_vlc_table = {
-				new short[,]{
+		public const short[][][] chroma_dc_total_zeros_vlc_table = {
+				Arrays.ConvertDimensional(new short[,]{
 			   {3, 3, 1}, 
 			   {2, 3, 1}, 
 			   {1, 2, 2}, 
 			   {0, 1, 4}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {2, 2, 2}, 
 			   {1, 2, 2}, 
 			   {0, 1, 4}, 
-				}, 
-				new short[,]{
-			   {1, 1, 4}, 
-			   {0, 1, 4}, 
-				}, 
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
+				{1, 1, 4}, 
+				{0, 1, 4}, 
+				}), 
 			};
 
-		public const short[][,] total_zeros_vlc = {
-				new short[,]{
+		public const short[][][] total_zeros_vlc = {
+				Arrays.ConvertDimensional(new short[,]{
 			   {-1, 0, 1}, 
 			   {15, 9, 1}, 
 			   {14, 9, 1}, 
@@ -355,8 +355,8 @@ namespace cscodec.h243.decoder
 			   {2, 3, 64}, 
 			   {1, 3, 64}, 
 			   {0, 1, 256}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {14, 6, 8}, 
 			   {13, 6, 8}, 
 			   {12, 6, 8}, 
@@ -372,8 +372,8 @@ namespace cscodec.h243.decoder
 			   {2, 3, 64}, 
 			   {1, 3, 64}, 
 			   {0, 3, 64}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {13, 6, 8}, 
 			   {11, 6, 8}, 
 			   {12, 5, 16}, 
@@ -388,8 +388,8 @@ namespace cscodec.h243.decoder
 			   {3, 3, 64}, 
 			   {2, 3, 64}, 
 			   {1, 3, 64}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {12, 5, 16}, 
 			   {11, 5, 16}, 
 			   {10, 5, 16}, 
@@ -403,8 +403,8 @@ namespace cscodec.h243.decoder
 			   {5, 3, 64}, 
 			   {4, 3, 64}, 
 			   {1, 3, 64}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {11, 5, 16}, 
 			   {9, 5, 16}, 
 			   {10, 4, 32}, 
@@ -417,8 +417,8 @@ namespace cscodec.h243.decoder
 			   {5, 3, 64}, 
 			   {4, 3, 64}, 
 			   {3, 3, 64}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {10, 6, 8}, 
 			   {0, 6, 8}, 
 			   {1, 5, 16}, 
@@ -430,8 +430,8 @@ namespace cscodec.h243.decoder
 			   {4, 3, 64}, 
 			   {3, 3, 64}, 
 			   {2, 3, 64}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {9, 6, 8}, 
 			   {0, 6, 8}, 
 			   {1, 5, 16}, 
@@ -442,8 +442,8 @@ namespace cscodec.h243.decoder
 			   {3, 3, 64}, 
 			   {2, 3, 64}, 
 			   {5, 2, 128}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {8, 6, 8}, 
 			   {0, 6, 8}, 
 			   {2, 5, 16}, 
@@ -453,8 +453,8 @@ namespace cscodec.h243.decoder
 			   {3, 3, 64}, 
 			   {5, 2, 128}, 
 			   {4, 2, 128}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {1, 6, 8}, 
 			   {0, 6, 8}, 
 			   {7, 5, 16}, 
@@ -463,8 +463,8 @@ namespace cscodec.h243.decoder
 			   {6, 2, 128}, 
 			   {4, 2, 128}, 
 			   {3, 2, 128}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {1, 5, 16}, 
 			   {0, 5, 16}, 
 			   {6, 4, 32}, 
@@ -472,71 +472,71 @@ namespace cscodec.h243.decoder
 			   {5, 2, 128}, 
 			   {4, 2, 128}, 
 			   {3, 2, 128}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {0, 4, 32}, 
 			   {1, 4, 32}, 
 			   {2, 3, 64}, 
 			   {3, 3, 64}, 
 			   {5, 3, 64}, 
 			   {4, 1, 256}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {0, 4, 32}, 
 			   {1, 4, 32}, 
 			   {4, 3, 64}, 
 			   {2, 2, 128}, 
 			   {3, 1, 256}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {0, 3, 64}, 
 			   {1, 3, 64}, 
 			   {3, 2, 128}, 
 			   {2, 1, 256}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {0, 2, 128}, 
 			   {1, 2, 128}, 
 			   {2, 1, 256}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {0, 1, 256}, 
 			   {1, 1, 256}, 
-				},
+				}),
 			};
 
-		public const short[][,] run_vlc_table = {
-				new short[,]{
+		public const short[][][] run_vlc_table = {
+				Arrays.ConvertDimensional(new short[,]{
 			   {1, 1, 4}, 
 			   {0, 1, 4}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {2, 2, 2}, 
 			   {1, 2, 2}, 
 			   {0, 1, 4}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {3, 2, 2}, 
 			   {2, 2, 2}, 
 			   {1, 2, 2}, 
 			   {0, 2, 2}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {4, 3, 1}, 
 			   {3, 3, 1}, 
 			   {2, 2, 2}, 
 			   {1, 2, 2}, 
 			   {0, 2, 2}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {5, 3, 1}, 
 			   {4, 3, 1}, 
 			   {3, 3, 1}, 
 			   {2, 3, 1}, 
 			   {1, 2, 2}, 
 			   {0, 2, 2}, 
-				}, 
-				new short[,]{
+				}), 
+				Arrays.ConvertDimensional(new short[,]{
 			   {1, 3, 1}, 
 			   {2, 3, 1}, 
 			   {4, 3, 1}, 
@@ -544,10 +544,10 @@ namespace cscodec.h243.decoder
 			   {6, 3, 1}, 
 			   {5, 3, 1}, 
 			   {0, 2, 2}, 
-				}, 
+				}), 
 			};
 
-		public const short[,] run7_vlc_table = {
+		public const short[][] run7_vlc_table = Arrays.ConvertDimensional(new short[,]{
 			   {64, -5, 1}, 
 			   {9, 6, 1}, 
 			   {8, 5, 2}, 
@@ -565,7 +565,6 @@ namespace cscodec.h243.decoder
 			   {12, 3, 4}, 
 			   {11, 2, 8}, 
 			   {10, 1, 16}, 
-			};
-
+			});
 	}
 }

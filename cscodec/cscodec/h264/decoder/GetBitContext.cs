@@ -164,7 +164,7 @@ namespace cscodec.h243.decoder
 			re_cache = (re_cache << 8) |  buffer[pos+2];
 			re_cache = (re_cache << 8) |  buffer[pos+3];
 			re_cache = (re_cache << (re_index & 0x07));
-			re_cache = re_cache & 0xffffffffl; // Prevent 32-Bit over flow.
+			re_cache = re_cache & 0xffffffffL; // Prevent 32-Bit over flow.
         
 			//cache = GET_CACHE(re,s);
 			cache = (re_cache);
@@ -198,7 +198,7 @@ namespace cscodec.h243.decoder
 			re_cache = (re_cache << 8) |  buffer[pos+2];
 			re_cache = (re_cache << 8) |  buffer[pos+3];
 			re_cache = (re_cache << (re_index & 0x07));
-			re_cache = re_cache & 0xffffffffl; // Prevent 32-Bit over flow.
+			re_cache = re_cache & 0xffffffffL; // Prevent 32-Bit over flow.
                 
 			//tmp= SHOW_SBITS(re, s, n);
 			////tmp = ((( int32_t)(re_cache))>>(32-(n)))
@@ -235,7 +235,7 @@ namespace cscodec.h243.decoder
 			re_cache = (re_cache << 8) |  buffer[pos+2];
 			re_cache = (re_cache << 8) |  buffer[pos+3];
 			re_cache = (re_cache << (re_index & 0x07));
-			re_cache = re_cache & 0xffffffffl; // Prevent 32-Bit over flow.
+			re_cache = re_cache & 0xffffffffL; // Prevent 32-Bit over flow.
        
 			//tmp= SHOW_UBITS(re, s, n);
 			////tmp = NEG_USR32(re_cache, n)
@@ -269,7 +269,7 @@ namespace cscodec.h243.decoder
 			re_cache = (re_cache << 8) |  buffer[pos+2];
 			re_cache = (re_cache << 8) |  buffer[pos+3];
 			re_cache = (re_cache << (re_index & 0x07));
-			re_cache = re_cache & 0xffffffffl; // Prevent 32-Bit over flow.
+			re_cache = re_cache & 0xffffffffL; // Prevent 32-Bit over flow.
         
 			//tmp= SHOW_UBITS(re, s, n);
 			////tmp = NEG_USR32(re_cache, n)
@@ -292,7 +292,7 @@ namespace cscodec.h243.decoder
 			re_cache = (re_cache << 8) |  buffer[pos+2];
 			re_cache = (re_cache << 8) |  buffer[pos+3];
 			re_cache = (re_cache << (re_index & 0x07));
-			re_cache = re_cache & 0xffffffffl; // Prevent 32-Bit over flow.
+			re_cache = re_cache & 0xffffffffL; // Prevent 32-Bit over flow.
                 
 			//LAST_SKIP_BITS(re, s, n)
 			re_index += (n);
@@ -606,7 +606,7 @@ namespace cscodec.h243.decoder
 			re_cache = (re_cache << 8) |  buffer[pos+2];
 			re_cache = (re_cache << 8) |  buffer[pos+3];
 			re_cache = (re_cache << (re_index & 0x07));
-			re_cache = re_cache & 0xffffffffl; // Prevent 32-Bit over flow.
+			re_cache = re_cache & 0xffffffffL; // Prevent 32-Bit over flow.
         
 			//GET_VLC(code, re, s, table, bits, max_depth)
 			/**
@@ -643,7 +643,7 @@ namespace cscodec.h243.decoder
 					re_cache = (re_cache << 8) |  buffer[pos+2];
 					re_cache = (re_cache << 8) |  buffer[pos+3];
 					re_cache = (re_cache << (re_index & 0x07));
-					re_cache = re_cache & 0xffffffffl; // Prevent 32-Bit over flow.
+					re_cache = re_cache & 0xffffffffL; // Prevent 32-Bit over flow.
 		        
        
 				   nb_bits = -n;
@@ -671,7 +671,7 @@ namespace cscodec.h243.decoder
 					   re_cache = (re_cache << 8) |  buffer[pos+2];
 					   re_cache = (re_cache << 8) |  buffer[pos+3];
 					   re_cache = (re_cache << (re_index & 0x07));
-					   re_cache = re_cache & 0xffffffffl; // Prevent 32-Bit over flow.
+					   re_cache = re_cache & 0xffffffffL; // Prevent 32-Bit over flow.
        
 					   nb_bits = -n;
        
@@ -722,12 +722,12 @@ namespace cscodec.h243.decoder
 			re_cache = (re_cache << 8) |  buffer[pos+2];
 			re_cache = (re_cache << 8) |  buffer[pos+3];
 			re_cache = (re_cache << (re_index & 0x07));
-			re_cache = (re_cache & 0xffffffffl); // Prevent 32-Bit over flow.
+			re_cache = (re_cache & 0xffffffffL); // Prevent 32-Bit over flow.
 
 	//        buf=GET_CACHE(re, gb);
 			buf = (re_cache);
 
-			if(buf >= (1l<<27)){
+			if(buf >= (1L<<27)){
 				buf >>= 32 - 9;
 	//            LAST_SKIP_BITS(re, gb, ff_golomb_vlc_len[buf]);
         		re_index += (ff_golomb_vlc_len[(int)buf]);
@@ -771,7 +771,7 @@ namespace cscodec.h243.decoder
 			re_cache = (re_cache << 8) |  buffer[pos+2];
 			re_cache = (re_cache << 8) |  buffer[pos+3];
 			re_cache = (re_cache << (re_index & 0x07));
-			re_cache = re_cache & 0xffffffffl; // Prevent 32-Bit over flow.
+			re_cache = re_cache & 0xffffffffL; // Prevent 32-Bit over flow.
 
 	//        buf=GET_CACHE(re, gb);
 			//buf = (int)(re_cache >> (32-9));
@@ -807,7 +807,7 @@ namespace cscodec.h243.decoder
 			re_cache = (re_cache << 8) |  buffer[pos+2];
 			re_cache = (re_cache << 8) |  buffer[pos+3];
 			re_cache = (re_cache << (re_index & 0x07));
-			re_cache = re_cache & 0xffffffffl; // Prevent 32-Bit over flow.
+			re_cache = re_cache & 0xffffffffL; // Prevent 32-Bit over flow.
         
 	//        buf=GET_CACHE(re, gb);
 			buf = (re_cache);

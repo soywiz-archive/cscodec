@@ -1,4 +1,5 @@
 using cscodec.h243.util;
+using System;
 namespace cscodec.h243.decoder
 {
 	public class CAVLCContext {
@@ -238,7 +239,7 @@ namespace cscodec.h243.decoder
 
 		public const int LEVEL_TAB_BITS = 8;
 		//static int8_t cavlc_level_tab[7][1<<LEVEL_TAB_BITS][2];
-		public static int[][][] cavlc_level_tab = new int[7][1<<LEVEL_TAB_BITS][2];
+		public static int[][][] cavlc_level_tab = Arrays.Create3D<int>(7, 1<<LEVEL_TAB_BITS, 2);
 
 		public const int[/*256*/] ff_log2_tab = {
 				0,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
@@ -868,9 +869,9 @@ namespace cscodec.h243.decoder
 						}
 
 						if(di==4)
-							Rectangle.fill_rectangle_sign( h.intra4x4_pred_mode_cache, h.scan8[i] , 2, 2, 8, mode, 1 );
+							Rectangle.fill_rectangle_sign( h.intra4x4_pred_mode_cache, H264Context.scan8[i] , 2, 2, 8, mode, 1 );
 						else
-							h.intra4x4_pred_mode_cache[ h.scan8[i] ] = mode;
+							h.intra4x4_pred_mode_cache[H264Context.scan8[i]] = mode;
 					}
 					h.ff_h264_write_back_intra_pred_mode();
 					if( h.ff_h264_check_intra4x4_pred_mode() < 0)
@@ -904,10 +905,10 @@ namespace cscodec.h243.decoder
 					}
 					if( 0!=((h.sub_mb_type[0]|h.sub_mb_type[1]|h.sub_mb_type[2]|h.sub_mb_type[3])&H264Context.MB_TYPE_DIRECT2)) {
 	            		mb_type = h.ff_h264_pred_direct_motion(mb_type);
-						h.ref_cache[0,h.scan8[4]] =
-						h.ref_cache[1,h.scan8[4]] =
-						h.ref_cache[0,h.scan8[12]] =
-						h.ref_cache[1,h.scan8[12]] = H264Context.PART_NOT_AVAILABLE;
+						h.ref_cache[0][H264Context.scan8[4]] =
+						h.ref_cache[1][H264Context.scan8[4]] =
+						h.ref_cache[0][H264Context.scan8[12]] =
+						h.ref_cache[1][H264Context.scan8[12]] = H264Context.PART_NOT_AVAILABLE;
 					}
 				}else{
 					//assert(h.slice_type_nos == H264Context.FF_P_TYPE); //FIXME SP correct ?
@@ -953,11 +954,11 @@ namespace cscodec.h243.decoder
 				for(list=0; list<h.list_count; list++){
 					for(i=0; i<4; i++){
 						if(0!=(h.sub_mb_type[i] & H264Context.MB_TYPE_DIRECT2)) {
-							h.ref_cache[list, h.scan8[4*i] ] = h.ref_cache[list, h.scan8[4*i]+1 ];
+							h.ref_cache[list][H264Context.scan8[4 * i]] = h.ref_cache[list][H264Context.scan8[4 * i] + 1];
 							continue;
 						}
-						h.ref_cache[list, h.scan8[4*i]   ]=h.ref_cache[list, h.scan8[4*i]+1 ]=
-						h.ref_cache[list, h.scan8[4*i]+8 ]=h.ref_cache[list, h.scan8[4*i]+9 ]= @ref[list,i];
+						h.ref_cache[list][H264Context.scan8[4 * i]] = h.ref_cache[list][H264Context.scan8[4 * i] + 1] =
+						h.ref_cache[list][H264Context.scan8[4 * i] + 8] = h.ref_cache[list][H264Context.scan8[4 * i] + 9] = @ref[list, i];
 
 						if(((h.sub_mb_type[i]) & (H264Context.MB_TYPE_P0L0<<((0)+2*(list)))) != 0 ) {//IS_DIR(h.sub_mb_type[i], 0, list)){
 							int sub_mb_type= h.sub_mb_type[i];
@@ -965,11 +966,11 @@ namespace cscodec.h243.decoder
 							for(j=0; j<sub_partition_count[i]; j++){
 								int mx, my;
 								int index= 4*i + block_width*j;
-								//int16_t (* mv_cache)[2]= &h.mv_cache[list][ h.scan8[index] ];
+								//int16_t (* mv_cache)[2]= &h.mv_cache[list][ H264Context.scan8[index] ];
 								int[][] mv_cache_base = h.mv_cache[list];
-								int my_cache_offset = h.scan8[index];
+								int my_cache_offset = H264Context.scan8[index];
 								int[] mxmy = new int[2];
-								h.pred_motion(index, block_width, list, h.ref_cache[list, h.scan8[index] ], mxmy);
+								h.pred_motion(index, block_width, list, h.ref_cache[list][H264Context.scan8[index]], mxmy);
 								mx = mxmy[0];
 								my = mxmy[1];
 								mx += s.gb.get_se_golomb("mx?");
@@ -997,14 +998,14 @@ namespace cscodec.h243.decoder
 							p[0] = p[1]=
 							p[8] = p[9]= 0;
 							*/
-	                		h.mv_cache[list,h.scan8[4*i] + 0][0] = (short)0;
-	                		h.mv_cache[list,h.scan8[4*i] + 1][0] = (short)0;
-	                		h.mv_cache[list,h.scan8[4*i] + 8][0] = (short)0;
-	                		h.mv_cache[list,h.scan8[4*i] + 9][0] = (short)0;
-	                		h.mv_cache[list,h.scan8[4*i] + 0][1] = (short)0;
-	                		h.mv_cache[list,h.scan8[4*i] + 1][1] = (short)0;
-	                		h.mv_cache[list,h.scan8[4*i] + 8][1] = (short)0;
-	                		h.mv_cache[list,h.scan8[4*i] + 9][1] = (short)0;
+							h.mv_cache[list][H264Context.scan8[4 * i] + 0][0] = (short)0;
+							h.mv_cache[list][H264Context.scan8[4 * i] + 1][0] = (short)0;
+							h.mv_cache[list][H264Context.scan8[4 * i] + 8][0] = (short)0;
+							h.mv_cache[list][H264Context.scan8[4 * i] + 9][0] = (short)0;
+							h.mv_cache[list][H264Context.scan8[4 * i] + 0][1] = (short)0;
+							h.mv_cache[list][H264Context.scan8[4 * i] + 1][1] = (short)0;
+							h.mv_cache[list][H264Context.scan8[4 * i] + 8][1] = (short)0;
+							h.mv_cache[list][H264Context.scan8[4 * i] + 9][1] = (short)0;
 						}
 					}
 				}
@@ -1029,13 +1030,13 @@ namespace cscodec.h243.decoder
 										return -1;
 									}
 								}
-							Rectangle.fill_rectangle_sign(h.ref_cache[list], h.scan8[0], 4, 4, 8, val, 1);
+								Rectangle.fill_rectangle_sign(h.ref_cache[list], H264Context.scan8[0], 4, 4, 8, val, 1);
 							}
 					}
 					for(list=0; list<h.list_count; list++){
 						if(((mb_type) & (H264Context.MB_TYPE_P0L0<<((0)+2*(list)))) != 0 ){
                     		int[] mxmy = new int[] { mx, my };
-							h.pred_motion(0, 4, list, h.ref_cache[list][ h.scan8[0] ], mxmy);
+							h.pred_motion(0, 4, list, h.ref_cache[list][H264Context.scan8[0]], mxmy);
 							mx = mxmy[0];
 							my = mxmy[1];
 							mx += s.gb.get_se_golomb("mx?");
@@ -1045,7 +1046,7 @@ namespace cscodec.h243.decoder
 							// DebugTool.printDebugString("    ****(1) mx="+mx+", my="+my+", val="+val+"\n");
 							//tprintf(s.avctx, "final mv:%d %d\n", mx, my);
 
-							Rectangle.fill_rectangle_mv_cache(h.mv_cache[list], h.scan8[0] , 4, 4, 8, h.pack16to32(mx,my), 4);
+							Rectangle.fill_rectangle_mv_cache(h.mv_cache[list], H264Context.scan8[0], 4, 4, 8, H264Context.pack16to32(mx, my), 4);
 						}
 					}
 				}
@@ -1069,7 +1070,7 @@ namespace cscodec.h243.decoder
 	                        		//!!?????????????????????? Need unsigneded??
 									val= H264Context.LIST_NOT_USED;
 								} // if
-								Rectangle.fill_rectangle_sign(h.ref_cache[list], h.scan8[0] + 16*i , 4, 2, 8, val, 1);
+								Rectangle.fill_rectangle_sign(h.ref_cache[list], H264Context.scan8[0] + 16 * i, 4, 2, 8, val, 1);
 							}
 					}
 					for(list=0; list<h.list_count; list++){
@@ -1077,20 +1078,20 @@ namespace cscodec.h243.decoder
 							int val;
 							if(((mb_type) & (H264Context.MB_TYPE_P0L0<<((i)+2*(list)))) != 0 ){
 	                    		int[] mxmy = new int[] { mx, my };
-								h.pred_16x8_motion(8*i, list, h.ref_cache[list][h.scan8[0] + 16*i], mxmy);
+								h.pred_16x8_motion(8 * i, list, h.ref_cache[list][H264Context.scan8[0] + 16 * i], mxmy);
 								mx = mxmy[0];
 								my = mxmy[1];
 								mx += s.gb.get_se_golomb("mx?");
 								my += s.gb.get_se_golomb("my?");
 								//tprintf(s.avctx, "final mv:%d %d\n", mx, my);
 
-								val= h.pack16to32(mx,my);
+								val = H264Context.pack16to32(mx, my);
 
 								// DebugTool.printDebugString("    ****(2) mx="+mx+", my="+my+", val="+val+"\n");
 
 							}else
 								val=0;
-							Rectangle.fill_rectangle_mv_cache(h.mv_cache[list], h.scan8[0] + 16*i, 4, 2, 8, val, 4);
+							Rectangle.fill_rectangle_mv_cache(h.mv_cache[list], H264Context.scan8[0] + 16 * i, 4, 2, 8, val, 4);
 						}
 					}
 				}else{
@@ -1112,10 +1113,10 @@ namespace cscodec.h243.decoder
 									}
 								}else {
 	                        		// !!?????????? Need Unsigned
-	                        		val= h.LIST_NOT_USED;	
+									val = H264Context.LIST_NOT_USED;	
 								} // if
-	                            
-								Rectangle.fill_rectangle_sign(h.ref_cache[list], h.scan8[0] + 2*i , 2, 4, 8, val, 1);
+
+								Rectangle.fill_rectangle_sign(h.ref_cache[list], H264Context.scan8[0] + 2 * i, 2, 4, 8, val, 1);
 							}
 					}
 					for(list=0; list<h.list_count; list++){
@@ -1123,20 +1124,20 @@ namespace cscodec.h243.decoder
 							int val;
 							if(((mb_type) & (H264Context.MB_TYPE_P0L0<<((i)+2*(list)))) != 0 ){
 	                    		int[] mxmy = new int[] { mx, my };
-	                    		h.pred_8x16_motion(i*4, list, h.ref_cache[list][ h.scan8[0] + 2*i ], mxmy);
+								h.pred_8x16_motion(i * 4, list, h.ref_cache[list][H264Context.scan8[0] + 2 * i], mxmy);
 	                    		mx = mxmy[0];
 	                    		my = mxmy[1];
 								mx += s.gb.get_se_golomb("mx?");
 								my += s.gb.get_se_golomb("my?");
 								//tprintf(s.avctx, "final mv:%d %d\n", mx, my);
 
-								val= h.pack16to32(mx,my);
+								val = H264Context.pack16to32(mx, my);
 	                        
 								// DebugTool.printDebugString("    ****(3) mx="+mx+", my="+my+", val="+val+"\n");
 
 							}else
 								val=0;
-							Rectangle.fill_rectangle_mv_cache(h.mv_cache[list], h.scan8[0] + 2*i , 2, 4, 8, val, 4);
+							Rectangle.fill_rectangle_mv_cache(h.mv_cache[list], H264Context.scan8[0] + 2 * i, 2, 4, 8, val, 4);
 						}
 					}
 				}
@@ -1162,7 +1163,7 @@ namespace cscodec.h243.decoder
 			}
 
 			if(dct8x8_allowed!=0 && (cbp&15)!=0 && 0==(mb_type & 7)){
-				mb_type |= H264Context.MB_TYPE_8x8DCT*s.gb.get_bits1("mb_type");
+				mb_type |= (int)(H264Context.MB_TYPE_8x8DCT*s.gb.get_bits1("mb_type"));
 			}
 			h.cbp=
 			h.cbp_table[mb_xy]= cbp;
@@ -1224,7 +1225,7 @@ namespace cscodec.h243.decoder
 						}
 	                	
 					}else{
-						Rectangle.fill_rectangle_unsign(h.non_zero_count_cache, h.scan8[0], 4, 4, 8, 0, 1);
+						Rectangle.fill_rectangle_unsign(h.non_zero_count_cache, H264Context.scan8[0], 4, 4, 8, 0, 1);
 					}
 				}else{
 					for(i8x8=0; i8x8<4; i8x8++){
@@ -1238,7 +1239,7 @@ namespace cscodec.h243.decoder
 										return -1;
 								}
 								int[] nnz_base = h.non_zero_count_cache;
-								int nnz_offset = h.scan8[4*i8x8];
+								int nnz_offset = H264Context.scan8[4*i8x8];
 								nnz_base[nnz_offset + 0] += nnz_base[nnz_offset + 1] + nnz_base[nnz_offset + 8] + nnz_base[nnz_offset + 9];
 							}else{
 								for(i4x4=0; i4x4<4; i4x4++){
@@ -1251,7 +1252,7 @@ namespace cscodec.h243.decoder
 							}
 						}else{
 							int[] nnz_base = h.non_zero_count_cache;
-							int nnz_offset = h.scan8[4*i8x8];
+							int nnz_offset = H264Context.scan8[4*i8x8];
 							nnz_base[nnz_offset + 0] = nnz_base[nnz_offset + 1] = nnz_base[nnz_offset + 8] = nnz_base[nnz_offset + 9] = 0;
 						}
 					}
@@ -1284,14 +1285,14 @@ namespace cscodec.h243.decoder
 					}
 				}else{
 					int[] nnz= h.non_zero_count_cache;
-					nnz[ h.scan8[16]+0 ] = nnz[ h.scan8[16]+1 ] =nnz[ h.scan8[16]+8 ] =nnz[ h.scan8[16]+9 ] =
-					nnz[ h.scan8[20]+0 ] = nnz[ h.scan8[20]+1 ] =nnz[ h.scan8[20]+8 ] =nnz[ h.scan8[20]+9 ] = 0;
+					nnz[ H264Context.scan8[16]+0 ] = nnz[ H264Context.scan8[16]+1 ] =nnz[ H264Context.scan8[16]+8 ] =nnz[ H264Context.scan8[16]+9 ] =
+					nnz[ H264Context.scan8[20]+0 ] = nnz[ H264Context.scan8[20]+1 ] =nnz[ H264Context.scan8[20]+8 ] =nnz[ H264Context.scan8[20]+9 ] = 0;
 				}
 			}else{
 				int[] nnz= h.non_zero_count_cache;
-				Rectangle.fill_rectangle_unsign(nnz, h.scan8[0], 4, 4, 8, 0, 1);
-				nnz[ h.scan8[16]+0 ] = nnz[ h.scan8[16]+1 ] =nnz[ h.scan8[16]+8 ] =nnz[ h.scan8[16]+9 ] =
-				nnz[ h.scan8[20]+0 ] = nnz[ h.scan8[20]+1 ] =nnz[ h.scan8[20]+8 ] =nnz[ h.scan8[20]+9 ] = 0;
+				Rectangle.fill_rectangle_unsign(nnz, H264Context.scan8[0], 4, 4, 8, 0, 1);
+				nnz[ H264Context.scan8[16]+0 ] = nnz[ H264Context.scan8[16]+1 ] =nnz[ H264Context.scan8[16]+8 ] =nnz[ H264Context.scan8[16]+9 ] =
+				nnz[ H264Context.scan8[20]+0 ] = nnz[ H264Context.scan8[20]+1 ] =nnz[ H264Context.scan8[20]+8 ] =nnz[ H264Context.scan8[20]+9 ] = 0;
 			}
 			s.current_picture.qscale_table[mb_xy]= s.qscale;
 			h.write_back_non_zero_count();
