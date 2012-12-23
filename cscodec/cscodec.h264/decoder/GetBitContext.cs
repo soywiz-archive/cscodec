@@ -581,8 +581,8 @@ namespace cscodec.h264.decoder
 					long tmp = code & 0xffffffffL;
 					code_prefix = (int)(tmp >> (32 - table_nb_bits));
 					subtable_bits = n;
-					codes_base[codes_offset + i].bits = n;
-					codes_base[codes_offset + i].code = code << table_nb_bits;
+					codes_base[codes_offset + i].bits = (byte)n;
+					codes_base[codes_offset + i].code = (uint)(code << table_nb_bits);
 					for (k = i + 1; k < nb_codes; k++)
 					{
 						n = codes_base[codes_offset + k].bits - table_nb_bits;
@@ -591,8 +591,8 @@ namespace cscodec.h264.decoder
 						code = codes_base[codes_offset + k].code;
 						if (code >> (32 - table_nb_bits) != code_prefix)
 							break;
-						codes_base[codes_offset + k].bits = n;
-						codes_base[codes_offset + k].code = code << table_nb_bits;
+						codes_base[codes_offset + k].bits = (byte)n;
+						codes_base[codes_offset + k].code = (uint)(code << table_nb_bits);
 						subtable_bits = Math.Max(subtable_bits, n);
 					}
 					subtable_bits = Math.Min(subtable_bits, table_nb_bits);

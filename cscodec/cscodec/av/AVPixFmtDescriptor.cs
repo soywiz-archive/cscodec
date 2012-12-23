@@ -4,7 +4,7 @@ namespace cscodec.av
 	{
 		public string name;
 
-		public int /*uint8_t */nb_components;      ///< The number of components each pixel has, (1-4)
+		public byte nb_components;      ///< The number of components each pixel has, (1-4)
 
 		/**
 		 * Amount to shift the luma width right to find the chroma width.
@@ -13,7 +13,7 @@ namespace cscodec.av
 		 * The note above is needed to ensure rounding up.
 		 * This value only refers to the chroma components.
 		 */
-		public int /*uint8_t */log2_chroma_w;      ///< chroma_width = -((-luma_width )>>log2_chroma_w)
+		public byte log2_chroma_w;      ///< chroma_width = -((-luma_width )>>log2_chroma_w)
 
 		/**
 		 * Amount to shift the luma height right to find the chroma height.
@@ -22,8 +22,8 @@ namespace cscodec.av
 		 * The note above is needed to ensure rounding up.
 		 * This value only refers to the chroma components.
 		 */
-		public int /*uint8_t */log2_chroma_h;
-		public int /*uint8_t */flags;
+		public byte log2_chroma_h;
+		public byte flags;
 
 		/**
 		 * Parameters that describe how pixels are packed. If the format

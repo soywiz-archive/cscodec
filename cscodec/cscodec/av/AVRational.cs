@@ -7,13 +7,14 @@ namespace cscodec.av
 
 		public AVRational(int _num, int _den)
 		{
-			num = _num;
-			den = _den;
+			this.num = _num;
+			this.den = _den;
 		}
+
 		public AVRational(long _num, long _den)
 		{
-			num = (int)_num;
-			den = (int)_den;
+			this.num = (int)_num;
+			this.den = (int)_den;
 		}
 	}
 }

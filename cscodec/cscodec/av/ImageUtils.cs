@@ -5,15 +5,16 @@ namespace cscodec.av
 {
 	public class ImageUtils
 	{
-
 		public const int PIX_FMT_BE = 1; ///< Pixel format is big-endian.
 		public const int PIX_FMT_PAL = 2; ///< Pixel format has a palette in data[1], values are indexes in this palette.
 		public const int PIX_FMT_BITSTREAM = 4; ///< All values of a component are bit-wise packed end to end.
 		public const int PIX_FMT_HWACCEL = 8; ///< Pixel format is an HW accelerated format.
 
 		// For JAVA .H264 Decoder, we support only Software Accelerated Format (PIX_FMT_YUV420P) 
-		public static AVPixFmtDescriptor[] av_pix_fmt_descriptors
-			= new AVPixFmtDescriptor[] { null, new PixFmtYUV420P() };
+		public static AVPixFmtDescriptor[] av_pix_fmt_descriptors = new AVPixFmtDescriptor[] {
+			null,
+			new PixFmtYUV420P()
+		};
 
 		//[PIX_FMT_NB] = {
 		//		    [PIX_FMT_YUV420P] = {
@@ -730,18 +731,24 @@ namespace cscodec.av
 				int i, planes_nb = 0;
 
 				for (i = 0; i < desc.nb_components; i++)
+				{
 					planes_nb = Math.Max(planes_nb, desc.comp[i].plane + 1);
+				}
 
 				for (i = 0; i < planes_nb; i++)
 				{
 					int h = height;
 					int bwidth = av_image_get_linesize(pix_fmt, width, i);
+					
 					if (i == 1 || i == 2)
 					{
 						h = -((-height) >> desc.log2_chroma_h);
 					}
-					av_image_copy_plane(dst_base[i], dst_offset[i], dst_linesizes[i], src_base[i], src_offset[i],
-							src_linesizes[i], bwidth, h);
+
+					av_image_copy_plane(
+						dst_base[i], dst_offset[i], dst_linesizes[i], src_base[i], src_offset[i],
+						src_linesizes[i], bwidth, h
+					);
 				}
 			}
 		}
@@ -756,9 +763,9 @@ namespace cscodec.av
 		{
 			int dst_offset = _dst_offset;
 			int src_offset = _src_offset;
-			if (dst == null || src == null)
+			
+			if (dst == null || src == null) return;
 
-				return;
 			for (; height > 0; height--)
 			{
 				//memcpy(dst, src, bytewidth);
@@ -775,23 +782,24 @@ namespace cscodec.av
 			int[] max_step_comp = new int[4];       /* the component for each plane which has the max pixel step */
 			int s;
 
-			if ((desc.flags & PIX_FMT_BITSTREAM)!=0)
-				return (width * (desc.comp[0].step_minus1+1) + 7) >> 3;
+			if ((desc.flags & PIX_FMT_BITSTREAM) != 0) return (width * (desc.comp[0].step_minus1+1) + 7) >> 3;
 
 			av_image_fill_max_pixsteps(max_step, max_step_comp, desc);
 			s = (max_step_comp[plane] == 1 || max_step_comp[plane] == 2) ? desc.log2_chroma_w : 0;
 			return max_step[plane] * (((width + (1 << s) - 1)) >> s);
 		}
 
-		public static void av_image_fill_max_pixsteps(int[] max_pixsteps,
-				int[] max_pixstep_comps, AVPixFmtDescriptor pixdesc)
+		public static void av_image_fill_max_pixsteps(int[] max_pixsteps, int[] max_pixstep_comps, AVPixFmtDescriptor pixdesc)
 		{
 			int i;
 			// memset(max_pixsteps, 0, 4*sizeof(max_pixsteps[0]));
 			Arrays.Fill(max_pixsteps, 0, 4, 0);
+			
 			if (max_pixstep_comps != null)
+			{
 				// memset(max_pixstep_comps, 0, 4*sizeof(max_pixstep_comps[0]));
 				Arrays.Fill(max_pixstep_comps, 0, 4, 0);
+			}
 
 			for (i = 0; i < 4; i++)
 			{
@@ -799,12 +807,9 @@ namespace cscodec.av
 				if ((comp.step_minus1 + 1) > max_pixsteps[comp.plane])
 				{
 					max_pixsteps[comp.plane] = comp.step_minus1 + 1;
-					if (max_pixstep_comps != null)
-						max_pixstep_comps[comp.plane] = i;
+					if (max_pixstep_comps != null) max_pixstep_comps[comp.plane] = i;
 				}
 			}
 		}
-
-
 	}
 }
