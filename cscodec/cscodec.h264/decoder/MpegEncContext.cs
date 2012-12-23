@@ -939,8 +939,8 @@ namespace cscodec.h264.decoder
 			return 0;
 		}
 
-		public int av_image_fill_pointers(/*uint8_t */int[][] data_base/*[4]*/, int[] data_offset, int pix_fmt, int height,
-			/*uint8_t **/int[] ptr, int[] linesizes/*[4]*/)
+		public int av_image_fill_pointers(byte[][] data_base/*[4]*/, int[] data_offset, int pix_fmt, int height,
+			byte[] ptr, int[] linesizes/*[4]*/)
 		{
 			int i, total_size;
 			int[] size = new int[4];
