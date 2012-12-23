@@ -2,7 +2,6 @@ namespace cscodec.h264.decoder
 {
 	public class MMCO
 	{
-
 		public const int MMCO_END = 0;
 		public const int MMCO_SHORT2UNUSED = 1;
 		public const int MMCO_LONG2UNUSED = 2;
@@ -14,6 +13,5 @@ namespace cscodec.h264.decoder
 		public int opcode;
 		public int short_pic_num;  ///< pic_num without wrapping (pic_num & max_pic_num)
 		public int long_arg;       ///< index, pic_num, or num long refs depending on opcode
-
 	}
 }

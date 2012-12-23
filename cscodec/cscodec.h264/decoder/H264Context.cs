@@ -1,5 +1,6 @@
 using System;
 using cscodec.util;
+using cscodec.av;
 
 namespace cscodec.h264.decoder
 {
@@ -4521,7 +4522,7 @@ namespace cscodec.h264.decoder
                 			bS_base[bS_offset + k] = 0x0003;
 
 						if (   (0==((mb_type|mbm_type)&MB_TYPE_INTERLACED))
-							|| ((0!=mb_aff_frame || (s.picture_structure != MpegEncContext.PICT_FRAME)) && (dir == 0))
+							|| ((0 != mb_aff_frame || (s.picture_structure != Constants.PICT_FRAME)) && (dir == 0))
 						)
 							//AV_WN64A(bS, 0x0004000400040004ULL);
 	                		for(int k=0;k<4;k++)
@@ -4889,8 +4890,8 @@ namespace cscodec.h264.decoder
 
 			s.mb_skip_run= -1;
 
-			this.is_complex = (mb_aff_frame !=0 
-	    			|| s.picture_structure != MpegEncContext.PICT_FRAME 
+			this.is_complex = (mb_aff_frame !=0
+					|| s.picture_structure != Constants.PICT_FRAME 
 	    			|| s.codec_id != H264PredictionContext.CODEC_ID_H264 
 							)?1:0;
 
@@ -4944,7 +4945,8 @@ namespace cscodec.h264.decoder
 						loop_filter();
 						s.ff_draw_horiz_band(16*s.mb_y, 16);
 						++s.mb_y;
-						if((mb_aff_frame!=0) || s.picture_structure != MpegEncContext.PICT_FRAME) {
+						if ((mb_aff_frame != 0) || s.picture_structure != Constants.PICT_FRAME)
+						{
 							++s.mb_y;
 							if(mb_aff_frame != 0 && s.mb_y < s.mb_height)
 								predict_field_decoding_flag();
@@ -4993,7 +4995,8 @@ namespace cscodec.h264.decoder
 
 						s.ff_draw_horiz_band(16*s.mb_y, 16);
 						++s.mb_y;
-						if((mb_aff_frame !=0)|| (s.picture_structure != MpegEncContext.PICT_FRAME) ) {
+						if ((mb_aff_frame != 0) || (s.picture_structure != Constants.PICT_FRAME))
+						{
 							++s.mb_y;
 							if(mb_aff_frame !=0 && s.mb_y < s.mb_height)
 								predict_field_decoding_flag();
@@ -6688,10 +6691,11 @@ namespace cscodec.h264.decoder
 		 */
 		public int pic_num_extract(int pic_num, int[] structure){
 			structure[0] = s.picture_structure;
-			if((s.picture_structure != MpegEncContext.PICT_FRAME)){
+			if ((s.picture_structure != Constants.PICT_FRAME))
+			{
 				if (0==(pic_num & 1))
 					/* opposite field */
-					structure[0] ^= MpegEncContext.PICT_FRAME;
+					structure[0] ^= Constants.PICT_FRAME;
 				pic_num >>= 1;
 			}
 			return pic_num;
@@ -6731,7 +6735,7 @@ namespace cscodec.h264.decoder
 				case MMCO.MMCO_SHORT2UNUSED:
 					//if(s.debug&FF_DEBUG_MMCO)
 					//    av_log(this.s.avctx, AV_LOG_DEBUG, "mmco: unref short %d count %d\n", this.mmco[i].short_pic_num, this.short_ref_count);
-					remove_short(frame_num, structure ^ MpegEncContext.PICT_FRAME);
+						remove_short(frame_num, structure ^ Constants.PICT_FRAME);
 					break;
 				case MMCO.MMCO_SHORT2LONG:
 						if (this.long_ref[mmco[i].long_arg] != pic)
@@ -6750,7 +6754,7 @@ namespace cscodec.h264.decoder
 					structure = param[0];
 					pic = this.long_ref[j];
 					if (pic!=null) {
-						remove_long(j, structure ^ MpegEncContext.PICT_FRAME);
+						remove_long(j, structure ^ Constants.PICT_FRAME);
 					} //else if(s.avctx->debug&FF_DEBUG_MMCO)
 					  //  av_log(this.s.avctx, AV_LOG_DEBUG, "mmco: unref long failure\n");
 					break;
@@ -6811,7 +6815,7 @@ namespace cscodec.h264.decoder
 				 */
 				if (0!=this.short_ref_count && this.short_ref[0] == s.current_picture_ptr) {
 					/* Just mark the second field valid */
-					s.current_picture_ptr.reference = MpegEncContext.PICT_FRAME;
+					s.current_picture_ptr.reference = Constants.PICT_FRAME;
 				} else if (0!=s.current_picture_ptr.long_ref) {
 					//av_log(this.s.avctx, AV_LOG_ERROR, "illegal short term reference "
 					//                                 "assignment for second field "
@@ -6905,7 +6909,7 @@ namespace cscodec.h264.decoder
 			 * past end by one (callers fault) and resync_mb_y != 0
 			 * causes problems for the first MB line, too.
 			 */
-			if (!(s.picture_structure != MpegEncContext.PICT_FRAME))
+			if (!(s.picture_structure != Constants.PICT_FRAME))
 				ErrorResilience.ff_er_frame_end(s);
 
 			s.MPV_frame_end();
@@ -7244,7 +7248,8 @@ namespace cscodec.h264.decoder
 
 			this.mmco_index= 0;
 			if(this.short_ref_count!=0 && this.long_ref_count + this.short_ref_count == this.sps.ref_frame_count &&
-					!((s.picture_structure != MpegEncContext.PICT_FRAME) && 0==s.first_field && 0!=s.current_picture_ptr.reference)) {
+					!((s.picture_structure != Constants.PICT_FRAME) && 0 == s.first_field && 0 != s.current_picture_ptr.reference))
+			{
 
 	    		if(this.mmco[0] == null) this.mmco[0] = new MMCO();
 	    		if(this.mmco[1] == null) this.mmco[1] = new MMCO();
@@ -7252,7 +7257,8 @@ namespace cscodec.h264.decoder
 	    		this.mmco[0].opcode= MMCO.MMCO_SHORT2UNUSED;
 				this.mmco[0].short_pic_num= this.short_ref[ this.short_ref_count - 1 ].frame_num;
 				this.mmco_index= 1;
-				if ((s.picture_structure != MpegEncContext.PICT_FRAME)) {
+				if ((s.picture_structure != Constants.PICT_FRAME))
+				{
 					this.mmco[0].short_pic_num *= 2;
 					this.mmco[1].opcode= MMCO.MMCO_SHORT2UNUSED;
 					this.mmco[1].short_pic_num= this.mmco[0].short_pic_num + 1;
@@ -7334,7 +7340,7 @@ namespace cscodec.h264.decoder
 		//printf("poc: %d %d\n", this.poc_msb, this.poc_lsb);
 				field_poc[0] =
 				field_poc[1] = this.poc_msb + this.poc_lsb;
-				if(s.picture_structure == MpegEncContext.PICT_FRAME)
+				if (s.picture_structure == Constants.PICT_FRAME)
 					field_poc[1] += this.delta_poc_bottom;
 			}else if(this.sps.poc_type==1){
 				int abs_frame_num, expected_delta_per_poc_cycle, expectedpoc;
@@ -7368,7 +7374,7 @@ namespace cscodec.h264.decoder
 				field_poc[0] = expectedpoc + this.delta_poc[0];
 				field_poc[1] = field_poc[0] + this.sps.offset_for_top_to_bottom_field;
 
-				if(s.picture_structure == MpegEncContext.PICT_FRAME)
+				if (s.picture_structure == Constants.PICT_FRAME)
 					field_poc[1] += this.delta_poc[1];
 			}else{
 				int poc= 2*(this.frame_num_offset + this.frame_num);
@@ -7380,9 +7386,9 @@ namespace cscodec.h264.decoder
 				field_poc[1]= poc;
 			}
 
-			if(s.picture_structure != MpegEncContext.PICT_BOTTOM_FIELD)
+			if (s.picture_structure != Constants.PICT_BOTTOM_FIELD)
 				s.current_picture_ptr.field_poc[0]= field_poc[0];
-			if(s.picture_structure != MpegEncContext.PICT_TOP_FIELD)
+			if (s.picture_structure != Constants.PICT_TOP_FIELD)
 				s.current_picture_ptr.field_poc[1]= field_poc[1];
 			cur.poc= Math.Min(cur.field_poc[0], cur.field_poc[1]);
 
@@ -7402,8 +7408,8 @@ namespace cscodec.h264.decoder
 				int cur_poc, list;
 				int[] lens = new int[2];
 
-				if((s.picture_structure != MpegEncContext.PICT_FRAME))
-					cur_poc= s.current_picture_ptr.field_poc[ (s.picture_structure == MpegEncContext.PICT_BOTTOM_FIELD)?1:0 ];
+				if ((s.picture_structure != Constants.PICT_FRAME))
+					cur_poc = s.current_picture_ptr.field_poc[(s.picture_structure == Constants.PICT_BOTTOM_FIELD) ? 1 : 0];
 				else
 					cur_poc= s.current_picture_ptr.poc;
 
@@ -7555,7 +7561,8 @@ namespace cscodec.h264.decoder
 									this.ref_list[list][i]= this.ref_list[list][i-1];
 								}
 								@ref.copyTo(this.ref_list[list][index]);
-								if ((s.picture_structure != MpegEncContext.PICT_FRAME)){
+								if ((s.picture_structure != Constants.PICT_FRAME))
+								{
 									AVFrame.pic_as_field(this.ref_list[list][index], pic_structure);
 								}
 							}
@@ -7726,7 +7733,8 @@ namespace cscodec.h264.decoder
 						}
 						if(opcode==MMCO.MMCO_SHORT2LONG || opcode==MMCO.MMCO_LONG2UNUSED || opcode==MMCO.MMCO_LONG || opcode==MMCO.MMCO_SET_MAX_LONG){
 							/*unsigned */int long_arg= gb.get_ue_golomb_31("long_arg");
-							if(long_arg >= 32 || (long_arg >= 16 && !(opcode == MMCO.MMCO_LONG2UNUSED && (s.picture_structure != MpegEncContext.PICT_FRAME)))){
+							if (long_arg >= 32 || (long_arg >= 16 && !(opcode == MMCO.MMCO_LONG2UNUSED && (s.picture_structure != Constants.PICT_FRAME))))
+							{
 								//av_log(this.s.avctx, AV_LOG_ERROR, "illegal long ref in memory management control operation %d\n", opcode);
 								return -1;
 							}
@@ -7759,12 +7767,12 @@ namespace cscodec.h264.decoder
 					frame.copyTo(field_base[field_offset + 0]);
 					for(j=0; j<3; j++)
 						field_base[field_offset + 0].linesize[j] <<= 1;
-					field_base[field_offset + 0].reference = MpegEncContext.PICT_TOP_FIELD;
+					field_base[field_offset + 0].reference = Constants.PICT_TOP_FIELD;
 					field_base[field_offset + 0].poc= field_base[field_offset + 0].field_poc[0];
 					field_base[field_offset + 1] = field_base[field_offset + 0];
 					for(j=0; j<3; j++)
 						field_base[field_offset + 1].data_offset[j] += frame.linesize[j];
-					field_base[field_offset + 1].reference = MpegEncContext.PICT_BOTTOM_FIELD;
+					field_base[field_offset + 1].reference = Constants.PICT_BOTTOM_FIELD;
 					field_base[field_offset + 1].poc= field_base[field_offset + 1].field_poc[1];
 
 					this.luma_weight[16+2*i][list][0] = this.luma_weight[16+2*i+1][list][0] = this.luma_weight[i][list][0];
@@ -7790,7 +7798,7 @@ namespace cscodec.h264.decoder
 		}	
 	
 		public void ff_h264_direct_dist_scale_factor(){
-			int _poc = this.s.current_picture_ptr.field_poc[ (s.picture_structure == MpegEncContext.PICT_BOTTOM_FIELD)?1:0 ];
+			int _poc = this.s.current_picture_ptr.field_poc[(s.picture_structure == Constants.PICT_BOTTOM_FIELD) ? 1 : 0];
 			int _poc1 = this.ref_list[1][0].poc;
 			int i, field;
 			for(field=0; field<2; field++){
@@ -7810,7 +7818,7 @@ namespace cscodec.h264.decoder
 			int j, old_ref, rfield;
 			int start= (mbafi!=0) ? 16                      : 0;
 			int end  = (int)((mbafi!=0) ? 16+2*this.ref_count[0]    : this.ref_count[0]);
-			int interl= (mbafi!=0 || s.picture_structure != MpegEncContext.PICT_FRAME)?1:0;
+			int interl = (mbafi != 0 || s.picture_structure != Constants.PICT_FRAME) ? 1 : 0;
 
 			/* bogus; fills in for missing frames */
 			//memset(map[list], 0, sizeof(map[list]));
@@ -7860,7 +7868,8 @@ namespace cscodec.h264.decoder
 				}
 			}
 
-			if(s.picture_structure == MpegEncContext.PICT_FRAME){
+			if (s.picture_structure == Constants.PICT_FRAME)
+			{
 				//memcpy(cur.ref_count[1], cur.ref_count[0], sizeof(cur.ref_count[0]));
 				//memcpy(cur.ref_poc  [1], cur.ref_poc  [0], sizeof(cur.ref_poc  [0]));
 	    		Array.Copy(cur.ref_count[0], 0, cur.ref_count[1], 0, cur.ref_count[0].Length);
@@ -7870,7 +7879,8 @@ namespace cscodec.h264.decoder
 			cur.mbaff = this.mb_aff_frame;
 
 			this.col_fieldoff= 0;
-			if(s.picture_structure == MpegEncContext.PICT_FRAME){
+			if (s.picture_structure == Constants.PICT_FRAME)
+			{
 				int cur_poc = s.current_picture_ptr.poc;
 				//?????????????????????????????
 				//int[] col_poc = this.ref_list[1].field_poc;
@@ -7923,7 +7933,8 @@ namespace cscodec.h264.decoder
 			first_mb_in_slice= s.gb.get_ue_golomb("first_mb_in_slice");
 
 			if(first_mb_in_slice == 0){ //FIXME better field boundary detection
-				if((h0.current_slice !=0 ) && (s.picture_structure != MpegEncContext.PICT_FRAME)){
+				if ((h0.current_slice != 0) && (s.picture_structure != Constants.PICT_FRAME))
+				{
 					h.field_end();
 				} // if
 
@@ -8099,16 +8110,16 @@ namespace cscodec.h264.decoder
 			h.mb_aff_frame = 0;
 			last_pic_structure = s0.picture_structure;
 			if(h.sps.frame_mbs_only_flag!=0){
-				s.picture_structure= MpegEncContext.PICT_FRAME;
+				s.picture_structure = Constants.PICT_FRAME;
 			}else{
 				if(s.gb.get_bits1("field_pic_flag")!=0) { //field_pic_flag
-					s.picture_structure= (int)(MpegEncContext.PICT_TOP_FIELD + s.gb.get_bits1("bottom_field_flag")); //bottom_field_flag
+					s.picture_structure = (int)(Constants.PICT_TOP_FIELD + s.gb.get_bits1("bottom_field_flag")); //bottom_field_flag
 				} else {
-					s.picture_structure= MpegEncContext.PICT_FRAME;
+					s.picture_structure = Constants.PICT_FRAME;
 					h.mb_aff_frame = h.sps.mb_aff;
 				}
 			}
-			h.mb_field_decoding_flag= ((s.picture_structure) != MpegEncContext.PICT_FRAME?1:0);
+			h.mb_field_decoding_flag = ((s.picture_structure) != Constants.PICT_FRAME ? 1 : 0);
 
 			if(h0.current_slice == 0){
 				while(h.frame_num !=  h.prev_frame_num &&
@@ -8150,13 +8161,14 @@ namespace cscodec.h264.decoder
 					////assert(s0.current_picture_ptr->reference != DELAYED_PIC_REF);
 
 					/* figure out if we have a complementary field pair */
-					if (!(s.picture_structure != MpegEncContext.PICT_FRAME) || s.picture_structure == last_pic_structure) {
+					if (!(s.picture_structure != Constants.PICT_FRAME) || s.picture_structure == last_pic_structure)
+					{
 						/*
 						 * Previous field is unmatched. Don't display it, but let it
 						 * remain for reference if marked as such.
 						 */
 						s0.current_picture_ptr = null;
-						s0.first_field = ((s.picture_structure != MpegEncContext.PICT_FRAME)?1:0);
+						s0.first_field = ((s.picture_structure != Constants.PICT_FRAME) ? 1 : 0);
 
 					} else {
 						if (h.nal_ref_idc!=0 &&
@@ -8180,10 +8192,11 @@ namespace cscodec.h264.decoder
 				} else {
 					/* Frame or first field in a potentially complementary pair */
 					////assert(!s0.current_picture_ptr);
-					s0.first_field = ((s.picture_structure != MpegEncContext.PICT_FRAME)?1:0);
+					s0.first_field = ((s.picture_structure != Constants.PICT_FRAME) ? 1 : 0);
 				}
 
-				if((0==((s.picture_structure != MpegEncContext.PICT_FRAME)?1:0) || 0!=s0.first_field) && h.ff_h264_frame_start() < 0) {
+				if ((0 == ((s.picture_structure != Constants.PICT_FRAME) ? 1 : 0) || 0 != s0.first_field) && h.ff_h264_frame_start() < 0)
+				{
 					s0.first_field = 0;
 		    		// DebugTool.printDebugString("   --- decode_slide_header error case 9\n");
 
@@ -8196,19 +8209,20 @@ namespace cscodec.h264.decoder
 			s.current_picture_ptr.frame_num= h.frame_num; //FIXME frame_num cleanup
 
 			////assert(s.mb_num == s.mb_width * s.mb_height);
-			if(first_mb_in_slice << ((h.mb_aff_frame!=0 || (s.picture_structure != MpegEncContext.PICT_FRAME))?1:0) >= s.mb_num ||
+			if (first_mb_in_slice << ((h.mb_aff_frame != 0 || (s.picture_structure != Constants.PICT_FRAME)) ? 1 : 0) >= s.mb_num ||
 			   first_mb_in_slice                    >= s.mb_num){
 				//av_log(h.s.avctx, AV_LOG_ERROR, "first_mb_in_slice overflow\n");
 	    		// DebugTool.printDebugString("   --- decode_slide_header error case 10\n");
 				return -1;
 			}
 			s.resync_mb_x = s.mb_x = first_mb_in_slice % s.mb_width;
-			s.resync_mb_y = s.mb_y = (first_mb_in_slice / s.mb_width) << ((h.mb_aff_frame!=0 || (s.picture_structure != MpegEncContext.PICT_FRAME))?1:0);
-			if (s.picture_structure == MpegEncContext.PICT_BOTTOM_FIELD)
+			s.resync_mb_y = s.mb_y = (first_mb_in_slice / s.mb_width) << ((h.mb_aff_frame != 0 || (s.picture_structure != Constants.PICT_FRAME)) ? 1 : 0);
+			if (s.picture_structure == Constants.PICT_BOTTOM_FIELD)
 				s.resync_mb_y = s.mb_y = s.mb_y + 1;
 			//assert(s.mb_y < s.mb_height);
 
-			if(s.picture_structure==MpegEncContext.PICT_FRAME){
+			if (s.picture_structure == Constants.PICT_FRAME)
+			{
 				h.curr_pic_num=   h.frame_num;
 				h.max_pic_num= 1<< h.sps.log2_max_frame_num;
 			}else{
@@ -8223,7 +8237,8 @@ namespace cscodec.h264.decoder
 			if(h.sps.poc_type==0){
 				h.poc_lsb= (int)s.gb.get_bits(h.sps.log2_max_poc_lsb,"poc_lsb");
 
-				if(h.pps.pic_order_present==1 && s.picture_structure==MpegEncContext.PICT_FRAME){
+				if (h.pps.pic_order_present == 1 && s.picture_structure == Constants.PICT_FRAME)
+				{
 					h.delta_poc_bottom= s.gb.get_se_golomb("delta_poc_bottom");
 				}
 			}
@@ -8231,7 +8246,7 @@ namespace cscodec.h264.decoder
 			if(h.sps.poc_type==1 && 0==h.sps.delta_pic_order_always_zero_flag){
 				h.delta_poc[0]= s.gb.get_se_golomb("delta_poc[0]");
 
-				if(h.pps.pic_order_present==1 && s.picture_structure==MpegEncContext.PICT_FRAME)
+				if (h.pps.pic_order_present == 1 && s.picture_structure == Constants.PICT_FRAME)
 					h.delta_poc[1]= s.gb.get_se_golomb("delta_poc[1]");
 			}
 
@@ -8448,7 +8463,7 @@ namespace cscodec.h264.decoder
 			}
 
 			h.emu_edge_width= ((s.flags&MpegEncContext.CODEC_FLAG_EMU_EDGE)!=0 ? 0 : 16);
-			h.emu_edge_height= (0!=h.mb_aff_frame || (s.picture_structure != MpegEncContext.PICT_FRAME)) ? 0 : h.emu_edge_width;
+			h.emu_edge_height = (0 != h.mb_aff_frame || (s.picture_structure != Constants.PICT_FRAME)) ? 0 : h.emu_edge_width;
 
 			/* No debug
 			if((s.debug&FF_DEBUG_PICT_INFO)!=0){
@@ -8655,7 +8670,7 @@ namespace cscodec.h264.decoder
 							break;
 						case SEI_PIC_STRUCT_TOP_BOTTOM:
 						case SEI_PIC_STRUCT_BOTTOM_TOP:
-							if ((mb_aff_frame != 0 || (s.picture_structure != MpegEncContext.PICT_FRAME)))
+							if ((mb_aff_frame != 0 || (s.picture_structure != Constants.PICT_FRAME)))
 								cur.interlaced_frame = 1;
 							else
 								// try to flag soft telecine progressive
@@ -8685,7 +8700,7 @@ namespace cscodec.h264.decoder
 									: 0;
 					} else {
 						/* Derive interlacing flag from used decoding process. */
-						cur.interlaced_frame = (mb_aff_frame != 0 || (s.picture_structure != MpegEncContext.PICT_FRAME)) ? 1
+						cur.interlaced_frame = (mb_aff_frame != 0 || (s.picture_structure != Constants.PICT_FRAME)) ? 1
 								: 0;
 					}
 					this.prev_interlaced_frame = cur.interlaced_frame;

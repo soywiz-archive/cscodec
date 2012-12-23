@@ -3,8 +3,8 @@ using System;
 
 namespace cscodec.h264.decoder
 {
-	public class PictureParameterSet {
-
+	public class PictureParameterSet
+	{
 		public long sps_id;
 		public int cabac;                  ///< entropy_coding_mode_flag
 		public int pic_order_present;      ///< pic_order_present_flag
@@ -24,8 +24,9 @@ namespace cscodec.h264.decoder
 		public int[][] scaling_matrix8 = Arrays.Create<int>(2, 64);
 		public int[][] chroma_qp_table = Arrays.Create<int>(2, 64);  ///< pre-scaled (with chroma_qp_index_offset) version of qp_table
 		public int chroma_qp_diff;
-    
-		public void copyTo(PictureParameterSet pps) {
+
+		public void copyTo(PictureParameterSet pps)
+		{
 			pps.sps_id = sps_id;
 			pps.cabac = cabac;                  ///< entropy_coding_mode_flag
 			pps.pic_order_present = pic_order_present;      ///< pic_order_present_flag
@@ -50,6 +51,5 @@ namespace cscodec.h264.decoder
 			pps.chroma_qp_table = (int[][])chroma_qp_table.Clone();
 			pps.chroma_qp_diff = chroma_qp_diff;
 		}
-		
 	}
 }

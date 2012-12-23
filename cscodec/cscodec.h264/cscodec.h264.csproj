@@ -45,13 +45,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="decoder\AVComponentDescriptor.cs" />
-    <Compile Include="decoder\AVFrame.cs" />
-    <Compile Include="decoder\AVPacket.cs" />
-    <Compile Include="decoder\AVPanScan.cs" />
-    <Compile Include="decoder\AVPicture.cs" />
-    <Compile Include="decoder\AVPixFmtDescriptor.cs" />
-    <Compile Include="decoder\AVRational.cs" />
     <Compile Include="decoder\CABACContext.cs" />
     <Compile Include="decoder\CAVLCContext.cs" />
     <Compile Include="decoder\CAVLCTables.cs" />
@@ -64,7 +57,6 @@
     <Compile Include="decoder\H264Decoder.cs" />
     <Compile Include="decoder\H264DSPContext.cs" />
     <Compile Include="decoder\H264PredictionContext.cs" />
-    <Compile Include="decoder\ImageUtils.cs" />
     <Compile Include="decoder\IMbInfo.cs" />
     <Compile Include="decoder\InternalBuffer.cs" />
     <Compile Include="decoder\LoopFilter.cs" />
@@ -73,7 +65,6 @@
     <Compile Include="decoder\MpegEncContext.cs" />
     <Compile Include="decoder\ParseContext.cs" />
     <Compile Include="decoder\PictureParameterSet.cs" />
-    <Compile Include="decoder\PixFmtYUV420P.cs" />
     <Compile Include="decoder\PMbInfo.cs" />
     <Compile Include="decoder\PutBitContext.cs" />
     <Compile Include="decoder\Rectangle.cs" />
@@ -84,8 +75,6 @@
     <Compile Include="decoder\VLC.cs" />
     <Compile Include="decoder\VLCcode.cs" />
     <Compile Include="player\FrameDecoder.cs" />
-    <Compile Include="player\FrameUtils.cs" />
-    <Compile Include="player\PlayerFrame.cs" />
     <Compile Include="player\VideoPacket.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

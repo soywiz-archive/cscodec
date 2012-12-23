@@ -1,3 +1,4 @@
+using cscodec.av;
 using cscodec.util;
 using System;
 namespace cscodec.h264.decoder
@@ -842,7 +843,7 @@ namespace cscodec.h264.decoder
 			// DebugTool.printDebugString("....F1.0....\n");
 
 			if(0==s.error_recognition || s.error_count==0 || 0!=s.lowres ||
-			   s.picture_structure != MpegEncContext.PICT_FRAME || // we dont support ER of field pictures yet, though it should not crash if enabled
+			   s.picture_structure != Constants.PICT_FRAME || // we dont support ER of field pictures yet, though it should not crash if enabled
 			   s.error_count==3*s.mb_width*(skip_top + skip_bottom)) return;
 
 			// DebugTool.printDebugString("....F1.1....\n");

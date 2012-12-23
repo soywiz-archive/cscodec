@@ -48,11 +48,24 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="av\AVComponentDescriptor.cs" />
+    <Compile Include="av\AVFrame.cs" />
+    <Compile Include="av\AVPacket.cs" />
+    <Compile Include="av\AVPanScan.cs" />
+    <Compile Include="av\AVPicture.cs" />
+    <Compile Include="av\AVPixFmtDescriptor.cs" />
+    <Compile Include="av\AVRational.cs" />
+    <Compile Include="av\Constants.cs" />
+    <Compile Include="av\ImageUtils.cs" />
+    <Compile Include="av\PixFmtYUV420P.cs" />
+    <Compile Include="CRC16.cs" />
+    <Compile Include="CRC32.cs" />
+    <Compile Include="FrameCrc.cs" />
+    <Compile Include="FrameUtils.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="util\Arrays.cs" />
     <Compile Include="util\Buffer.cs" />
     <Compile Include="util\Frame.cs" />
-    <Compile Include="util\FrameUtils.cs" />
     <Compile Include="util\HashUtil.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

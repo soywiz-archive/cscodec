@@ -1,4 +1,5 @@
-﻿using cscodec.h264.decoder;
+﻿using cscodec.av;
+using cscodec.h264.decoder;
 using cscodec.util;
 using System;
 using System.Collections.Generic;
@@ -6,6 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text;
+using cscodec;
 
 namespace cscodec.h264.player
 {
@@ -49,8 +51,6 @@ namespace cscodec.h264.player
 			// Set end of buffer to 0 (this ensures that no overreading happens for damaged mpeg streams)
 			Arrays.Fill(inbuf, INBUF_SIZE, MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE + INBUF_SIZE, (sbyte)0);
 
-			Console.WriteLine("Video decoding\n");
-
 			// Find the mpeg1 video decoder
 			codec = new H264Decoder();
 			if (codec == null)
@@ -93,6 +93,7 @@ namespace cscodec.h264.player
 				cacheRead[0] = cacheRead[1];
 				cacheRead[1] = cacheRead[2];
 				cacheRead[2] = fin.ReadByte();
+				if (cacheRead[2] == -1) throw(new EndOfStreamException());
 			} // while
 
 			// 4 first bytes always indicate NAL header
@@ -110,7 +111,7 @@ namespace cscodec.h264.player
 			}
 		}
 
-		private void ReadPacket()
+		public AVPacket _ReadPacket()
 		{
 			if (hasMoreNAL)
 			{
@@ -132,6 +133,11 @@ namespace cscodec.h264.player
 
 				avpkt.data_base = inbuf_int;
 				avpkt.data_offset = 0;
+				return avpkt;
+			}
+			else
+			{
+				throw (new EndOfStreamException());
 			}
 		}
 
@@ -140,17 +146,19 @@ namespace cscodec.h264.player
 			while (hasMoreNAL)
 			{
 				//Console.WriteLine(avpkt.size);
-				ReadPacket();
+
+				_ReadPacket();
 
 				while (avpkt.size > 0)
 				{
 					len = c.avcodec_decode_video2(picture, got_picture, avpkt);
+					//Console.WriteLine(FrameCrc.GetFrameLine(avpkt));
 					if (len < 0)
 					{
-						Console.WriteLine("Error while decoding frame " + frame);
+						//Console.WriteLine("Error while decoding frame " + frame);
 						// Discard current packet and proceed to next packet
 						break;
-					} // if
+					}
 
 					if (got_picture[0] != 0)
 					{
@@ -161,12 +169,15 @@ namespace cscodec.h264.player
 						{
 							buffer = new int[bufferSize];
 						}
-						return picture;
 					}
 					avpkt.size -= len;
 					avpkt.data_offset += len;
+					frame++;
+					if (got_picture[0] != 0)
+					{
+						return picture;
+					}
 				}
-
 			} // while
 			throw (new EndOfStreamException());
 		}
