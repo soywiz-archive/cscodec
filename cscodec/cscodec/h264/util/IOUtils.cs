@@ -1,5 +1,6 @@
 namespace cscodec.h243.util
 {
+	#if false
 	public class IOUtils {
 	
 		public static sbyte[] toByteArray(InputStream input) throws IOException {
@@ -35,4 +36,5 @@ namespace cscodec.h243.util
 		}
 	
 	}
+#endif
 }

@@ -11,12 +11,12 @@ namespace cscodec.h243.decoder
 		/////////////////
 		// AVCODEC PARAMS
 
-		public const int /*uint8_t*/[] ff_default_chroma_qscale_table/*[32]*/={
+		public static readonly int /*uint8_t*/[] ff_default_chroma_qscale_table/*[32]*/={
 		//  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
 			0, 1, 2, 3, 4, 5, 6, 7, 8, 9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31
 		};
 
-		public const int /*uint8_t*/[] ff_mpeg1_dc_scale_table/*[128]*/={
+		public static readonly int /*uint8_t*/[] ff_mpeg1_dc_scale_table/*[128]*/={
 		//  0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31
 			8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
 			8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
@@ -263,8 +263,8 @@ namespace cscodec.h243.decoder
 		public const int PIX_FMT_Y400A = 67;     ///< 8bit gray = 0; 8bit alpha
 		public const int PIX_FMT_NB = 68;        ///< number of pixel formats = 0; DO NOT USE THIS if you want to link with shared libav* because the number of formats might differ between versions
 	//};
-	
-		public const int[] /*enum PixelFormat*/ ff_hwaccel_pixfmt_list_420 = {
+
+		public static readonly int[] /*enum PixelFormat*/ ff_hwaccel_pixfmt_list_420 = {
 			PIX_FMT_DXVA2_VLD,
 			PIX_FMT_VAAPI_VLD,
 			PIX_FMT_YUV420P,

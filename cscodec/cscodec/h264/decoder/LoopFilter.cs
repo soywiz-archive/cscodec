@@ -5,7 +5,7 @@ namespace cscodec.h243.decoder
 
 		/* Deblocking filter (p153) */
 		//	public const int[] alpha_table[52*3] = {
-		public const int[] alpha_table = {
+		public static readonly int[] alpha_table = {
 	     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 	     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 	     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -22,7 +22,7 @@ namespace cscodec.h243.decoder
 	   255,255,255,255,255,255,255,255,255,255,255,255,255,
 	};
 		//	public const int[] beta_table[52*3] = {
-		public const int[] beta_table = {
+		public static readonly int[] beta_table = {
 	     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 	     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
 	     0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,
@@ -39,7 +39,7 @@ namespace cscodec.h243.decoder
 	    18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18, 18,
 	};
 		//	public const int[] tc0_table[52*3][4] = {
-		public const int[][] tc0_table = {
+		public static readonly int[][] tc0_table = {
 	    new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 },
 	    new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 },
 	    new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 }, new int[]{-1, 0, 0, 0 },

@@ -1,6 +1,6 @@
 namespace cscodec.h243.util
 {
-
+#if false
 	public class FilterInputStream : InputStream {
 
 		protected volatile InputStream inputStream;
@@ -52,4 +52,5 @@ namespace cscodec.h243.util
 		 }
 
 	}
+#endif
 }

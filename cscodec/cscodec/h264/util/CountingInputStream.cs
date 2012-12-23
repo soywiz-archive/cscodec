@@ -1,5 +1,6 @@
 namespace cscodec.h243.util
 {
+	#if false
 	public class CountingInputStream : InputStream {
 		protected volatile InputStream inputStream;
 		private int count;
@@ -78,4 +79,5 @@ namespace cscodec.h243.util
 		 }
 
 	}
+#endif
 }

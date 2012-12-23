@@ -46,17 +46,17 @@ namespace cscodec.h243.decoder
 		#include <assert.h>
 		*/
 		//static const uint8_t golomb_to_inter_cbp_gray[16]= {
-		public const int[] golomb_to_inter_cbp_gray = {
+		public static readonly int[] golomb_to_inter_cbp_gray = {
 		 0, 1, 2, 4, 8, 3, 5,10,12,15, 7,11,13,14, 6, 9,
 		};
 
 		//static const uint8_t golomb_to_intra4x4_cbp_gray[16]={
-		public const int[] golomb_to_intra4x4_cbp_gray={
+		public static readonly int[] golomb_to_intra4x4_cbp_gray ={
 			15, 0, 7,11,13,14, 3, 5,10,12, 1, 2, 4, 8, 6, 9,
 		};
 
 		//static const uint8_t chroma_dc_coeff_token_len[4*5]={
-		public const int[] chroma_dc_coeff_token_len={
+		public static readonly int[] chroma_dc_coeff_token_len ={
 		 2, 0, 0, 0,
 		 6, 1, 0, 0,
 		 6, 6, 3, 0,
@@ -64,7 +64,7 @@ namespace cscodec.h243.decoder
 		 6, 8, 8, 7,
 		};
 
-		public const int[] chroma_dc_coeff_token_bits={
+		public static readonly int[] chroma_dc_coeff_token_bits ={
 	//		static const uint8_t chroma_dc_coeff_token_bits[4*5]={
 		 1, 0, 0, 0,
 		 7, 1, 0, 0,
@@ -73,7 +73,7 @@ namespace cscodec.h243.decoder
 		 2, 3, 2, 0,
 		};
 
-		public const int[][] coeff_token_len=Arrays.ConvertDimensional(new int[,]{
+		public static readonly int[][] coeff_token_len = Arrays.ConvertDimensional(new int[,]{
 	//		static const uint8_t coeff_token_len[4][4*17]={
 		{
 			 1, 0, 0, 0,
@@ -105,7 +105,7 @@ namespace cscodec.h243.decoder
 		}
 		});
 
-		public const int[][] coeff_token_bits=Arrays.ConvertDimensional(new int[,]{
+		public static readonly int[][] coeff_token_bits = Arrays.ConvertDimensional(new int[,]{
 	//		static const uint8_t coeff_token_bits[4][4*17]={
 		{
 			 1, 0, 0, 0,
@@ -137,7 +137,7 @@ namespace cscodec.h243.decoder
 		}
 		});
 
-		public const int[][] total_zeros_len= Arrays.ConvertDimensional(new int[,]{
+		public static readonly int[][] total_zeros_len = Arrays.ConvertDimensional(new int[,]{
 	//		static const uint8_t total_zeros_len[16][16]= {
 			{1,3,3,4,4,5,5,6,6,7,7,8,8,9,9,9},
 			{3,3,3,3,3,4,4,4,4,5,5,6,6,6,6,0},
@@ -156,7 +156,7 @@ namespace cscodec.h243.decoder
 			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		});
 
-		public const int[][] total_zeros_bits= Arrays.ConvertDimensional(new int[,]{
+		public static readonly int[][] total_zeros_bits = Arrays.ConvertDimensional(new int[,]{
 	//		static const uint8_t total_zeros_bits[16][16]= {
 			{1,3,2,3,2,3,2,3,2,3,2,3,2,3,2,1},
 			{7,6,5,4,3,5,4,3,2,3,2,3,2,1,0,0},
@@ -175,21 +175,21 @@ namespace cscodec.h243.decoder
 			{0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 		});
 
-		public const int[][] chroma_dc_total_zeros_len= Arrays.ConvertDimensional(new int[,]{
+		public static readonly int[][] chroma_dc_total_zeros_len = Arrays.ConvertDimensional(new int[,]{
 	//		static uint8_t chroma_dc_total_zeros_len[3][4]= {
 			{ 1, 2, 3, 3,},
 			{ 1, 2, 2, 0,},
 			{ 1, 1, 0, 0,},
 		});
 
-		public const int[][] chroma_dc_total_zeros_bits= Arrays.ConvertDimensional(new int[,]{
+		public static readonly int[][] chroma_dc_total_zeros_bits = Arrays.ConvertDimensional(new int[,]{
 	//		static uint8_t chroma_dc_total_zeros_bits[3][4]= {
 			{ 1, 1, 1, 0,},
 			{ 1, 1, 0, 0,},
 			{ 1, 0, 0, 0,},
 		});
 
-		public const int[][] run_len=Arrays.ConvertDimensional(new int[,]{
+		public static readonly int[][] run_len = Arrays.ConvertDimensional(new int[,]{
 	//		static uint8_t run_len[7][16]={
 			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 			{1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -200,7 +200,7 @@ namespace cscodec.h243.decoder
 			{3,3,3,3,3,3,3,4,5,6,7,8,9,10,11,0},
 		});
 
-		public const int[][] run_bits= Arrays.ConvertDimensional(new int[,]{
+		public static readonly int[][] run_bits = Arrays.ConvertDimensional(new int[,]{
 	//		static uint8_t run_bits[7][16]={
 			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -215,7 +215,7 @@ namespace cscodec.h243.decoder
 	
 		public static VLC[] coeff_token_vlc = new VLC[4];
 		//public static short[][] coeff_token_vlc_tables = new short[520+332+280+256][2];
-		public const int[] coeff_token_vlc_tables_size={520,332,280,256};
+		public static readonly int[] coeff_token_vlc_tables_size = { 520, 332, 280, 256 };
 
 		public static VLC chroma_dc_coeff_token_vlc = new VLC();
 		//public static short[][] chroma_dc_coeff_token_vlc_table = new short[256][2];
@@ -241,7 +241,7 @@ namespace cscodec.h243.decoder
 		//static int8_t cavlc_level_tab[7][1<<LEVEL_TAB_BITS][2];
 		public static int[][][] cavlc_level_tab = Arrays.Create3D<int>(7, 1<<LEVEL_TAB_BITS, 2);
 
-		public const int[/*256*/] ff_log2_tab = {
+		public static readonly int[/*256*/] ff_log2_tab = {
 				0,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
 				5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,5,
 				6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,6,

@@ -1,3 +1,4 @@
+using System;
 namespace cscodec.h243.decoder
 {
 	public class H264DSPContext {
@@ -14,7 +15,7 @@ namespace cscodec.h243.decoder
 			}
 		}
 	
-		public void weight_h264_pixels_c(int W, int H, int[] block, int _block_offset, int stride, int log2_denom, int weight, int offset){ 
+		static public void weight_h264_pixels_c(int W, int H, int[] block, int _block_offset, int stride, int log2_denom, int weight, int offset){ 
 			int y; 
 			int block_offset = _block_offset;
 			offset <<= log2_denom; 
@@ -42,7 +43,7 @@ namespace cscodec.h243.decoder
 			} 
 		} 
 	
-		public void biweight_h264_pixels_c(int W, int H, int[] dst, int _dst_offset, int[] src, int _src_offset, int stride, int log2_denom, int weightd, int weights, int offset){ 
+		static public void biweight_h264_pixels_c(int W, int H, int[] dst, int _dst_offset, int[] src, int _src_offset, int stride, int log2_denom, int weightd, int weights, int offset){ 
 			int y; 
 			int src_offset = _src_offset;
 			int dst_offset = _dst_offset;
@@ -158,7 +159,7 @@ namespace cscodec.h243.decoder
 			else               return a;
 		}
     
-		private int av_clip_uint8(int a) {
+		static private int av_clip_uint8(int a) {
 			if ((a&(~0x000000FF)) != 0) return (-a)>>31;
 			else           return a;
 		}    
@@ -342,7 +343,7 @@ namespace cscodec.h243.decoder
 		}
     
 		// h264_loop_filter_strength: simd only. the C version is inlined in h264.c
-		public void h264_loop_filter_strength(int[][][] bS, int[] nnz, int[][] ref, int[][][] mv,
+		public void h264_loop_filter_strength(int[][][] bS, int[] nnz, int[][] @ref, int[][][] mv,
 										  int bidir, int edges, int step, int mask_mv0, int mask_mv1, int field) {
     	
 		}
@@ -356,7 +357,7 @@ namespace cscodec.h243.decoder
 			int i;
 			int cm_pos = MAX_NEG_CROP;
 
-			block[block_offset + 0] += 1<<(shift-1);
+			block[block_offset + 0] += (short)(1<<(shift-1));
 
 			for(i=0; i<4; i++){
 				 int z0=  block[block_offset + i + block_stride*0]     +  block[block_offset + i + block_stride*2];
@@ -480,11 +481,12 @@ namespace cscodec.h243.decoder
 			}    	
 		}
 
-		public void h264_dct(short block[][]) {
+		public void h264_dct(short[][] block)
+		{
     	
 		}
-    
-		public const short[] scan8 = {
+
+		public static readonly short[] scan8 = {
     		 4+1*8, 5+1*8, 4+2*8, 5+2*8,
     		 6+1*8, 7+1*8, 6+2*8, 7+2*8,
     		 4+3*8, 5+3*8, 4+4*8, 5+4*8,

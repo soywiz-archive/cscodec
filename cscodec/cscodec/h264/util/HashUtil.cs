@@ -85,7 +85,7 @@ namespace cscodec.h243.util
 
 
 	  /// PRIVATE ///
-	  private static const int fODD_PRIME_NUMBER = 37;
+	  private const int fODD_PRIME_NUMBER = 37;
 
 	  private static int firstTerm( int aSeed ){
 	    return fODD_PRIME_NUMBER * aSeed;

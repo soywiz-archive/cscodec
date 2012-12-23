@@ -212,31 +212,40 @@ namespace cscodec.h243.decoder
 		public const int DC_129_PRED8x8        =8;
 		//@}
 	
-	
-		public interface IPrediction4x4 {
-			public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride);//FIXME move to dsp?		
-		}
-		public interface IPrediction8x8L {
-			public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride);
-		}
-		public interface IPrediction8x8 {
-			public void pred8x8(int[] src, int src_offset, int stride);
-		}
-		public interface IPrediction16x16 {
-			public void pred16x16(int[] src, int src_offset, int stride);
-		}
-		public interface IPrediction4x4_add {
-			public void pred4x4_add(int[] pix, int pix_offset/*align  4*/, short[] block/*align 16*/, int _block_offset, int stride);
-		}
-		public interface IPrediction8x8L_add {
-			public void pred8x8l_add(int[] pix, int pix_offset/*align  8*/, short[] block/*align 16*/, int _block_offset, int stride);
-		}
-		public interface IPrediction8x8_add {
-			public void pred8x8_add(int[] pix, int pix_offset/*align  8*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride);
-		}
-		public interface IPrediction16x16_add {
-			public void pred16x16_add(int[] pix, int pix_offset/*align 16*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride);
-		}
+
+		public delegate void IPrediction4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride);//FIXME move to dsp?
+		public delegate void IPrediction8x8L(int[] src, int src_offset, int topleft, int topright, int stride);
+		public delegate void IPrediction8x8(int[] src, int src_offset, int stride);
+		public delegate void IPrediction16x16(int[] src, int src_offset, int stride);
+		public delegate void IPrediction4x4_add(int[] pix, int pix_offset/*align  4*/, short[] block/*align 16*/, int _block_offset, int stride);
+		public delegate void IPrediction8x8L_add(int[] pix, int pix_offset/*align  8*/, short[] block/*align 16*/, int _block_offset, int stride);
+		public delegate void IPrediction8x8_add(int[] pix, int pix_offset/*align  8*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride);
+		public delegate void IPrediction16x16_add(int[] pix, int pix_offset/*align 16*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride);
+
+		//public interface IPrediction4x4 {
+		//	public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride);//FIXME move to dsp?		
+		//}
+		//public interface IPrediction8x8L {
+		//	public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride);
+		//}
+		//public interface IPrediction8x8 {
+		//	public void pred8x8(int[] src, int src_offset, int stride);
+		//}
+		//public interface IPrediction16x16 {
+		//	public void pred16x16(int[] src, int src_offset, int stride);
+		//}
+		//public interface IPrediction4x4_add {
+		//	public void pred4x4_add(int[] pix, int pix_offset/*align  4*/, short[] block/*align 16*/, int _block_offset, int stride);
+		//}
+		//public interface IPrediction8x8L_add {
+		//	public void pred8x8l_add(int[] pix, int pix_offset/*align  8*/, short[] block/*align 16*/, int _block_offset, int stride);
+		//}
+		//public interface IPrediction8x8_add {
+		//	public void pred8x8_add(int[] pix, int pix_offset/*align  8*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride);
+		//}
+		//public interface IPrediction16x16_add {
+		//	public void pred16x16_add(int[] pix, int pix_offset/*align 16*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride);
+		//}
 	
 		public IPrediction4x4[] pred4x4 = new IPrediction4x4[9+3+3];
 		public IPrediction8x8L[] pred8x8l = new IPrediction8x8L[9+3];
@@ -251,463 +260,296 @@ namespace cscodec.h243.decoder
 		
 			if(codec_id != CODEC_ID_RV40){
 				if(codec_id == CODEC_ID_VP8) {
-					pred4x4[VERT_PRED       ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
-		        			pred4x4_vertical_vp8_c(src, src_offset, topright, topright_offset, stride);
-		        		}
+					pred4x4[VERT_PRED       ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
+	        			pred4x4_vertical_vp8_c(src, src_offset, topright, topright_offset, stride);
 					};
-					pred4x4[HOR_PRED        ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+					pred4x4[HOR_PRED        ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 		        			pred4x4_horizontal_vp8_c(src, src_offset, topright, topright_offset, stride);
-		        		}
 					};
 				} else {
-					pred4x4[VERT_PRED       ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+					pred4x4[VERT_PRED       ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 		        			pred4x4_vertical_c(src, src_offset, topright, topright_offset, stride);
-		        		}
 					};
-					pred4x4[HOR_PRED        ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+					pred4x4[HOR_PRED        ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 		        			pred4x4_horizontal_c(src, src_offset, topright, topright_offset, stride);
-		        		}
 					};
 				}
-				pred4x4[DC_PRED             ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[DC_PRED             ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_dc_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
 				if(codec_id == CODEC_ID_SVQ3)
-					pred4x4[DIAG_DOWN_LEFT_PRED ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+					pred4x4[DIAG_DOWN_LEFT_PRED ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 		        			pred4x4_down_left_svq3_c(src, src_offset, topright, topright_offset, stride);
-		        		}
 					};
-				else
-					pred4x4[DIAG_DOWN_LEFT_PRED ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				else {
+					pred4x4[DIAG_DOWN_LEFT_PRED ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 		        			pred4x4_down_left_c(src, src_offset, topright, topright_offset, stride);
-		        		}
 					};
-				pred4x4[DIAG_DOWN_RIGHT_PRED] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				}
+				pred4x4[DIAG_DOWN_RIGHT_PRED] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_down_right_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[VERT_RIGHT_PRED     ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[VERT_RIGHT_PRED     ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_vertical_right_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[HOR_DOWN_PRED       ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[HOR_DOWN_PRED       ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_horizontal_down_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
 				if (codec_id == CODEC_ID_VP8) {
-					pred4x4[VERT_LEFT_PRED  ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+					pred4x4[VERT_LEFT_PRED  ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 		        			pred4x4_vertical_left_vp8_c(src, src_offset, topright, topright_offset, stride);
-		        		}
-					};
-				} else
-					pred4x4[VERT_LEFT_PRED  ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
-		        			pred4x4_vertical_left_c(src, src_offset, topright, topright_offset, stride);
-		        		}
-					};
-				pred4x4[HOR_UP_PRED         ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
-	        			pred4x4_horizontal_up_c(src, src_offset, topright, topright_offset, stride);
-	        		}
-				};
-				if(codec_id != CODEC_ID_VP8) {
-					pred4x4[LEFT_DC_PRED    ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
-		        			pred4x4_left_dc_c(src, src_offset, topright, topright_offset, stride);
-		        		}
-					};
-					pred4x4[TOP_DC_PRED     ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
-		        			pred4x4_top_dc_c(src, src_offset, topright, topright_offset, stride);
-		        		}
-					};
-					pred4x4[DC_128_PRED     ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
-		        			pred4x4_128_dc_c(src, src_offset, topright, topright_offset, stride);
-		        		}
 					};
 				} else {
-					pred4x4[TM_VP8_PRED     ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+					pred4x4[VERT_LEFT_PRED  ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
+		        			pred4x4_vertical_left_c(src, src_offset, topright, topright_offset, stride);
+					};
+				}
+				pred4x4[HOR_UP_PRED         ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
+	        			pred4x4_horizontal_up_c(src, src_offset, topright, topright_offset, stride);
+				};
+				if(codec_id != CODEC_ID_VP8) {
+					pred4x4[LEFT_DC_PRED    ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
+		        			pred4x4_left_dc_c(src, src_offset, topright, topright_offset, stride);
+					};
+					pred4x4[TOP_DC_PRED     ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
+		        			pred4x4_top_dc_c(src, src_offset, topright, topright_offset, stride);
+					};
+					pred4x4[DC_128_PRED     ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
+		        			pred4x4_128_dc_c(src, src_offset, topright, topright_offset, stride);
+					};
+				} else {
+					pred4x4[TM_VP8_PRED     ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 		        			pred4x4_tm_vp8_c(src, src_offset, topright, topright_offset, stride);
-		        		}
 					};
-					pred4x4[DC_127_PRED     ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+					pred4x4[DC_127_PRED     ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 		        			pred4x4_127_dc_c(src, src_offset, topright, topright_offset, stride);
-		        		}
 					};
-					pred4x4[DC_129_PRED     ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+					pred4x4[DC_129_PRED     ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 		        			pred4x4_129_dc_c(src, src_offset, topright, topright_offset, stride);
-		        		}
 					};
-					pred4x4[VERT_VP8_PRED   ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+					pred4x4[VERT_VP8_PRED   ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 		        			pred4x4_vertical_c(src, src_offset, topright, topright_offset, stride);
-		        		}
 					};
-					pred4x4[HOR_VP8_PRED    ] = new IPrediction4x4() {
-		        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+					pred4x4[HOR_VP8_PRED    ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 		        			pred4x4_horizontal_c(src, src_offset, topright, topright_offset, stride);
-		        		}
 					};
 				}
 			}else{
-				pred4x4[VERT_PRED           ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[VERT_PRED           ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_vertical_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[HOR_PRED            ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[HOR_PRED            ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_horizontal_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[DC_PRED             ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[DC_PRED             ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_dc_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[DIAG_DOWN_LEFT_PRED ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[DIAG_DOWN_LEFT_PRED ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_down_left_rv40_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[DIAG_DOWN_RIGHT_PRED] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[DIAG_DOWN_RIGHT_PRED] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_down_right_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[VERT_RIGHT_PRED     ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[VERT_RIGHT_PRED     ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_vertical_right_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[HOR_DOWN_PRED       ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[HOR_DOWN_PRED       ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_horizontal_down_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[VERT_LEFT_PRED      ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[VERT_LEFT_PRED      ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_vertical_left_rv40_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[HOR_UP_PRED         ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[HOR_UP_PRED         ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_horizontal_up_rv40_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[LEFT_DC_PRED        ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[LEFT_DC_PRED        ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_left_dc_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[TOP_DC_PRED         ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[TOP_DC_PRED         ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_top_dc_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[DC_128_PRED         ] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[DC_128_PRED         ] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_128_dc_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[DIAG_DOWN_LEFT_PRED_RV40_NODOWN] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[DIAG_DOWN_LEFT_PRED_RV40_NODOWN] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_down_left_rv40_nodown_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[HOR_UP_PRED_RV40_NODOWN] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[HOR_UP_PRED_RV40_NODOWN] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_horizontal_up_rv40_nodown_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
-				pred4x4[VERT_LEFT_PRED_RV40_NODOWN] = new IPrediction4x4() {
-	        		public void pred4x4(int[] src, int src_offset, int[] topright, int topright_offset, int stride) {
+				pred4x4[VERT_LEFT_PRED_RV40_NODOWN] = (int[] src, int src_offset, int[] topright, int topright_offset, int stride) => {
 	        			pred4x4_vertical_left_rv40_nodown_c(src, src_offset, topright, topright_offset, stride);
-	        		}
 				};
 			}
 		
-			pred8x8l[VERT_PRED           ] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[VERT_PRED           ] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_vertical_c(src, src_offset, topleft, topright, stride);
-				}
 			};
-			pred8x8l[HOR_PRED            ] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[HOR_PRED            ] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_horizontal_c(src, src_offset, topleft, topright, stride);
-				}
 			};
-			pred8x8l[DC_PRED             ] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[DC_PRED             ] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_dc_c(src, src_offset, topleft, topright, stride);
-				}
 			};
-			pred8x8l[DIAG_DOWN_LEFT_PRED ] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[DIAG_DOWN_LEFT_PRED ] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_down_left_c(src, src_offset, topleft, topright, stride);
-				}
 			};
-			pred8x8l[DIAG_DOWN_RIGHT_PRED] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[DIAG_DOWN_RIGHT_PRED] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_down_right_c(src, src_offset, topleft, topright, stride);
-				}
 			};
-			pred8x8l[VERT_RIGHT_PRED     ] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[VERT_RIGHT_PRED     ] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_vertical_right_c(src, src_offset, topleft, topright, stride);
-				}
 			};
-			pred8x8l[HOR_DOWN_PRED       ] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[HOR_DOWN_PRED       ] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_horizontal_down_c(src, src_offset, topleft, topright, stride);
-				}
 			};
-			pred8x8l[VERT_LEFT_PRED      ] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[VERT_LEFT_PRED      ] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_vertical_left_c(src, src_offset, topleft, topright, stride);
-				}
 			};
-			pred8x8l[HOR_UP_PRED         ] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[HOR_UP_PRED         ] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_horizontal_up_c(src, src_offset, topleft, topright, stride);
-				}
 			};
-			pred8x8l[LEFT_DC_PRED        ] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[LEFT_DC_PRED        ] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_left_dc_c(src, src_offset, topleft, topright, stride);
-				}
 			};
-			pred8x8l[TOP_DC_PRED         ] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[TOP_DC_PRED         ] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_top_dc_c(src, src_offset, topleft, topright, stride);
-				}
 			};
-			pred8x8l[DC_128_PRED         ] = new IPrediction8x8L() {
-				public void pred8x8l(int[] src, int src_offset, int topleft, int topright, int stride) {
+			pred8x8l[DC_128_PRED         ] = (int[] src, int src_offset, int topleft, int topright, int stride) => {
 					pred8x8l_128_dc_c(src, src_offset, topleft, topright, stride);
-				}
 			};
 		
-			pred8x8[VERT_PRED8x8   ] = new IPrediction8x8() {
-				public void pred8x8(int[] src, int src_offset, int stride) {
+			pred8x8[VERT_PRED8x8   ] = (int[] src, int src_offset, int stride) => {
 					pred8x8_vertical_c(src, src_offset, stride);
-				}
 			};
-			pred8x8[HOR_PRED8x8    ] = new IPrediction8x8() {
-				public void pred8x8(int[] src, int src_offset, int stride) {
+			pred8x8[HOR_PRED8x8    ] = (int[] src, int src_offset, int stride) => {
 					pred8x8_horizontal_c(src, src_offset, stride);
-				}
 			};
 			if (codec_id != CODEC_ID_VP8) {
-				pred8x8[PLANE_PRED8x8] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[PLANE_PRED8x8] = (int[] src, int src_offset, int stride) => {
 						pred8x8_plane_c(src, src_offset, stride);
-					}
 				};
 			} else
-				pred8x8[PLANE_PRED8x8] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[PLANE_PRED8x8] = (int[] src, int src_offset, int stride) => {
 						pred8x8_tm_vp8_c(src, src_offset, stride);
-					}
 				};
 			if(codec_id != CODEC_ID_RV40 && codec_id != CODEC_ID_VP8){
-				pred8x8[DC_PRED8x8     ] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[DC_PRED8x8     ] = (int[] src, int src_offset, int stride) => {
 						pred8x8_dc_c(src, src_offset, stride);
-					}
 				};
-				pred8x8[LEFT_DC_PRED8x8] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[LEFT_DC_PRED8x8] = (int[] src, int src_offset, int stride) => {
 						pred8x8_left_dc_c(src, src_offset, stride);
-					}
 				};
-				pred8x8[TOP_DC_PRED8x8 ] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[TOP_DC_PRED8x8 ] = (int[] src, int src_offset, int stride) => {
 						pred8x8_top_dc_c(src, src_offset, stride);
-					}
 				};
-				pred8x8[ALZHEIMER_DC_L0T_PRED8x8 ] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[ALZHEIMER_DC_L0T_PRED8x8 ] = (int[] src, int src_offset, int stride) => {
 						pred8x8_mad_cow_dc_l0t(src, src_offset, stride);
-					}
 				};
-				pred8x8[ALZHEIMER_DC_0LT_PRED8x8 ] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[ALZHEIMER_DC_0LT_PRED8x8 ] = (int[] src, int src_offset, int stride) => {
 						pred8x8_mad_cow_dc_0lt(src, src_offset, stride);
-					}
 				};
-				pred8x8[ALZHEIMER_DC_L00_PRED8x8 ] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[ALZHEIMER_DC_L00_PRED8x8 ] = (int[] src, int src_offset, int stride) => {
 						pred8x8_mad_cow_dc_l00(src, src_offset, stride);
-					}
 				};
-				pred8x8[ALZHEIMER_DC_0L0_PRED8x8 ] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[ALZHEIMER_DC_0L0_PRED8x8 ] = (int[] src, int src_offset, int stride) => {
 						pred8x8_mad_cow_dc_0l0(src, src_offset, stride);
-					}
 				};
 			}else{
-				pred8x8[DC_PRED8x8     ] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[DC_PRED8x8     ] = (int[] src, int src_offset, int stride) => {
 						pred8x8_dc_rv40_c(src, src_offset, stride);
-					}
 				};
-				pred8x8[LEFT_DC_PRED8x8] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[LEFT_DC_PRED8x8] = (int[] src, int src_offset, int stride) => {
 						pred8x8_left_dc_rv40_c(src, src_offset, stride);
-					}
 				};
-				pred8x8[TOP_DC_PRED8x8 ] = new IPrediction8x8() {
-					public void pred8x8(int[] src, int src_offset, int stride) {
+				pred8x8[TOP_DC_PRED8x8 ] = (int[] src, int src_offset, int stride) => {
 						pred8x8_top_dc_rv40_c(src, src_offset, stride);
-					}
 				};
 				if (codec_id == CODEC_ID_VP8) {
-					pred8x8[DC_127_PRED8x8] = new IPrediction8x8() {
-						public void pred8x8(int[] src, int src_offset, int stride) {
+					pred8x8[DC_127_PRED8x8] = (int[] src, int src_offset, int stride) => {
 							pred8x8_127_dc_c(src, src_offset, stride);
-						}
 					};
-					pred8x8[DC_129_PRED8x8] = new IPrediction8x8() {
-						public void pred8x8(int[] src, int src_offset, int stride) {
+					pred8x8[DC_129_PRED8x8] = (int[] src, int src_offset, int stride) => {
 							pred8x8_129_dc_c(src, src_offset, stride);
-						}
 					};
 				}
 			}
-			pred8x8[DC_128_PRED8x8 ] = new IPrediction8x8() {
-				public void pred8x8(int[] src, int src_offset, int stride) {
+			pred8x8[DC_128_PRED8x8 ] = (int[] src, int src_offset, int stride) => {
 					pred8x8_128_dc_c(src, src_offset, stride);
-				}
 			};
 		
-			pred16x16[DC_PRED8x8     ] = new IPrediction16x16() {
-				public void pred16x16(int[] src, int src_offset, int stride) {
+			pred16x16[DC_PRED8x8     ] = (int[] src, int src_offset, int stride) => {
 					pred16x16_dc_c(src, src_offset, stride);
-				}
 			};
-			pred16x16[VERT_PRED8x8   ] = new IPrediction16x16() {
-				public void pred16x16(int[] src, int src_offset, int stride) {
+			pred16x16[VERT_PRED8x8   ] = (int[] src, int src_offset, int stride) => {
 					pred16x16_vertical_c(src, src_offset, stride);
-				}
 			};
-			pred16x16[HOR_PRED8x8    ] = new IPrediction16x16() {
-				public void pred16x16(int[] src, int src_offset, int stride) {
+			pred16x16[HOR_PRED8x8    ] = (int[] src, int src_offset, int stride) => {
 					pred16x16_horizontal_c(src, src_offset, stride);
-				}
 			};
 			switch(codec_id){
 				case CODEC_ID_SVQ3:
-				   pred16x16[PLANE_PRED8x8  ] = new IPrediction16x16() {
-						public void pred16x16(int[] src, int src_offset, int stride) {
+				   pred16x16[PLANE_PRED8x8  ] = (int[] src, int src_offset, int stride) => {
 							pred16x16_plane_svq3_c(src, src_offset, stride);
-						}
 					};
 				   break;
 				case CODEC_ID_RV40:
-				   pred16x16[PLANE_PRED8x8  ] = new IPrediction16x16() {
-						public void pred16x16(int[] src, int src_offset, int stride) {
+				   pred16x16[PLANE_PRED8x8  ] = (int[] src, int src_offset, int stride) => {
 							pred16x16_plane_rv40_c(src, src_offset, stride);
-						}
 					};
 				   break;
 				case CODEC_ID_VP8:
-				   pred16x16[PLANE_PRED8x8  ] = new IPrediction16x16() {
-						public void pred16x16(int[] src, int src_offset, int stride) {
+				   pred16x16[PLANE_PRED8x8  ] = (int[] src, int src_offset, int stride) => {
 							pred16x16_tm_vp8_c(src, src_offset, stride);
-						}
 					};
-				   pred16x16[DC_127_PRED8x8] = new IPrediction16x16() {
-						public void pred16x16(int[] src, int src_offset, int stride) {
+				   pred16x16[DC_127_PRED8x8] = (int[] src, int src_offset, int stride) => {
 							pred16x16_127_dc_c(src, src_offset, stride);
-						}
 					};
-				   pred16x16[DC_129_PRED8x8] = new IPrediction16x16() {
-						public void pred16x16(int[] src, int src_offset, int stride) {
+				   pred16x16[DC_129_PRED8x8] = (int[] src, int src_offset, int stride) => {
 							pred16x16_129_dc_c(src, src_offset, stride);
-						}
 					};
 				   break;
 				default:
-				   pred16x16[PLANE_PRED8x8  ] = new IPrediction16x16() {
-						public void pred16x16(int[] src, int src_offset, int stride) {
+				   pred16x16[PLANE_PRED8x8  ] = (int[] src, int src_offset, int stride) => {
 							pred16x16_plane_c(src, src_offset, stride);
-						}
 					};
 				   break;
 			}
-			pred16x16[LEFT_DC_PRED8x8] = new IPrediction16x16() {
-				public void pred16x16(int[] src, int src_offset, int stride) {
+			pred16x16[LEFT_DC_PRED8x8] = (int[] src, int src_offset, int stride) => {
 					pred16x16_left_dc_c(src, src_offset, stride);
-				}
 			};
-			pred16x16[TOP_DC_PRED8x8 ] = new IPrediction16x16() {
-				public void pred16x16(int[] src, int src_offset, int stride) {
+			pred16x16[TOP_DC_PRED8x8 ] = (int[] src, int src_offset, int stride) => {
 					pred16x16_top_dc_c(src, src_offset, stride);
-				}
 			};
-			pred16x16[DC_128_PRED8x8 ] = new IPrediction16x16() {
-				public void pred16x16(int[] src, int src_offset, int stride) {
+			pred16x16[DC_128_PRED8x8 ] = (int[] src, int src_offset, int stride) => {
 					pred16x16_128_dc_c(src, src_offset, stride);
-				}
 			};
 		
 			//special lossless h/v prediction for h264
-			pred4x4_add  [VERT_PRED   ] = new IPrediction4x4_add() {
-				public void pred4x4_add(int[] pix, int pix_offset/*align  4*/, short[] block/*align 16*/, int _block_offset, int stride) {
+			pred4x4_add  [VERT_PRED   ] = (int[] pix, int pix_offset/*align  4*/, short[] block/*align 16*/, int _block_offset, int stride) => {
 					pred4x4_vertical_add_c(pix, pix_offset, block, _block_offset, stride);
-				}
 			};
-			pred4x4_add  [ HOR_PRED   ] = new IPrediction4x4_add() {
-				public void pred4x4_add(int[] pix, int pix_offset/*align  4*/, short[] block/*align 16*/, int _block_offset, int stride) {
+			pred4x4_add  [ HOR_PRED   ] = (int[] pix, int pix_offset/*align  4*/, short[] block/*align 16*/, int _block_offset, int stride) => {
 					pred4x4_horizontal_add_c(pix, pix_offset, block, _block_offset, stride);
-				}
 			};
-			pred8x8l_add [VERT_PRED   ] = new IPrediction8x8L_add() {
-				public void pred8x8l_add(int[] pix, int pix_offset/*align  8*/, short[] block/*align 16*/, int _block_offset, int stride) {
+			pred8x8l_add [VERT_PRED   ] = (int[] pix, int pix_offset/*align  8*/, short[] block/*align 16*/, int _block_offset, int stride) => {
 					pred8x8l_vertical_add_c(pix, pix_offset, block, _block_offset, stride);
-				}
 			};
-			pred8x8l_add [ HOR_PRED   ] = new IPrediction8x8L_add() {
-				public void pred8x8l_add(int[] pix, int pix_offset/*align  8*/, short[] block/*align 16*/, int _block_offset, int stride) {
+			pred8x8l_add [ HOR_PRED   ] = (int[] pix, int pix_offset/*align  8*/, short[] block/*align 16*/, int _block_offset, int stride) => {
 					pred8x8l_horizontal_add_c(pix, pix_offset, block, _block_offset, stride);
-				}
 			};
-			pred8x8_add  [VERT_PRED8x8] = new IPrediction8x8_add() {
-				public void pred8x8_add(int[] pix, int pix_offset/*align  8*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride) {
+			pred8x8_add  [VERT_PRED8x8] = (int[] pix, int pix_offset/*align  8*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride) => {
 					pred8x8_vertical_add_c(pix, pix_offset, block_offset, block_offset_offset, block, _block_offset, stride);
-				}
 			};
-			pred8x8_add  [ HOR_PRED8x8] = new IPrediction8x8_add() {
-				public void pred8x8_add(int[] pix, int pix_offset/*align  8*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride) {
+			pred8x8_add  [ HOR_PRED8x8] = (int[] pix, int pix_offset/*align  8*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride) => {
 					pred8x8_horizontal_add_c(pix, pix_offset, block_offset, block_offset_offset, block, _block_offset, stride);				
-				}
 			};
-			pred16x16_add[VERT_PRED8x8] = new IPrediction16x16_add() {
-				public void pred16x16_add(int[] pix, int pix_offset/*align  16*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride) {
+			pred16x16_add[VERT_PRED8x8] = (int[] pix, int pix_offset/*align  16*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride) => {
 					pred16x16_vertical_add_c(pix, pix_offset, block_offset, block_offset_offset, block, _block_offset, stride);
-				}
 			};
-			pred16x16_add[ HOR_PRED8x8] = new IPrediction16x16_add() {
-				public void pred16x16_add(int[] pix, int pix_offset/*align  16*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride) {
+			pred16x16_add[HOR_PRED8x8] = (int[] pix, int pix_offset/*align  16*/, int[] block_offset, int block_offset_offset, short[] block/*align 16*/, int _block_offset, int stride) =>
+			{
 					pred16x16_horizontal_add_c(pix, pix_offset, block_offset, block_offset_offset, block, _block_offset, stride);
-				}
 			};
 		
 		}

@@ -1,5 +1,6 @@
 namespace cscodec.h243.util
 {
+#if false
 	public class BufferedInputStream : FilterInputStream{
 		protected volatile sbyte[] buf;
 		protected int count;
@@ -163,4 +164,5 @@ namespace cscodec.h243.util
 		}
 	
 	}
+#endif
 }

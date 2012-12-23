@@ -1,5 +1,6 @@
 namespace cscodec.h243.util
 {
+	#if false
 	public class PushbackInputStream : FilterInputStream {
 
 		protected sbyte[] buf;
@@ -103,4 +104,5 @@ namespace cscodec.h243.util
 	
 		
 	}
+#endif
 }

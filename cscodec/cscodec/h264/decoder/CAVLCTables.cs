@@ -21,7 +21,7 @@ namespace cscodec.h243.decoder
 			return output;
 		}
 
-		public const short[][] chroma_dc_coeff_token_vlc_table = Arrays.ConvertDimensional(new short[,]{
+		public static readonly short[][] chroma_dc_coeff_token_vlc_table = Arrays.ConvertDimensional(new short[,]{
 			   {19, 7, 2}, 
 			   {18, 8, 1}, 
 			   {17, 8, 1}, 
@@ -38,7 +38,7 @@ namespace cscodec.h243.decoder
 			   {5, 1, 128}, 
 			});
 
-		public const short[][][] coeff_token_vlc_table = {
+		public static readonly short[][][] coeff_token_vlc_table = {
 			Arrays.ConvertDimensional(new short[,]{
 			   {256, -8, 1}, 
 			   {512, -2, 1}, 
@@ -318,7 +318,7 @@ namespace cscodec.h243.decoder
 				}), 
 			};
 
-		public const short[][][] chroma_dc_total_zeros_vlc_table = {
+		public static readonly short[][][] chroma_dc_total_zeros_vlc_table = {
 				Arrays.ConvertDimensional(new short[,]{
 			   {3, 3, 1}, 
 			   {2, 3, 1}, 
@@ -336,7 +336,7 @@ namespace cscodec.h243.decoder
 				}), 
 			};
 
-		public const short[][][] total_zeros_vlc = {
+		public static readonly short[][][] total_zeros_vlc = {
 				Arrays.ConvertDimensional(new short[,]{
 			   {-1, 0, 1}, 
 			   {15, 9, 1}, 
@@ -505,7 +505,7 @@ namespace cscodec.h243.decoder
 				}),
 			};
 
-		public const short[][][] run_vlc_table = {
+		public static readonly short[][][] run_vlc_table = {
 				Arrays.ConvertDimensional(new short[,]{
 			   {1, 1, 4}, 
 			   {0, 1, 4}, 
@@ -547,7 +547,7 @@ namespace cscodec.h243.decoder
 				}), 
 			};
 
-		public const short[][] run7_vlc_table = Arrays.ConvertDimensional(new short[,]{
+		public static readonly short[][] run7_vlc_table = Arrays.ConvertDimensional(new short[,]{
 			   {64, -5, 1}, 
 			   {9, 6, 1}, 
 			   {8, 5, 2}, 
