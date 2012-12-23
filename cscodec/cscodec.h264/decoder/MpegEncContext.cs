@@ -739,11 +739,11 @@ namespace cscodec.h264.decoder
 			return pos;
 		}
 
-		public void ff_init_scantable(int[] permutation, ScanTable st, int[] src_scantable)
+		public void ff_init_scantable(byte[] permutation, ScanTable st, byte[] src_scantable)
 		{
 			//(uint8_t *permutation, ScanTable *st, const uint8_t *src_scantable){
 			int i;
-			int end;
+			byte end;
 
 			st.scantable = src_scantable;
 
@@ -754,11 +754,10 @@ namespace cscodec.h264.decoder
 				st.permutated[i] = permutation[j];
 			}
 
-			end = -1;
+			end = 0xFF;
 			for (i = 0; i < 64; i++)
 			{
-				int j;
-				j = st.permutated[i];
+				var j = st.permutated[i];
 				if (j > end) end = j;
 				st.raster_end[i] = end;
 			}

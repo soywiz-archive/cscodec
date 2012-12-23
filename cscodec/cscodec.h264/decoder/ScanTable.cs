@@ -5,11 +5,8 @@ namespace cscodec.h264.decoder
 		/**
 		 * Scantable.
 		 */
-		//const uint8_t *scantable;
-		//uint8_t permutated[64];
-		//uint8_t raster_end[64];
-		public int[] scantable;
-		public int[] permutated = new int[64];
-		public int[] raster_end = new int[64];
+		public byte[] scantable;
+		public byte[] permutated = new byte[64];
+		public byte[] raster_end = new byte[64];
 	}
 }

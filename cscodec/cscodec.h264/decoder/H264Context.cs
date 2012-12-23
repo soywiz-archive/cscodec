@@ -297,18 +297,18 @@ namespace cscodec.h264.decoder
 		public int[] direct_table; // uint8_t     *direct_table;
 		public int[] direct_cache = new int[5 * 8]; // uint8_t     direct_cache[5*8];
 
-		public int[] zigzag_scan = new int[16];
-		public int[] zigzag_scan8x8 = new int[64];
-		public int[] zigzag_scan8x8_cavlc = new int[64];
-		public int[] field_scan = new int[16];
-		public int[] field_scan8x8 = new int[64];
-		public int[] field_scan8x8_cavlc = new int[64];
-		public int[] zigzag_scan_q0;
-		public int[] zigzag_scan8x8_q0;
-		public int[] zigzag_scan8x8_cavlc_q0;
-		public int[] field_scan_q0;
-		public int[] field_scan8x8_q0;
-		public int[] field_scan8x8_cavlc_q0;
+		public byte[] zigzag_scan = new byte[16];
+		public byte[] zigzag_scan8x8 = new byte[64];
+		public byte[] zigzag_scan8x8_cavlc = new byte[64];
+		public byte[] field_scan = new byte[16];
+		public byte[] field_scan8x8 = new byte[64];
+		public byte[] field_scan8x8_cavlc = new byte[64];
+		public byte[] zigzag_scan_q0;
+		public byte[] zigzag_scan8x8_q0;
+		public byte[] zigzag_scan8x8_cavlc_q0;
+		public byte[] field_scan_q0;
+		public byte[] field_scan8x8_q0;
+		public byte[] field_scan8x8_cavlc_q0;
 		/*
 		uint8_t zigzag_scan[16];
 		uint8_t zigzag_scan8x8[64];
@@ -478,7 +478,7 @@ namespace cscodec.h264.decoder
 		public int next_slice_index;
 		public long svq3_watermark_key;
 
-		static public readonly int[]/*uint8_t*/ ff_alternate_horizontal_scan = {
+		static public readonly byte[] ff_alternate_horizontal_scan = {
 				0,  1,   2,  3,  8,  9, 16, 17,
 				10, 11,  4,  5,  6,  7, 15, 14,
 				13, 12, 19, 18, 24, 25, 32, 33,
@@ -489,7 +489,7 @@ namespace cscodec.h264.decoder
 				52, 53, 54, 55, 60, 61, 62, 63,
 			};
 
-		static public readonly int[]/*uint8_t*/ ff_alternate_vertical_scan = {
+		static public readonly byte[] ff_alternate_vertical_scan = {
 				0,  8,  16, 24,  1,  9,  2, 10,
 				17, 25, 32, 40, 48, 56, 57, 49,
 				41, 33, 26, 18,  3, 11,  4, 12,
@@ -569,7 +569,7 @@ namespace cscodec.h264.decoder
 			}};
 
 
-		public static readonly int /*const uint8_t*/[] ff_zigzag_direct/*[64]*/ = {
+		public static readonly byte[] ff_zigzag_direct = new byte[64] {
 				0,   1,  8, 16,  9,  2,  3, 10,
 				17, 24, 32, 25, 18, 11,  4,  5,
 				12, 19, 26, 33, 40, 48, 41, 34,
@@ -3153,7 +3153,7 @@ namespace cscodec.h264.decoder
 			} // if
 		}
 
-		public void decode_cabac_residual_internal(short[] block, int block_offset, int cat, int n, int[] scantable, int scan_offset, long[] qmul, int max_coeff, int is_dc)
+		public void decode_cabac_residual_internal(short[] block, int block_offset, int cat, int n, byte[] scantable, int scan_offset, long[] qmul, int max_coeff, int is_dc)
 		{
 
 			int[] index = new int[64];
@@ -3295,12 +3295,12 @@ namespace cscodec.h264.decoder
 
 		}
 
-		public void decode_cabac_residual_dc_internal(short[] block, int block_offset, int cat, int n, int[] scantable, int scan_offset, int max_coeff)
+		public void decode_cabac_residual_dc_internal(short[] block, int block_offset, int cat, int n, byte[] scantable, int scan_offset, int max_coeff)
 		{
 			decode_cabac_residual_internal(block, block_offset, cat, n, scantable, scan_offset, null, max_coeff, 1);
 		}
 
-		public void decode_cabac_residual_nondc_internal(short[] block, int block_offset, int cat, int n, int[] scantable, int scan_offset, long[] qmul, int max_coeff)
+		public void decode_cabac_residual_nondc_internal(short[] block, int block_offset, int cat, int n, byte[] scantable, int scan_offset, long[] qmul, int max_coeff)
 		{
 			decode_cabac_residual_internal(block, block_offset, cat, n, scantable, scan_offset, qmul, max_coeff, 0);
 		}
@@ -3317,7 +3317,7 @@ namespace cscodec.h264.decoder
 		 * because it allows improved constant propagation into get_cabac_cbf_ctx,
 		 * as well as because most blocks have zero CBFs. */
 
-		public void decode_cabac_residual_dc(short[] block, int block_offset, int cat, int n, int[] scantable, int scan_offset, int max_coeff)
+		public void decode_cabac_residual_dc(short[] block, int block_offset, int cat, int n, byte[] scantable, int scan_offset, int max_coeff)
 		{
 			/* read coded block flag */
 			if (cabac.get_cabac(cabac_state, 85 + get_cabac_cbf_ctx(cat, n, 1)) == 0)
@@ -3328,7 +3328,7 @@ namespace cscodec.h264.decoder
 			decode_cabac_residual_dc_internal(block, block_offset, cat, n, scantable, scan_offset, max_coeff);
 		}
 
-		public void decode_cabac_residual_nondc(short[] block, int block_offset, int cat, int n, int[] scantable, int scan_offset, long[] qmul, int max_coeff)
+		public void decode_cabac_residual_nondc(short[] block, int block_offset, int cat, int n, byte[] scantable, int scan_offset, long[] qmul, int max_coeff)
 		{
 			/* read coded block flag */
 			if (cat != 5 && cabac.get_cabac(cabac_state, 85 + get_cabac_cbf_ctx(cat, n, 0)) == 0)
@@ -4020,7 +4020,8 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 
 			if (cbp != 0 || (mb_type & MB_TYPE_INTRA16x16) != 0)
 			{
-				int[] scan, scan8x8;
+				byte[] scan;
+				byte[] scan8x8;
 				long[] qmul;
 
 				if ((mb_type & MB_TYPE_INTERLACED) != 0)
@@ -6749,7 +6750,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		{
 			int i, last = 8, next = 8;
 			/* const uint8_t * */
-			int[] scan = (size == 16) ? zigzag_scan
+			byte[] scan = (size == 16) ? zigzag_scan
 				: ff_zigzag_direct;
 			if (0l == s.gb.get_bits1("01?")) /*
 										 * matrix not written, we use the predicted
@@ -8090,17 +8091,17 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 			for (i = 0; i < 16; i++)
 			{
 				//#define T(x) (x>>2) | ((x<<2) & 0xF)
-				this.zigzag_scan[i] = (H264Data.zigzag_scan[i] >> 2) | ((H264Data.zigzag_scan[i] << 2) & 0x0F); // T(zigzag_scan[i]);
-				this.field_scan[i] = (H264Data.field_scan[i] >> 2) | ((H264Data.field_scan[i] << 2) & 0x0F); // T( field_scan[i]);
+				this.zigzag_scan[i] = (byte)((H264Data.zigzag_scan[i] >> 2) | ((H264Data.zigzag_scan[i] << 2) & 0x0F)); // T(zigzag_scan[i]);
+				this.field_scan[i] = (byte)((H264Data.field_scan[i] >> 2) | ((H264Data.field_scan[i] << 2) & 0x0F)); // T( field_scan[i]);
 				//#undef T
 			}
 			for (i = 0; i < 64; i++)
 			{
 				//#define T(x) (x>>3) | ((x&7)<<3)
-				this.zigzag_scan8x8[i] = (ff_zigzag_direct[i] >> 3) | ((ff_zigzag_direct[i] & 7) << 3);
-				this.zigzag_scan8x8_cavlc[i] = (H264Data.zigzag_scan8x8_cavlc[i] >> 3) | ((H264Data.zigzag_scan8x8_cavlc[i] & 7) << 3);
-				this.field_scan8x8[i] = (H264Data.field_scan8x8[i] >> 3) | ((H264Data.field_scan8x8[i] & 7) << 3);
-				this.field_scan8x8_cavlc[i] = (H264Data.field_scan8x8_cavlc[i] >> 3) | ((H264Data.field_scan8x8_cavlc[i] & 7) << 3);
+				this.zigzag_scan8x8[i] = (byte)((ff_zigzag_direct[i] >> 3) | ((ff_zigzag_direct[i] & 7) << 3));
+				this.zigzag_scan8x8_cavlc[i] = (byte)((H264Data.zigzag_scan8x8_cavlc[i] >> 3) | ((H264Data.zigzag_scan8x8_cavlc[i] & 7) << 3));
+				this.field_scan8x8[i] = (byte)((H264Data.field_scan8x8[i] >> 3) | ((H264Data.field_scan8x8[i] & 7) << 3));
+				this.field_scan8x8_cavlc[i] = (byte)((H264Data.field_scan8x8_cavlc[i] >> 3) | ((H264Data.field_scan8x8_cavlc[i] & 7) << 3));
 				//#undef T
 			}
 			if (this.sps.transform_bypass != 0)

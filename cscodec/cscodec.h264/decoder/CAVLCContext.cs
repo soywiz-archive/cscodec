@@ -479,7 +479,7 @@ namespace cscodec.h264.decoder
 		 * @return <0 if an error occurred
 		 */
 		public static int decode_residual(H264Context h, GetBitContext gb, short[] block_base, int block_offset
-				, int n, int[] scantable_base, int scantable_offset, long[] qmul_base, int qmul_offset, int max_coeff)
+				, int n, byte[] scantable_base, int scantable_offset, long[] qmul_base, int qmul_offset, int max_coeff)
 		{
 			//			, int n, uint8_t *scantable, uint32_t *qmul, int max_coeff){
 			//MpegEncContext s = h.s;
@@ -713,7 +713,7 @@ namespace cscodec.h264.decoder
 			//!!????????????????????????????????? Magic about array resizing??
 			if (scantable_offset < 0)
 			{
-				int[] new_scantable_base = new int[scantable_base.Length + (-scantable_offset)];
+				byte[] new_scantable_base = new byte[scantable_base.Length + (-scantable_offset)];
 				Array.Copy(scantable_base, 0, new_scantable_base, -scantable_offset, scantable_base.Length);
 				scantable_base = new_scantable_base;
 				scantable_offset = 0;
@@ -1355,8 +1355,8 @@ namespace cscodec.h264.decoder
 				int dquant;
 				GetBitContext gb = (((mb_type & 7) != 0) ? h.intra_gb_ptr : h.inter_gb_ptr);
 				//uint8_t *scan, *scan8x8;
-				int[] scan;
-				int[] scan8x8;
+				byte[] scan;
+				byte[] scan8x8;
 
 				if (0 != (mb_type & H264Context.MB_TYPE_INTERLACED))
 				{

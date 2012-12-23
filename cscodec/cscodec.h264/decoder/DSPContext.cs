@@ -19,8 +19,7 @@ namespace cscodec.h264.decoder
 		 * - (x -> referece dct -> simple_mmx_perm = idct_permutation -> simple_idct_mmx -> x)
 		 * - (->decode coeffs -> zigzag reorder -> simple_mmx_perm -> dequant -> simple_idct_mmx ->...)
 		 */
-		/*uint8_t*/
-		public int[] idct_permutation = new int[64];
+		public byte[] idct_permutation = new byte[64];
 		public int idct_permutation_type;
 
 		public static Ih264_qpel_mc_func[][] put_h264_qpel_pixels_tab = Arrays.Create<Ih264_qpel_mc_func>(4, 16);
@@ -2021,8 +2020,7 @@ namespace cscodec.h264.decoder
 			switch (this.idct_permutation_type)
 			{
 				case FF_NO_IDCT_PERM:
-					for (i = 0; i < 64; i++)
-						this.idct_permutation[i] = i;
+					for (i = 0; i < 64; i++) this.idct_permutation[i] = (byte)i;
 					break;
 			} // switch
 
