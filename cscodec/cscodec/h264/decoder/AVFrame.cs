@@ -319,9 +319,9 @@ namespace cscodec.h264.decoder
     		 ret.qscale_type = qscale_type;
     		 ret.qstride = qstride;
     		 ret.quality = quality;
-			 System.Buffer.BlockCopy(ref_count, 0, ret.ref_count, 0, 2 * 2);
+			 ret.ref_count = (int[][])ref_count.Clone();
 			 Array.Copy(ref_index, 0, ret.ref_index, 0, ref_index.Length);
-			 System.Buffer.BlockCopy(ref_poc, 0, ret.ref_poc, 0, 2 * 2 * 16);
+			 ret.ref_poc = (int[][][])ref_poc.Clone();
     		 ret.reference = reference;
     		 ret.reordered_opaque = reordered_opaque;
     		 ret.repeat_pict = repeat_pict;

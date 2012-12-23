@@ -1263,6 +1263,9 @@ namespace cscodec.h264.decoder
 			// For JAVA software decoder, use simple IDCT Scanline:
 			this.idct_permutation_type = FF_NO_IDCT_PERM;
 
+			put_h264_qpel_pixels_tab[0][ 0] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
+   				pixels_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride,16);	
+			}; 
 			put_h264_qpel_pixels_tab[0][1] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
 			{
 				h264_qpel_mc10_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
