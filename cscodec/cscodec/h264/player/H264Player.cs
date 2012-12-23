@@ -35,6 +35,9 @@ public class H264Player {
 			H264Player.frame = new Form()
 			{
 				Text = "Player",
+				FormBorderStyle = FormBorderStyle.FixedDialog,
+				MinimizeBox = false,
+				StartPosition = FormStartPosition.CenterScreen,
 			};
 			//displayPanel = new PlayerFrame();
 
@@ -68,7 +71,14 @@ public class H264Player {
 		Console.WriteLine("Playing "+ fileName);
 		playFile(fileName);		
 	}
-	
+
+	public static void CenterForm(Form theForm)
+	{
+		theForm.Location = new Point(
+			Screen.PrimaryScreen.WorkingArea.Width / 2 - theForm.Width / 2,
+			Screen.PrimaryScreen.WorkingArea.Height / 2 - theForm.Height / 2);
+	}
+
 	public bool playFile(string filename) {
 	    H264Decoder codec;
 	    MpegEncContext c= null;
@@ -194,6 +204,14 @@ public class H264Player {
 						}
 						//FrameUtils.YUV2RGB(picture, buffer);
 						var Image = FrameUtils.imageFromFrame(picture);
+						if (this.frame.ClientSize.Width < picture.imageWidth || this.frame.ClientSize.Height < picture.imageHeight)
+						{
+							this.frame.Invoke((Action)(() =>
+							{
+								this.frame.ClientSize = new Size(picture.imageWidth, picture.imageHeight);
+								CenterForm(this.frame);
+							}));
+						}
 						this.frame.CreateGraphics().DrawImage(Image, Point.Empty);
 						//displayPanel.lastFrame = displayPanel.createImage(new Bitmap(picture.imageWidth, picture.imageHeight, buffer, 0, picture.imageWidth));
 						//displayPanel.invalidate();
