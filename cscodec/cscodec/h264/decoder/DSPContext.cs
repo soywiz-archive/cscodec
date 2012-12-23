@@ -1261,620 +1261,585 @@ namespace cscodec.h243.decoder
 			*/
         
 			// For JAVA software decoder, use simple IDCT Scanline:
-			this.idct_permutation_type= FF_NO_IDCT_PERM;        
-        
-			throw(new NotImplementedException("DSPContext Check!"));
-#if false
-			put_h264_qpel_pixels_tab[0][ 1] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
-   				h264_qpel_mc10_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-			}; 
-			put_h264_qpel_pixels_tab[0][ 2] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
-   				h264_qpel_mc20_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-			}; 
-			put_h264_qpel_pixels_tab[0][ 3] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
-    			h264_qpel_mc30_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-			}; 
-			put_h264_qpel_pixels_tab[0][ 4] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
-   				h264_qpel_mc01_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-			}; 
-			put_h264_qpel_pixels_tab[0][ 5] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
-   				h264_qpel_mc11_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-			}; 
-			put_h264_qpel_pixels_tab[0][ 6] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
+			this.idct_permutation_type = FF_NO_IDCT_PERM;
+
+			put_h264_qpel_pixels_tab[0][1] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc10_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
+			};
+			put_h264_qpel_pixels_tab[0][2] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc20_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
+			};
+			put_h264_qpel_pixels_tab[0][3] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc30_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
+			};
+			put_h264_qpel_pixels_tab[0][4] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc01_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
+			};
+			put_h264_qpel_pixels_tab[0][5] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc11_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
+			};
+			put_h264_qpel_pixels_tab[0][ 6] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
     				h264_qpel_mc21_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
 			}; 
-			put_h264_qpel_pixels_tab[0][ 7] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
+			put_h264_qpel_pixels_tab[0][ 7] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
     				h264_qpel_mc31_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
 			}; 
-			put_h264_qpel_pixels_tab[0][ 8] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
+			put_h264_qpel_pixels_tab[0][ 8] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
     				h264_qpel_mc02_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
 			}; 
-			put_h264_qpel_pixels_tab[0][ 9] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
+			put_h264_qpel_pixels_tab[0][ 9] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
     				h264_qpel_mc12_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
 			}; 
-			put_h264_qpel_pixels_tab[0][10] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
+			put_h264_qpel_pixels_tab[0][10] = (int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) => {
     				h264_qpel_mc22_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[0][11] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc32_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[0][12] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc03_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[0][13] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc13_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[0][14] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc23_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[0][15] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc33_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
 			}; 
 
-			put_h264_qpel_pixels_tab[1][ 0] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				pixels_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride, 8); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][ 1] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc10_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][ 2] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc20_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][ 3] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc30_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][ 4] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc01_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][ 5] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc11_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][ 6] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc21_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][ 7] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc31_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][ 8] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc02_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][ 9] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc12_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][10] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc22_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][11] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc32_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][12] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc03_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][13] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc13_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][14] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc23_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[1][15] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc33_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
+#if true
+			put_h264_qpel_pixels_tab[0][11] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc32_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
 
-			put_h264_qpel_pixels_tab[2][ 0] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc00_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][ 1] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc10_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][ 2] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc20_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][ 3] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc30_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][ 4] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc01_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][ 5] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc11_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][ 6] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc21_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][ 7] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc31_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][ 8] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc02_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][ 9] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc12_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][10] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc22_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][11] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc32_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][12] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc03_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][13] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc13_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][14] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc23_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[2][15] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc33_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
+			};
+			put_h264_qpel_pixels_tab[0][12] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc03_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
 
-			put_h264_qpel_pixels_tab[3][ 0] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc00_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][ 1] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc10_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][ 2] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc20_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][ 3] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc30_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][ 4] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc01_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][ 5] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc11_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][ 6] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc21_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][ 7] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc31_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][ 8] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc02_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][ 9] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc12_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][10] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc22_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][11] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc32_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][12] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc03_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][13] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc13_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][14] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc23_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			put_h264_qpel_pixels_tab[3][15] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc33_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
+			};
+			put_h264_qpel_pixels_tab[0][13] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc13_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[0][14] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc23_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[0][15] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc33_c(0, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+
+			put_h264_qpel_pixels_tab[1][0] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				pixels_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride, 8);
+
+			};
+			put_h264_qpel_pixels_tab[1][1] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc10_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][2] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc20_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][3] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc30_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][4] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc01_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][5] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc11_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][6] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc21_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][7] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc31_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][8] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc02_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][9] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc12_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][10] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc22_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][11] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc32_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][12] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc03_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][13] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc13_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][14] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc23_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[1][15] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc33_c(0, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+
+			put_h264_qpel_pixels_tab[2][0] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc00_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][1] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc10_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][2] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc20_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][3] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc30_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][4] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc01_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][5] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc11_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][6] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc21_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][7] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc31_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][8] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc02_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][9] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc12_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][10] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc22_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][11] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc32_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][12] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc03_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][13] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc13_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][14] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc23_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[2][15] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc33_c(0, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+
+			put_h264_qpel_pixels_tab[3][0] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc00_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][1] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc10_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][2] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc20_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][3] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc30_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][4] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc01_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][5] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc11_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][6] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc21_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][7] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc31_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][8] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc02_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][9] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc12_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][10] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc22_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][11] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc32_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][12] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc03_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][13] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc13_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][14] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc23_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			put_h264_qpel_pixels_tab[3][15] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc33_c(0, 2, dst_base, dst_offset, src_base, src_offset, stride);
+
 			}; 
 #endif
 			///////////////////////////////////////////////////////////////////////////////////////
 
 			// avg_h264_qpel_pixels_tab[0][ 0]
-#if false
-			avg_h264_qpel_pixels_tab[0][ 0] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				pixels_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride, 16); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][ 1] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc10_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][ 2] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc20_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][ 3] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc30_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][ 4] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc01_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][ 5] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc11_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][ 6] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc21_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][ 7] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc31_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][ 8] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc02_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][ 9] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc12_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][10] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc22_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][11] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc32_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][12] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc03_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][13] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc13_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][14] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc23_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[0][15] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc33_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
+#if true
+			avg_h264_qpel_pixels_tab[0][0] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				pixels_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride, 16);
 
-			avg_h264_qpel_pixels_tab[1][ 0] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				pixels_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride, 8); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][ 1] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc10_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][ 2] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc20_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][ 3] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc30_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][ 4] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc01_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][ 5] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc11_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][ 6] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc21_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][ 7] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc31_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][ 8] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc02_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][ 9] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc12_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][10] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc22_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][11] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc32_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][12] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc03_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][13] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc13_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][14] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc23_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[1][15] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc33_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
-			}; 
+			};
+			avg_h264_qpel_pixels_tab[0][1] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc10_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
 
-			avg_h264_qpel_pixels_tab[2][ 0] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc00_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][ 1] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc10_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][ 2] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc20_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][ 3] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc30_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][ 4] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc01_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][ 5] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc11_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][ 6] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc21_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][ 7] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc31_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][ 8] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc02_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][ 9] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc12_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][10] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc22_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][11] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc32_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][12] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc03_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][13] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc13_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][14] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc23_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride); 
-    			}
-			}; 
-			avg_h264_qpel_pixels_tab[2][15] = new Ih264_qpel_mc_func() {
-    			public void h264_qpel_mc_func(int[] dst_base, int dst_offset,int[] src_base, int src_offset,int stride) {
-    				h264_qpel_mc33_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
-    			}
+			};
+			avg_h264_qpel_pixels_tab[0][2] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc20_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][3] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc30_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][4] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc01_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][5] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc11_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][6] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc21_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][7] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc31_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][8] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc02_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][9] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc12_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][10] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc22_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][11] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc32_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][12] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc03_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][13] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc13_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][14] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc23_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[0][15] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc33_c(1, 16, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+
+			avg_h264_qpel_pixels_tab[1][0] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				pixels_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride, 8);
+
+			};
+			avg_h264_qpel_pixels_tab[1][1] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc10_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][2] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc20_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][3] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc30_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][4] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc01_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][5] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc11_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][6] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc21_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][7] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc31_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][8] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc02_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][9] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc12_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][10] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc22_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][11] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc32_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][12] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc03_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][13] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc13_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][14] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc23_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[1][15] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc33_c(1, 8, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+
+			avg_h264_qpel_pixels_tab[2][0] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc00_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][1] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc10_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][2] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc20_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][3] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc30_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][4] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc01_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][5] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc11_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][6] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc21_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][7] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc31_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][8] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc02_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][9] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc12_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][10] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc22_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][11] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc32_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][12] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc03_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][13] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc13_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][14] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc23_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
+			};
+			avg_h264_qpel_pixels_tab[2][15] = (int[] dst_base, int dst_offset, int[] src_base, int src_offset, int stride) =>
+			{
+				h264_qpel_mc33_c(1, 4, dst_base, dst_offset, src_base, src_offset, stride);
+
 			}; 
 #endif
     	
-#if false
-			put_h264_chroma_pixels_tab[0]= new Ih264_chroma_mc_func() {
-        		public void h264_chroma_mc_func(
-    					int[] dst_base/*align 8*/, int dst_offset,
-    					int[] src_base/*align 1*/, int src_offset, 
-    					int srcStride, int h, int x, int y){
+#if true
+			put_h264_chroma_pixels_tab[0]= (int[] dst_base/*align 8*/, int dst_offset,int[] src_base/*align 1*/, int src_offset,  int srcStride, int h, int x, int y) => {
         			put_h264_chroma_mc8_c(dst_base, dst_offset, src_base, src_offset, srcStride, h, x, y);
-        		}
 			};
-			put_h264_chroma_pixels_tab[1]= new Ih264_chroma_mc_func() {
-        		public void h264_chroma_mc_func(
-    					int[] dst_base/*align 8*/, int dst_offset,
-    					int[] src_base/*align 1*/, int src_offset, 
-    					int srcStride, int h, int x, int y){
+			put_h264_chroma_pixels_tab[1]= (int[] dst_base/*align 8*/, int dst_offset, int[] src_base/*align 1*/, int src_offset,  int srcStride, int h, int x, int y) => {
         			put_h264_chroma_mc4_c(dst_base, dst_offset, src_base, src_offset, srcStride, h, x, y);
-        		}
 			};
-			put_h264_chroma_pixels_tab[2]= new Ih264_chroma_mc_func() {
-        		public void h264_chroma_mc_func(
-    					int[] dst_base/*align 8*/, int dst_offset,
-    					int[] src_base/*align 1*/, int src_offset, 
-    					int srcStride, int h, int x, int y){
+			put_h264_chroma_pixels_tab[2]= (int[] dst_base/*align 8*/, int dst_offset, int[] src_base/*align 1*/, int src_offset,  int srcStride, int h, int x, int y) => {
         			put_h264_chroma_mc2_c(dst_base, dst_offset, src_base, src_offset, srcStride, h, x, y);
-        		}
 			};
 #endif
 
 			///////////////////////////
 
-#if false
-			avg_h264_chroma_pixels_tab[0]= new Ih264_chroma_mc_func() {
-        		public void h264_chroma_mc_func(
-    					int[] dst_base/*align 8*/, int dst_offset,
-    					int[] src_base/*align 1*/, int src_offset, 
-    					int srcStride, int h, int x, int y){
+#if true
+			avg_h264_chroma_pixels_tab[0]= (int[] dst_base/*align 8*/, int dst_offset, int[] src_base/*align 1*/, int src_offset,  int srcStride, int h, int x, int y) => {
         			avg_h264_chroma_mc8_c(dst_base, dst_offset, src_base, src_offset, srcStride, h, x, y);
-        		}
 			};
-			avg_h264_chroma_pixels_tab[1]= new Ih264_chroma_mc_func() {
-        		public void h264_chroma_mc_func(
-    					int[] dst_base/*align 8*/, int dst_offset,
-    					int[] src_base/*align 1*/, int src_offset, 
-    					int srcStride, int h, int x, int y){
+			avg_h264_chroma_pixels_tab[1]= (int[] dst_base/*align 8*/, int dst_offset, int[] src_base/*align 1*/, int src_offset,  int srcStride, int h, int x, int y) => {
         			avg_h264_chroma_mc4_c(dst_base, dst_offset, src_base, src_offset, srcStride, h, x, y);
-        		}
 			};
-			avg_h264_chroma_pixels_tab[2]= new Ih264_chroma_mc_func() {
-        		public void h264_chroma_mc_func(
-    					int[] dst_base/*align 8*/, int dst_offset,
-    					int[] src_base/*align 1*/, int src_offset, 
-    					int srcStride, int h, int x, int y){
+			avg_h264_chroma_pixels_tab[2]= (int[] dst_base/*align 8*/, int dst_offset, int[] src_base/*align 1*/, int src_offset,  int srcStride, int h, int x, int y) => {
         			avg_h264_chroma_mc2_c(dst_base, dst_offset, src_base, src_offset, srcStride, h, x, y);
-        		}
 			};
 #endif
         
