@@ -94,6 +94,7 @@
     <Compile Include="h264\player\FrameUtils.cs" />
     <Compile Include="h264\player\H264Player.cs" />
     <Compile Include="h264\player\VideoPacket.cs" />
+    <Content Include="atrac\README.txt" />
     <Content Include="h264\README.txt" />
     <Compile Include="h264\util\Arrays.cs" />
     <Compile Include="h264\util\Buffer.cs" />
@@ -105,6 +106,8 @@
     <Compile Include="h264\util\HashUtil.cs" />
     <Compile Include="h264\util\IOUtils.cs" />
     <Compile Include="h264\util\PushbackInputStream.cs" />
+    <Content Include="mp3\README.txt" />
+    <Content Include="mpeg\README.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
