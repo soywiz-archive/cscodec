@@ -1,4 +1,4 @@
-namespace cscodec.h243.util
+namespace cscodec.h264.util
 {
 	#if false
 	public class CountingInputStream : InputStream {

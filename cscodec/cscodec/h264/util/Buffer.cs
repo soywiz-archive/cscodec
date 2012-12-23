@@ -1,6 +1,6 @@
 using System;
 
-namespace cscodec.h243.util
+namespace cscodec.h264.util
 {
 	public class Buffer
 	{

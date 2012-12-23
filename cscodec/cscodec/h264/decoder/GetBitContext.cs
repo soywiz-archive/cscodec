@@ -1,6 +1,6 @@
-using cscodec.h243.util;
+using cscodec.h264.util;
 using System;
-namespace cscodec.h243.decoder
+namespace cscodec.h264.decoder
 {
 	// This class is implemented using #ifdef ALT_BITSTREAM_READER and #ifdef ALT_BITSTREAM_READER_LE
 

@@ -6,7 +6,7 @@
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{351DCB00-EFCF-435A-9C72-9A7E1D5950B0}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>cscodec</RootNamespace>
     <AssemblyName>cscodec</AssemblyName>
@@ -31,9 +31,14 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>cscodec.h264.player.H264Player</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,6 +46,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="h264\player\PlayerFrame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -84,6 +90,9 @@
     <Compile Include="h264\decoder\VLCcode.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="h264\player\FrameUtils.cs" />
+    <Compile Include="h264\player\H264Player.cs" />
+    <Compile Include="h264\player\VideoPacket.cs" />
     <Content Include="h264\README.txt" />
     <Compile Include="h264\util\Arrays.cs" />
     <Compile Include="h264\util\Buffer.cs" />

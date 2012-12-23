@@ -1,5 +1,5 @@
 using System;
-namespace cscodec.h243.decoder
+namespace cscodec.h264.decoder
 {
 	public class H264DSPContext {
 	

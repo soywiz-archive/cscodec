@@ -1,5 +1,5 @@
 using System;
-namespace cscodec.h243.util
+namespace cscodec.h264.util
 {
 	public class Arrays
 	{
@@ -72,29 +72,16 @@ namespace cscodec.h243.util
 			return true;
 		}
 
-		public static void fill(int[] arr, int startIdxIncl, int endIdxExcl, int val)
+		public static void fill<T>(T[] arr, int startIdxIncl, int endIdxExcl, T val)
 		{
 			for (int i = startIdxIncl; i < endIdxExcl; i++)
 				arr[i] = val;
 		}
 
-		public static void fill(int[] arr, int val)
+		public static void fill<T>(T[] arr, T val)
 		{
 			for (int i = 0; i < arr.Length; i++)
 				arr[i] = val;
 		}
-
-		public static void fill(short[] arr, int startIdxIncl, int endIdxExcl, short val)
-		{
-			for (int i = startIdxIncl; i < endIdxExcl; i++)
-				arr[i] = val;
-		}
-
-		public static void fill(short[] arr, short val)
-		{
-			for (int i = 0; i < arr.Length; i++)
-				arr[i] = val;
-		}
-
 	}
 }
