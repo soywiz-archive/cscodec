@@ -2677,39 +2677,39 @@ namespace cscodec.h243.decoder
 			5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8
 		};
 
-		const int[,] significant_coeff_flag_offset = {
+		const int[][] significant_coeff_flag_offset = Arrays.ConvertDimensional(new int[,]{
 			  { 105+0, 105+15, 105+29, 105+44, 105+47, 402 },
 			  { 277+0, 277+15, 277+29, 277+44, 277+47, 436 }
-			};
-		const int[,] last_coeff_flag_offset = {
+			});
+		const int[][] last_coeff_flag_offset = Arrays.ConvertDimensional(new int[,]{
 		  { 166+0, 166+15, 166+29, 166+44, 166+47, 417 },
 		  { 338+0, 338+15, 338+29, 338+44, 338+47, 451 }
-		};
+		});
 		const int[] coeff_abs_level_m1_offset = {
 			227+0, 227+10, 227+20, 227+30, 227+39, 426
 		};
-		const short[][] significant_coeff_flag_offset_8x8 = {
-		  new short[] { 0, 1, 2, 3, 4, 5, 5, 4, 4, 3, 3, 4, 4, 4, 5, 5,
+		const short[][] significant_coeff_flag_offset_8x8 = Arrays.ConvertDimensional(new short[,]{
+		  { 0, 1, 2, 3, 4, 5, 5, 4, 4, 3, 3, 4, 4, 4, 5, 5,
 			4, 4, 4, 4, 3, 3, 6, 7, 7, 7, 8, 9,10, 9, 8, 7,
 			7, 6,11,12,13,11, 6, 7, 8, 9,14,10, 9, 8, 6,11,
 		   12,13,11, 6, 9,14,10, 9,11,12,13,11,14,10,12 },
-		  new short[] { 0, 1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 7, 7, 8, 4, 5,
+		  { 0, 1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 7, 7, 8, 4, 5,
 			6, 9,10,10, 8,11,12,11, 9, 9,10,10, 8,11,12,11,
 			9, 9,10,10, 8,11,12,11, 9, 9,10,10, 8,13,13, 9,
 			9,10,10, 8,13,13, 9, 9,10,10,14,14,14,14,14 }
-		};
+		});
 		/* node ctx: 0..3: abslevel1 (with abslevelgt1 == 0).
 		 * 4..7: abslevelgt1 + 3 (and abslevel1 doesn't matter).
 		 * map node ctx => cabac ctx for level=1 */
 		const short[] coeff_abs_level1_ctx = { 1, 2, 3, 4, 0, 0, 0, 0 };
 		/* map node ctx => cabac ctx for level>1 */
 		const short[] coeff_abs_levelgt1_ctx = { 5, 5, 5, 5, 6, 7, 8, 9 };
-		const short[][] coeff_abs_level_transition = {
+		const short[][] coeff_abs_level_transition = Arrays.ConvertDimensional(new short[,]{
 		/* update node ctx after decoding a level=1 */
-			new short[]{ 1, 2, 3, 3, 4, 5, 6, 7 },
+			{ 1, 2, 3, 3, 4, 5, 6, 7 },
 		/* update node ctx after decoding a level>1 */
-			new short[]{ 4, 4, 4, 4, 5, 6, 7, 7 }
-		};
+			{ 4, 4, 4, 4, 5, 6, 7, 7 }
+		});
 
 		public /* inline */ int get_dct8x8_allowed(){
 			if(0 != sps.direct_8x8_inference_flag) {
@@ -2735,16 +2735,13 @@ namespace cscodec.h243.decoder
 			int coeff_count = 0;
 			int node_ctx = 0;
 
-			int significant_coeff_ctx_base_offset;
-			int last_coeff_ctx_base_offset;
-			int abs_level_m1_ctx_base_offset;
+			int significant_coeff_ctx_base_offset = significant_coeff_flag_offset[mb_field_decoding_flag][cat];
+			int last_coeff_ctx_base_offset = last_coeff_flag_offset[mb_field_decoding_flag][cat];
+			int abs_level_m1_ctx_base_offset = coeff_abs_level_m1_offset[cat];
 
 			/*
 		#define CC &h->cabac
 	*/
-			significant_coeff_ctx_base_offset = significant_coeff_flag_offset[mb_field_decoding_flag][cat];
-			last_coeff_ctx_base_offset = last_coeff_flag_offset[mb_field_decoding_flag][cat];
-			abs_level_m1_ctx_base_offset = coeff_abs_level_m1_offset[cat];
 
 			if( is_dc == 0 && cat == 5 ) {
 	        
@@ -4453,8 +4450,8 @@ namespace cscodec.h243.decoder
 			// how often to recheck mv-based bS when iterating between edges
 			//static uint8_t mask_edge_tab[2][8]={{0,3,3,3,1,1,1,1},
 			//                                          {0,3,1,1,3,3,3,3}};
-			int[,] mask_edge_tab ={{0,3,3,3,1,1,1,1},
-													  {0,3,1,1,3,3,3,3}};
+			int[][] mask_edge_tab =Arrays.ConvertDimensional(new int[,]{{0,3,3,3,1,1,1,1},
+													  {0,3,1,1,3,3,3,3}});
 			int mask_edge = mask_edge_tab[dir,(mb_type>>3)&7];
 			int edges = ((mask_edge== 3 && (0==(this.cbp&15)) )? 1 : 4);
 

@@ -73,7 +73,7 @@ namespace cscodec.h243.decoder
 		 2, 3, 2, 0,
 		};
 
-		public const int[,] coeff_token_len={
+		public const int[][] coeff_token_len=Arrays.ConvertDimensional(new int[,]{
 	//		static const uint8_t coeff_token_len[4][4*17]={
 		{
 			 1, 0, 0, 0,
@@ -103,9 +103,9 @@ namespace cscodec.h243.decoder
 			 6, 6, 6, 6,     6, 6, 6, 6,     6, 6, 6, 6,     6, 6, 6, 6,
 			 6, 6, 6, 6,     6, 6, 6, 6,     6, 6, 6, 6,     6, 6, 6, 6,
 		}
-		};
+		});
 
-		public const int[,] coeff_token_bits={
+		public const int[][] coeff_token_bits=Arrays.ConvertDimensional(new int[,]{
 	//		static const uint8_t coeff_token_bits[4][4*17]={
 		{
 			 1, 0, 0, 0,
@@ -135,9 +135,9 @@ namespace cscodec.h243.decoder
 			32,33,34,35,    36,37,38,39,    40,41,42,43,    44,45,46,47,
 			48,49,50,51,    52,53,54,55,    56,57,58,59,    60,61,62,63,
 		}
-		};
+		});
 
-		public const int[,] total_zeros_len= {
+		public const int[][] total_zeros_len= Arrays.ConvertDimensional(new int[,]{
 	//		static const uint8_t total_zeros_len[16][16]= {
 			{1,3,3,4,4,5,5,6,6,7,7,8,8,9,9,9},
 			{3,3,3,3,3,4,4,4,4,5,5,6,6,6,6,0},
@@ -154,9 +154,9 @@ namespace cscodec.h243.decoder
 			{3,3,1,2,0,0,0,0,0,0,0,0,0,0,0,0},
 			{2,2,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
 			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		};
+		});
 
-		public const int[,] total_zeros_bits= {
+		public const int[][] total_zeros_bits= Arrays.ConvertDimensional(new int[,]{
 	//		static const uint8_t total_zeros_bits[16][16]= {
 			{1,3,2,3,2,3,2,3,2,3,2,3,2,3,2,1},
 			{7,6,5,4,3,5,4,3,2,3,2,3,2,1,0,0},
@@ -173,23 +173,23 @@ namespace cscodec.h243.decoder
 			{0,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0},
 			{0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0},
 			{0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-		};
+		});
 
-		public const int[,] chroma_dc_total_zeros_len= {
+		public const int[][] chroma_dc_total_zeros_len= Arrays.ConvertDimensional(new int[,]{
 	//		static uint8_t chroma_dc_total_zeros_len[3][4]= {
 			{ 1, 2, 3, 3,},
 			{ 1, 2, 2, 0,},
 			{ 1, 1, 0, 0,},
-		};
+		});
 
-		public const int[,] chroma_dc_total_zeros_bits= {
+		public const int[][] chroma_dc_total_zeros_bits= Arrays.ConvertDimensional(new int[,]{
 	//		static uint8_t chroma_dc_total_zeros_bits[3][4]= {
 			{ 1, 1, 1, 0,},
 			{ 1, 1, 0, 0,},
 			{ 1, 0, 0, 0,},
-		};
+		});
 
-		public const int[,] run_len={
+		public const int[][] run_len=Arrays.ConvertDimensional(new int[,]{
 	//		static uint8_t run_len[7][16]={
 			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 			{1,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -198,9 +198,9 @@ namespace cscodec.h243.decoder
 			{2,2,3,3,3,3,0,0,0,0,0,0,0,0,0,0},
 			{2,3,3,3,3,3,3,0,0,0,0,0,0,0,0,0},
 			{3,3,3,3,3,3,3,4,5,6,7,8,9,10,11,0},
-		};
+		});
 
-		public const int[,] run_bits= new int[,]{
+		public const int[][] run_bits= Arrays.ConvertDimensional(new int[,]{
 	//		static uint8_t run_bits[7][16]={
 			{1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 			{1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
@@ -209,7 +209,7 @@ namespace cscodec.h243.decoder
 			{3,2,3,2,1,0,0,0,0,0,0,0,0,0,0,0},
 			{3,0,1,3,2,5,4,0,0,0,0,0,0,0,0,0},
 			{7,6,5,4,3,2,1,1,1,1,1,1,1,1,1,0},
-		};
+		});
 
 		//#define VLC_TYPE int16_t
 	
@@ -891,7 +891,7 @@ namespace cscodec.h243.decoder
 				int i, j;
 				int[] sub_partition_count = new int[4];
 				int list;
-				int[,] @ref = new int[2, 4];
+				int[][] @ref = Arrays.Create2D<int>(2, 4);
 
 				if(h.slice_type_nos == H264Context.FF_B_TYPE){
 					for(i=0; i<4; i++){
@@ -940,10 +940,10 @@ namespace cscodec.h243.decoder
 									return -1;
 								}
 							}
-							@ref[list,i]= tmp;
+							@ref[list][i]= tmp;
 						}else{
 						 //FIXME
-							@ref[list,i] = -1;
+							@ref[list][i] = -1;
 						}
 					}
 				}
@@ -958,7 +958,7 @@ namespace cscodec.h243.decoder
 							continue;
 						}
 						h.ref_cache[list][H264Context.scan8[4 * i]] = h.ref_cache[list][H264Context.scan8[4 * i] + 1] =
-						h.ref_cache[list][H264Context.scan8[4 * i] + 8] = h.ref_cache[list][H264Context.scan8[4 * i] + 9] = @ref[list, i];
+						h.ref_cache[list][H264Context.scan8[4 * i] + 8] = h.ref_cache[list][H264Context.scan8[4 * i] + 9] = @ref[list][i];
 
 						if(((h.sub_mb_type[i]) & (H264Context.MB_TYPE_P0L0<<((0)+2*(list)))) != 0 ) {//IS_DIR(h.sub_mb_type[i], 0, list)){
 							int sub_mb_type= h.sub_mb_type[i];

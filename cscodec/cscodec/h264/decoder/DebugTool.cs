@@ -50,13 +50,13 @@ namespace cscodec.h243.decoder
 			
 				Console.Write("ctx.mv_cache[0]: ");
 				for(int i=0;i<40;i++) {
-					Console.Write(","+h.mv_cache[0,i,0]+","+h.mv_cache[0,i,1]);
+					Console.Write("," + h.mv_cache[0][i][0] + "," + h.mv_cache[0][i][1]);
 				} // for
 				Console.WriteLine();
 
 				Console.Write("ctx.mv_cache[1]: ");
 				for(int i=0;i<40;i++) {
-					Console.Write(","+h.mv_cache[1,i,0]+","+h.mv_cache[1,i,1]);
+					Console.Write(","+h.mv_cache[1][i][0]+","+h.mv_cache[1][i][1]);
 				} // for
 				Console.WriteLine();
 
@@ -88,13 +88,13 @@ namespace cscodec.h243.decoder
 			
 				Console.Write("ctx.ref_cache[0]: ");
 				for(int i=0;i<40;i++) {
-					Console.Write(","+h.ref_cache[0,i]+","+h.ref_cache[0,i]);
+					Console.Write(","+h.ref_cache[0][i]+","+h.ref_cache[0][i]);
 				} // for
 				Console.WriteLine();
 			
 				Console.Write("ctx.ref_cache[1]: ");
 				for(int i=0;i<40;i++) {
-					Console.Write(","+h.ref_cache[1,i]+","+h.ref_cache[1,i]);
+					Console.Write(","+h.ref_cache[1][i]+","+h.ref_cache[1][i]);
 				} // for
 				Console.WriteLine();
 

@@ -1,3 +1,4 @@
+using cscodec.h243.util;
 namespace cscodec.h243.decoder
 {
 	public class H264Data
@@ -136,26 +137,26 @@ namespace cscodec.h243.decoder
 		new IMbInfo(H264Context.MB_TYPE_INTRA_PCM , -1, -1),
 		};
 
-		public const short[,] dequant4_coeff_init = {
+		public const short[][] dequant4_coeff_init = Arrays.ConvertDimensional(new short[,]{
 		  {10,13,16},
 		  {11,14,18},
 		  {13,16,20},
 		  {14,18,23},
 		  {16,20,25},
 		  {18,23,29},
-		};
+		});
 
 		public const short[] dequant8_coeff_init_scan = {
 		  0,3,4,3, 3,1,5,1, 4,5,2,5, 3,1,5,1
 		};
-		public const short[][] dequant8_coeff_init = {
-		  new short[]{20,18,32,19,25,24},
-		  new short[]{22,19,35,21,28,26},
-		  new short[]{26,23,42,24,33,31},
-		  new short[]{28,25,45,26,35,33},
-		  new short[]{32,28,51,30,40,38},
-		  new short[]{36,32,58,34,46,43},
-		};
+		public const short[][] dequant8_coeff_init = Arrays.ConvertDimensional(new short[,]{
+		  {20,18,32,19,25,24},
+		  {22,19,35,21,28,26},
+		  {26,23,42,24,33,31},
+		  {28,25,45,26,35,33},
+		  {32,28,51,30,40,38},
+		  {36,32,58,34,46,43},
+		});
 
 		public static PMbInfo[] p_mb_type_info = {
 			new PMbInfo(H264Context.MB_TYPE_16x16|H264Context.MB_TYPE_P0L0             , 1),

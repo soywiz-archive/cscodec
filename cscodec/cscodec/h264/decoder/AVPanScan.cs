@@ -1,3 +1,4 @@
+using cscodec.h243.util;
 namespace cscodec.h243.decoder
 {
 	public class AVPanScan {
@@ -21,6 +22,6 @@ namespace cscodec.h243.decoder
 		 * - encoding: Set by user.
 		 * - decoding: Set by libavcodec.
 		 */
-		public int[,] position = new int[3, 2];
+		public int[][] position = Arrays.Create2D<int>(3, 2);
 	}
 }

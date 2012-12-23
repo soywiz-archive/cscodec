@@ -1,4 +1,5 @@
-﻿namespace cscodec.h243.decoder
+﻿using cscodec.h243.util;
+namespace cscodec.h243.decoder
 {
 	public class CABACContext
 	{
@@ -16,7 +17,7 @@
 		public int bytestream_end;
 		public PutBitContext pb;
 
-		public static readonly short[,] lps_range = {
+		public static readonly short[][] lps_range = Arrays.ConvertDimensional(new short[,]{
     	{128,176,208,240}, {128,167,197,227}, {128,158,187,216}, {123,150,178,205},
     	{116,142,169,195}, {111,135,160,185}, {105,128,152,175}, {100,122,144,166},
     	{ 95,116,137,158}, { 90,110,130,150}, { 85,104,123,142}, { 81, 99,117,135},
@@ -33,7 +34,7 @@
     	{ 10, 12, 14, 16}, {  9, 11, 13, 15}, {  9, 11, 12, 14}, {  8, 10, 12, 14},
     	{  8,  9, 11, 13}, {  7,  9, 11, 12}, {  7,  9, 10, 12}, {  7,  8, 10, 11},
     	{  6,  8,  9, 11}, {  6,  7,  9, 10}, {  6,  7,  8,  9}, {  2,  2,  2,  2},
-    	};
+    	});
 
     public short[] ff_h264_mlps_state = new short[4*64];
     public short[] ff_h264_lps_range = new short[4*2*64];
@@ -85,7 +86,7 @@
     	 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     	};
     
-	public static readonly sbyte[,] cabac_context_init_I =
+	public static readonly sbyte[][] cabac_context_init_I = Arrays.ConvertDimensional(new sbyte[,]
 	{
 	    /* 0 - 10 */
 	    { 20, -15 }, {  2, 54 },  {  3,  74 }, { 20, -15 },
@@ -252,12 +253,12 @@
 	    {  -9,  64 }, {  -5,  58 }, {   2,  59 }, {  21, -10 },
 	    {  24, -11 }, {  28,  -8 }, {  28,  -1 }, {  29,   3 },
 	    {  29,   9 }, {  35,  20 }, {  29,  36 }, {  14,  67 }
-	};
+	});
 
-	public static readonly sbyte[][,] cabac_context_init_PB =
+	public static readonly sbyte[][][] cabac_context_init_PB =
 	{
 	    /* i_cabac_init_idc == 0 */
-	    new sbyte[,] {
+	    Arrays.ConvertDimensional(new sbyte[,] {
 	        /* 0 - 10 */
 	        {  20, -15 }, {   2,  54 }, {   3,  74 }, {  20, -15 },
 	        {   2,  54 }, {   3,  74 }, { -28, 127 }, { -23, 104 },
@@ -410,10 +411,10 @@
 	        { -14,  66 }, {   0,  59 }, {   2,  59 }, {  21, -13 },
 	        {  33, -14 }, {  39,  -7 }, {  46,  -2 }, {  51,   2 },
 	        {  60,   6 }, {  61,  17 }, {  55,  34 }, {  42,  62 },
-	    },
+	    }),
 
 	    /* i_cabac_init_idc == 1 */
-	    new sbyte[,] {
+	    Arrays.ConvertDimensional(new sbyte[,] {
 	        /* 0 - 10 */
 	        {  20, -15 }, {   2,  54 }, {   3,  74 }, {  20, -15 },
 	        {   2,  54 }, {   3,  74 }, { -28, 127 }, { -23, 104 },
@@ -566,10 +567,10 @@
 	        {  -9,  60 }, {   1,  54 }, {   2,  58 }, {  17, -10 },
 	        {  32, -13 }, {  42,  -9 }, {  49,  -5 }, {  53,   0 },
 	        {  64,   3 }, {  68,  10 }, {  66,  27 }, {  47,  57 },
-	    },
+	    }),
 
 	    /* i_cabac_init_idc == 2 */
-	    new sbyte[,] {
+	    Arrays.ConvertDimensional(new sbyte[,] {
 	        /* 0 - 10 */
 	        {  20, -15 }, {   2,  54 }, {   3,  74 }, {  20, -15 },
 	        {   2,  54 }, {   3,  74 }, { -28, 127 }, { -23, 104 },
@@ -722,7 +723,7 @@
 	        { -14,  59 }, {  -9,  52 }, { -11,  68 }, {   9,  -2 },
 	        {  30, -10 }, {  31,  -4 }, {  33,  -1 }, {  33,   7 },
 	        {  31,  12 }, {  37,  23 }, {  31,  38 }, {  20,  64 },
-	    }
+	    })
 	};
 
 		/**
@@ -758,7 +759,7 @@
 				for (j = 0; j < 4; j++)
 				{ //FIXME check if this is worth the 1 shift we save
 					ff_h264_lps_range[j * 2 * 64 + 2 * i + 0] =
-					ff_h264_lps_range[j * 2 * 64 + 2 * i + 1] = lps_range[i, j];
+					ff_h264_lps_range[j * 2 * 64 + 2 * i + 1] = lps_range[i][j];
 				}
 
 				ff_h264_mlps_state[128 + 2 * i + 0] =
@@ -1240,7 +1241,7 @@
 			/* calculate pre-state */
 			for (int i = 0; i < 460; i++)
 			{
-				int pre = 2 * (((tab[i, 0] * h.s.qscale) >> 4) + tab[i, 1]) - 127;
+				int pre = 2 * (((tab[i][0] * h.s.qscale) >> 4) + tab[i][1]) - 127;
 				pre ^= pre >> 31;
 				if (pre > 124)
 					pre = 124 + (pre & 1);
