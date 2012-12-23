@@ -2376,9 +2376,9 @@ namespace cscodec.h264.decoder
 
 		//	static inline void backup_mb_border(H264Context *h, uint8_t *src_y, uint8_t *src_cb, uint8_t *src_cr, int linesize, int uvlinesize, int simple){
 		public /*inline*/ void backup_mb_border(
-				int[] src_y_base, int src_y_offset,
-				int[] src_cb_base, int src_cb_offset,
-				int[] src_cr_base, int src_cr_offset,
+				byte[] src_y_base, int src_y_offset,
+				byte[] src_cb_base, int src_cb_offset,
+				byte[] src_cr_base, int src_cr_offset,
 				int linesize, int uvlinesize, int simple)
 		{
 			//uint8_t *top_border;
@@ -2434,9 +2434,9 @@ namespace cscodec.h264.decoder
 
 		//public /*inline*/ void xchg_mb_border(uint8_t *src_y, uint8_t *src_cb, uint8_t *src_cr, int linesize, int uvlinesize, int xchg, int simple){
 		public /*inline*/ void xchg_mb_border(
-				int[] src_y_base, int src_y_offset,
-				int[] src_cb_base, int src_cb_offset,
-				int[] src_cr_base, int src_cr_offset,
+				byte[] src_y_base, int src_y_offset,
+				byte[] src_cb_base, int src_cb_offset,
+				byte[] src_cr_base, int src_cr_offset,
 				int linesize, int uvlinesize, int xchg, int simple)
 		{
 			int deblock_left;
@@ -2498,7 +2498,7 @@ namespace cscodec.h264.decoder
 					{
 						tmp = top_border_m1_base[top_border_m1_offset + 8 + i];
 						top_border_m1_base[top_border_m1_offset + 8 + i] = src_y_base[src_y_offset - 7 + i];
-						src_y_base[src_y_offset - 7 + i] = tmp;
+						src_y_base[src_y_offset - 7 + i] = (byte)tmp;
 					} // for i
 				}
 
@@ -2508,7 +2508,7 @@ namespace cscodec.h264.decoder
 					{
 						tmp = top_border_base[top_border_offset + 0 + i];
 						top_border_base[top_border_offset + 0 + i] = src_y_base[src_y_offset + 1 + i];
-						src_y_base[src_y_offset + 1 + i] = tmp;
+						src_y_base[src_y_offset + 1 + i] = (byte)tmp;
 					} // for i	        	
 				}
 				else
@@ -2523,7 +2523,7 @@ namespace cscodec.h264.decoder
 				{
 					tmp = top_border_base[top_border_offset + 8 + i];
 					top_border_base[top_border_offset + 8 + i] = src_y_base[src_y_offset + 9 + i];
-					src_y_base[src_y_offset + 9 + i] = tmp;
+					src_y_base[src_y_offset + 9 + i] = (byte)tmp;
 				} // for i
 
 				if (s.mb_x + 1 < s.mb_width)
@@ -2533,7 +2533,7 @@ namespace cscodec.h264.decoder
 					{
 						tmp = this.top_borders[top_idx][s.mb_x + 1][i];
 						this.top_borders[top_idx][s.mb_x + 1][i] = src_y_base[src_y_offset + 17 + i];
-						src_y_base[src_y_offset + 17 + i] = tmp;
+						src_y_base[src_y_offset + 17 + i] = (byte)tmp;
 					} // for i	        	
 					//XCHG(this.top_borders[top_idx][s.mb_x+1], src_y +17, 1);
 				}
@@ -2547,24 +2547,24 @@ namespace cscodec.h264.decoder
 					for (int i = 0; i < 8; i++)
 					{
 						tmp = top_border_m1_base[top_border_m1_offset + 16 + i];
-						top_border_m1_base[top_border_m1_offset + 16 + i] = src_cb_base[src_cb_offset + 1 + i];
-						src_cb_base[src_cb_offset + 1 + i] = tmp;
+						top_border_m1_base[top_border_m1_offset + 16 + i] = (sbyte)src_cb_base[src_cb_offset + 1 + i];
+						src_cb_base[src_cb_offset + 1 + i] = (byte)tmp;
 
 						tmp = top_border_m1_base[top_border_m1_offset + 24 + i];
-						top_border_m1_base[top_border_m1_offset + 24 + i] = src_cr_base[src_cr_offset + 1 + i];
-						src_cr_base[src_cr_offset + 1 + i] = tmp;
+						top_border_m1_base[top_border_m1_offset + 24 + i] = (sbyte)src_cr_base[src_cr_offset + 1 + i];
+						src_cr_base[src_cr_offset + 1 + i] = (byte)tmp;
 					} // for i		        	
 				}
 
 				for (int i = 0; i < 8; i++)
 				{
 					tmp = top_border_base[top_border_offset + 16 + i];
-					top_border_base[top_border_offset + 16 + i] = src_cb_base[src_cb_offset + 1 + i];
-					src_cb_base[src_cb_offset + 1 + i] = tmp;
+					top_border_base[top_border_offset + 16 + i] = (sbyte)src_cb_base[src_cb_offset + 1 + i];
+					src_cb_base[src_cb_offset + 1 + i] = (byte)tmp;
 
 					tmp = top_border_base[top_border_offset + 24 + i];
-					top_border_base[top_border_offset + 24 + i] = src_cr_base[src_cr_offset + 1 + i];
-					src_cr_base[src_cr_offset + 1 + i] = tmp;
+					top_border_base[top_border_offset + 24 + i] = (sbyte)src_cr_base[src_cr_offset + 1 + i];
+					src_cr_base[src_cr_offset + 1 + i] = (byte)tmp;
 				} // for i
 			}
 			//}
@@ -2577,7 +2577,7 @@ namespace cscodec.h264.decoder
 			int mb_xy = this.mb_xy;
 			int mb_type = (int)s.current_picture.mb_type_base[s.current_picture.mb_type_offset + mb_xy];
 			//uint8_t  *dest_y, *dest_cb, *dest_cr;
-			int[] dest_y_base, dest_cb_base, dest_cr_base;
+			byte[] dest_y_base, dest_cb_base, dest_cr_base;
 			int dest_y_offset, dest_cb_offset, dest_cr_offset;
 			int linesize, uvlinesize /*dct_offset*/;
 			int i;
@@ -2663,8 +2663,8 @@ namespace cscodec.h264.decoder
 					for (int j = 0; j < 8; j++)
 					{
 						short val = this.mb[i * 8];
-						dest_y_base[dest_y_offset + i * linesize + j * 2] = val & 0x0ff;
-						dest_y_base[dest_y_offset + i * linesize + j * 2 + 1] = (val & 0x0ff00) >> 8;
+						dest_y_base[dest_y_offset + i * linesize + j * 2] = (byte)(val & 0x0ff);
+						dest_y_base[dest_y_offset + i * linesize + j * 2 + 1] = (byte)((val & 0x0ff00) >> 8);
 					} // for j
 				}
 				for (i = 0; i < 8; i++)
@@ -2674,12 +2674,12 @@ namespace cscodec.h264.decoder
 					// Copy 4 int_16t into 8 uint_8t
 					for (int j = 0; j < 4; j++)
 					{
-						short val1 = this.mb[128 + i * 4];
-						short val2 = this.mb[160 + i * 4];
-						dest_cb_base[dest_cb_offset + i * uvlinesize + j * 2] = val1 & 0x0ff;
-						dest_cb_base[dest_cb_offset + i * uvlinesize + j * 2 + 1] = (val1 & 0x0ff00) >> 8;
-						dest_cr_base[dest_cr_offset + i * uvlinesize + j * 2] = val2 & 0x0ff;
-						dest_cr_base[dest_cr_offset + i * uvlinesize + j * 2 + 1] = (val2 & 0x0ff00) >> 8;
+						short val1 = (short)this.mb[128 + i * 4];
+						short val2 = (short)this.mb[160 + i * 4];
+						dest_cb_base[dest_cb_offset + i * uvlinesize + j * 2] = (byte)(val1 & 0x0ff);
+						dest_cb_base[dest_cb_offset + i * uvlinesize + j * 2 + 1] = (byte)((val1 & 0x0ff00) >> 8);
+						dest_cr_base[dest_cr_offset + i * uvlinesize + j * 2] = (byte)(val2 & 0x0ff);
+						dest_cr_base[dest_cr_offset + i * uvlinesize + j * 2 + 1] = (byte)((val2 & 0x0ff00) >> 8);
 					} // for j
 				}
 			}
@@ -2688,7 +2688,9 @@ namespace cscodec.h264.decoder
 				if (0 != (mb_type & 7))
 				{
 					if (0 != this.deblocking_filter)
+					{
 						xchg_mb_border(dest_y_base, dest_y_offset, dest_cb_base, dest_cb_offset, dest_cr_base, dest_cr_offset, linesize, uvlinesize, 1, simple);
+					}
 
 					//if(0!=simple || 0==MpegEncContext.CONFIG_GRAY || 0==(s.flags & MpegEncContext.CODEC_FLAG_GRAY)){
 					this.hpc.pred8x8[this.chroma_pred_mode](dest_cb_base, dest_cb_offset, uvlinesize);
@@ -2713,7 +2715,7 @@ namespace cscodec.h264.decoder
 								for (i = 0; i < 16; i += 4)
 								{
 									//uint8_t * ptr= dest_y + block_offset[i];
-									int[] ptr_base = dest_y_base;
+									byte[] ptr_base = dest_y_base;
 									int ptr_offset = dest_y_offset + block_offset_base[block_offset_offset + i];
 									int dir = this.intra4x4_pred_mode_cache[scan8[i]];
 									if (transform_bypass && this.sps.profile_idc == 244 && dir <= 1)
@@ -2759,7 +2761,7 @@ namespace cscodec.h264.decoder
 								for (i = 0; i < 16; i++)
 								{
 									//uint8_t * ptr= dest_y + block_offset_base[block_offset_offset + i];
-									int[] ptr_base = dest_y_base;
+									byte[] ptr_base = dest_y_base;
 									int ptr_offset = dest_y_offset + block_offset_base[block_offset_offset + i];
 									int dir = this.intra4x4_pred_mode_cache[scan8[i]];
 
@@ -2770,9 +2772,10 @@ namespace cscodec.h264.decoder
 									else
 									{
 										//uint8_t *topright;
-										int[] topright_base = null;
+										byte[] topright_base = null;
 										int topright_offset = 0;
-										int nnz, tr;
+										int nnz;
+										byte tr;
 										if (dir == H264PredictionContext.DIAG_DOWN_LEFT_PRED || dir == H264PredictionContext.VERT_LEFT_PRED)
 										{
 											int topright_avail = ((int)this.topright_samples_available << i) & 0x08000;
@@ -2781,7 +2784,7 @@ namespace cscodec.h264.decoder
 											{
 												tr = ptr_base[ptr_offset + 3 - linesize];//*0x01010101;
 												//topright= (uint8_t*) &tr;
-												topright_base = new int[] { tr, tr, tr, tr };
+												topright_base = new byte[] { tr, tr, tr, tr };
 												topright_offset = 0;
 											}
 											else
@@ -2933,7 +2936,7 @@ namespace cscodec.h264.decoder
 						0 != (this.cbp & 0x030))
 				{
 					//uint8_t *dest[2] = {dest_cb, dest_cr};
-					int[][] dest_base = { dest_cb_base, dest_cr_base };
+					byte[][] dest_base = { dest_cb_base, dest_cr_base };
 					int[] dest_offset = { dest_cb_offset, dest_cr_offset };
 					if (transform_bypass)
 					{
@@ -4578,19 +4581,17 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 			else return a;
 		}
 
-		private static int av_clip_uint8(int a)
+		private static byte av_clip_uint8(int a)
 		{
-			if ((a & (~0x000000FF)) != 0) return (-a) >> 31;
-			else return a;
+			if ((a & (~0x000000FF)) != 0) return (byte)((-a) >> 31);
+			else return (byte)a;
 		}
 
 		public void filter_mb_edgev(
-			//uint8_t *pix,
-				int[] pix_base,
+				byte[] pix_base,
 				int pix_offset,
 				int stride,
-			//int16_t bS[4],
-				int[] bS_base,
+				short[] bS_base,
 				int bS_offset,
 				int qp)
 		{
@@ -4620,15 +4621,13 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		}
 
 		public void filter_mb_edgecv(
-			//uint8_t *pix,
-				int[] pix_base,
-				int pix_offset,
-				int stride,
-			//int16_t bS[4],
-				int[] bS_base,
-				int bS_offset,
-				int qp)
-		{
+			byte[] pix_base,
+			int pix_offset,
+			int stride,
+			short[] bS_base,
+			int bS_offset,
+			int qp
+		) {
 			//        public void filter_mb_edgecv( uint8_t *pix, int stride, int16_t bS[4], unsigned int qp, H264Context *h ) {
 			int index_a = qp + this.slice_alpha_c0_offset;
 			int alpha = LoopFilter.alpha_table[index_a];
@@ -4652,12 +4651,10 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		}
 
 		public void filter_mb_edgeh(
-			//uint8_t *pix,
-				int[] pix_base,
+				byte[] pix_base,
 				int pix_offset,
 				int stride,
-			//int16_t bS[4],
-				int[] bS_base,
+				short[] bS_base,
 				int bS_offset,
 				int qp)
 		{
@@ -4687,12 +4684,10 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		}
 
 		public void filter_mb_edgech(
-			//uint8_t *pix,
-				int[] pix_base,
+				byte[] pix_base,
 				int pix_offset,
 				int stride,
-			//int16_t bS[4],
-				int[] bS_base,
+				short[] bS_base,
 				int bS_offset,
 				int qp)
 		{
@@ -4719,9 +4714,9 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		}
 
 		public void ff_h264_filter_mb_fast(int mb_x, int mb_y,
-				int[] img_y_base, int img_y_offset,
-				int[] img_cb_base, int img_cb_offset,
-				int[] img_cr_base, int img_cr_offset,
+				byte[] img_y_base, int img_y_offset,
+				byte[] img_cb_base, int img_cb_offset,
+				byte[] img_cr_base, int img_cr_offset,
 				int linesize, int uvlinesize)
 		{
 			//int mb_xy;
@@ -4962,14 +4957,12 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		}
 
 		public void filter_mb_mbaff_edgev(
-			//uint8_t *pix,
-				int[] pix_base,
-				int pix_offset,
-				int stride,
-			//int16_t bS[4],
-				int[] bS_base,
-				int bS_offset,
-				int bsi, int qp)
+			byte[] pix_base,
+			int pix_offset,
+			int stride,
+			short[] bS_base,
+			int bS_offset,
+			int bsi, int qp)
 		{
 			int i;
 			int index_a = qp + this.slice_alpha_c0_offset;
@@ -5004,19 +4997,19 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 						if (Math.Abs(p2 - p0) < beta)
 						{
 							if (tc0 != 0)
-								pix_base[pix_offset + -2] = p1 + av_clip((p2 + ((p0 + q0 + 1) >> 1) - (p1 << 1)) >> 1, -tc0, tc0);
+								pix_base[pix_offset + -2] = (byte)(p1 + av_clip((p2 + ((p0 + q0 + 1) >> 1) - (p1 << 1)) >> 1, -tc0, tc0));
 							tc++;
 						}
 						if (Math.Abs(q2 - q0) < beta)
 						{
 							if (tc0 != 0)
-								pix_base[pix_offset + 1] = q1 + av_clip((q2 + ((p0 + q0 + 1) >> 1) - (q1 << 1)) >> 1, -tc0, tc0);
+								pix_base[pix_offset + 1] = (byte)(q1 + av_clip((q2 + ((p0 + q0 + 1) >> 1) - (q1 << 1)) >> 1, -tc0, tc0));
 							tc++;
 						}
 
 						i_delta = av_clip((((q0 - p0) << 2) + (p1 - q1) + 4) >> 3, -tc, tc);
-						pix_base[pix_offset + -1] = av_clip_uint8(p0 + i_delta);    /* p0' */
-						pix_base[pix_offset + 0] = av_clip_uint8(q0 - i_delta);    /* q0' */
+						pix_base[pix_offset + -1] = (byte)av_clip_uint8(p0 + i_delta);    /* p0' */
+						pix_base[pix_offset + 0] = (byte)av_clip_uint8(q0 - i_delta);    /* q0' */
 						//tprintf(this.s.avctx, "filter_mb_mbaff_edgev i:%d, qp:%d, indexA:%d, alpha:%d, beta:%d, tc:%d\n# bS:%d -> [%02x, %02x, %02x, %02x, %02x, %02x] =>[%02x, %02x, %02x, %02x]\n", i, qp[qp_index], index_a, alpha, beta, tc, bS_base[bS_offset + bS_index], pix_base[pix_offset + -3], p1, p0, q0, q1, pix_base[pix_offset + 2], p1, pix_base[pix_offset + -1], pix_base[pix_offset + 0], q1);
 					}
 				}
@@ -5041,34 +5034,34 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 							{
 								int p3 = pix_base[pix_offset + -4];
 								/* p0', p1', p2' */
-								pix_base[pix_offset + -1] = (p2 + 2 * p1 + 2 * p0 + 2 * q0 + q1 + 4) >> 3;
-								pix_base[pix_offset + -2] = (p2 + p1 + p0 + q0 + 2) >> 2;
-								pix_base[pix_offset + -3] = (2 * p3 + 3 * p2 + p1 + p0 + q0 + 4) >> 3;
+								pix_base[pix_offset + -1] = (byte)((p2 + 2 * p1 + 2 * p0 + 2 * q0 + q1 + 4) >> 3);
+								pix_base[pix_offset + -2] = (byte)((p2 + p1 + p0 + q0 + 2) >> 2);
+								pix_base[pix_offset + -3] = (byte)((2 * p3 + 3 * p2 + p1 + p0 + q0 + 4) >> 3);
 							}
 							else
 							{
 								/* p0' */
-								pix_base[pix_offset + -1] = (2 * p1 + p0 + q1 + 2) >> 2;
+								pix_base[pix_offset + -1] = (byte)((2 * p1 + p0 + q1 + 2) >> 2);
 							}
 							if (Math.Abs(q2 - q0) < beta)
 							{
 								int q3 = pix_base[pix_offset + 3];
 								/* q0', q1', q2' */
-								pix_base[pix_offset + 0] = (p1 + 2 * p0 + 2 * q0 + 2 * q1 + q2 + 4) >> 3;
-								pix_base[pix_offset + 1] = (p0 + q0 + q1 + q2 + 2) >> 2;
-								pix_base[pix_offset + 2] = (2 * q3 + 3 * q2 + q1 + q0 + p0 + 4) >> 3;
+								pix_base[pix_offset + 0] = (byte)((p1 + 2 * p0 + 2 * q0 + 2 * q1 + q2 + 4) >> 3);
+								pix_base[pix_offset + 1] = (byte)((p0 + q0 + q1 + q2 + 2) >> 2);
+								pix_base[pix_offset + 2] = (byte)((2 * q3 + 3 * q2 + q1 + q0 + p0 + 4) >> 3);
 							}
 							else
 							{
 								/* q0' */
-								pix_base[pix_offset + 0] = (2 * q1 + q0 + p1 + 2) >> 2;
+								pix_base[pix_offset + 0] = (byte)((2 * q1 + q0 + p1 + 2) >> 2);
 							}
 						}
 						else
 						{
 							/* p0', q0' */
-							pix_base[pix_offset + -1] = (2 * p1 + p0 + q1 + 2) >> 2;
-							pix_base[pix_offset + 0] = (2 * q1 + q0 + p1 + 2) >> 2;
+							pix_base[pix_offset + -1] = (byte)((2 * p1 + p0 + q1 + 2) >> 2);
+							pix_base[pix_offset + 0] = (byte)((2 * q1 + q0 + p1 + 2) >> 2);
 						}
 						//tprintf(this.s.avctx, "filter_mb_mbaff_edgev i:%d, qp:%d, indexA:%d, alpha:%d, beta:%d\n# bS:4 -> [%02x, %02x, %02x, %02x, %02x, %02x] =>[%02x, %02x, %02x, %02x, %02x, %02x]\n", i, qp[qp_index], index_a, alpha, beta, p2, p1, p0, q0, q1, q2, pix_base[pix_offset + -3], pix_base[pix_offset + -2], pix_base[pix_offset + -1], pix_base[pix_offset + 0], pix_base[pix_offset + 1], pix_base[pix_offset + 2]);
 					}
@@ -5076,12 +5069,10 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 			}
 		}
 		public void filter_mb_mbaff_edgecv(
-			//uint8_t *pix,
-				int[] pix_base,
+				byte[] pix_base,
 				int pix_offset,
 				int stride,
-			//int16_t bS[4],
-				int[] bS_base,
+				short[] bS_base,
 				int bS_offset,
 				int bsi, int qp)
 		{
@@ -5129,8 +5120,8 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 						Math.Abs(q1 - q0) < beta)
 					{
 
-						pix_base[pix_offset + -1] = (2 * p1 + p0 + q1 + 2) >> 2;   /* p0' */
-						pix_base[pix_offset + 0] = (2 * q1 + q0 + p1 + 2) >> 2;   /* q0' */
+						pix_base[pix_offset + -1] = (byte)((2 * p1 + p0 + q1 + 2) >> 2);   /* p0' */
+						pix_base[pix_offset + 0] = (byte)((2 * q1 + q0 + p1 + 2) >> 2);   /* q0' */
 						//tprintf(this.s.avctx, "filter_mb_mbaff_edgecv i:%d\n# bS:4 -> [%02x, %02x, %02x, %02x, %02x, %02x] =>[%02x, %02x, %02x, %02x, %02x, %02x]\n", i, pix_base[pix_offset + -3], p1, p0, q0, q1, pix_base[pix_offset + 2], pix_base[pix_offset + -3], pix_base[pix_offset + -2], pix_base[pix_offset + -1], pix_base[pix_offset + 0], pix_base[pix_offset + 1], pix_base[pix_offset + 2]);
 					}
 				}
@@ -5141,9 +5132,9 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 													  {0,3,1,1,3,3,3,3}});
 
 		public void filter_mb_dir(int mb_x, int mb_y,
-				int[] img_y_base, int img_y_offset,
-				int[] img_cb_base, int img_cb_offset,
-				int[] img_cr_base, int img_cr_offset,
+				byte[] img_y_base, int img_y_offset,
+				byte[] img_cb_base, int img_cb_offset,
+				byte[] img_cr_base, int img_cr_offset,
 				int linesize, int uvlinesize, int mb_xy, int mb_type, int mvy_limit, int first_vertical_edge_done, int dir)
 		{
 			int edge;
@@ -5178,7 +5169,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 					for (j = 0; j < 2; j++, mbn_xy += s.mb_stride)
 					{
 						//DECLARE_ALIGNED(8, int16_t, bS)[4];
-						int[] bS_base = new int[4];
+						short[] bS_base = new short[4];
 						int bS_offset = 0;
 						int qp;
 						if (0 != (7 & (mb_type | s.current_picture.mb_type_base[s.current_picture.mb_type_offset + mbn_xy])))
@@ -5191,10 +5182,10 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 						{
 							if (0 == pps.cabac && 0 != (s.current_picture.mb_type_base[s.current_picture.mb_type_offset + mbn_xy] & MB_TYPE_8x8DCT))
 							{
-								bS_base[bS_offset + 0] = 1 + (((this.cbp_table[mbn_xy] & 4) != 0 || this.non_zero_count_cache[scan8[0] + 0] != 0) ? 1 : 0);
-								bS_base[bS_offset + 1] = 1 + (((this.cbp_table[mbn_xy] & 4) != 0 || this.non_zero_count_cache[scan8[0] + 1] != 0) ? 1 : 0);
-								bS_base[bS_offset + 2] = 1 + (((this.cbp_table[mbn_xy] & 8) != 0 || this.non_zero_count_cache[scan8[0] + 2] != 0) ? 1 : 0);
-								bS_base[bS_offset + 3] = 1 + (((this.cbp_table[mbn_xy] & 8) != 0 || this.non_zero_count_cache[scan8[0] + 3] != 0) ? 1 : 0);
+								bS_base[bS_offset + 0] = (short)(1 + (((this.cbp_table[mbn_xy] & 4) != 0 || this.non_zero_count_cache[scan8[0] + 0] != 0) ? 1 : 0));
+								bS_base[bS_offset + 1] = (short)(1 + (((this.cbp_table[mbn_xy] & 4) != 0 || this.non_zero_count_cache[scan8[0] + 1] != 0) ? 1 : 0));
+								bS_base[bS_offset + 2] = (short)(1 + (((this.cbp_table[mbn_xy] & 8) != 0 || this.non_zero_count_cache[scan8[0] + 2] != 0) ? 1 : 0));
+								bS_base[bS_offset + 3] = (short)(1 + (((this.cbp_table[mbn_xy] & 8) != 0 || this.non_zero_count_cache[scan8[0] + 3] != 0) ? 1 : 0));
 							}
 							else
 							{
@@ -5204,7 +5195,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 								int i;
 								for (i = 0; i < 4; i++)
 								{
-									bS_base[bS_offset + i] = 1 + ((this.non_zero_count_cache[scan8[0] + i] | mbn_nnz_base[mbn_nnz_offset + i]) != 0 ? 1 : 0);
+									bS_base[bS_offset + i] = (short)(1 + ((this.non_zero_count_cache[scan8[0] + i] | mbn_nnz_base[mbn_nnz_offset + i]) != 0 ? 1 : 0));
 								}
 							}
 						}
@@ -5222,7 +5213,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 				}
 				else
 				{
-					int[] bS_base = new int[4];
+					short[] bS_base = new short[4];
 					int bS_offset = 0;
 					int qp;
 
@@ -5256,7 +5247,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 							int b_idx = 8 + 4;
 							int bn_idx = b_idx - (dir != 0 ? 8 : 1);
 
-							bS_base[bS_offset + 0] = bS_base[bS_offset + 1] = bS_base[bS_offset + 2] = bS_base[bS_offset + 3] = check_mv(8 + 4, bn_idx, mvy_limit);
+							bS_base[bS_offset + 0] = bS_base[bS_offset + 1] = bS_base[bS_offset + 2] = bS_base[bS_offset + 3] = (short)check_mv(8 + 4, bn_idx, mvy_limit);
 							mv_done = 1;
 						}
 						else
@@ -5276,7 +5267,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 							}
 							else if (0 == mv_done)
 							{
-								bS_base[bS_offset + i] = check_mv(b_idx, bn_idx, mvy_limit);
+								bS_base[bS_offset + i] = (short)check_mv(b_idx, bn_idx, mvy_limit);
 							}
 						}
 					}
@@ -5319,7 +5310,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 			/* Calculate bS */
 			for (edge = 1; edge < edges; edge++)
 			{
-				int[] bS_base = new int[4];
+				short[] bS_base = new short[4];
 				int bS_offset = 0;
 				int qp;
 
@@ -5349,7 +5340,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 						int b_idx = 8 + 4 + edge * (0 != dir ? 8 : 1);
 						int bn_idx = b_idx - (0 != dir ? 8 : 1);
 
-						bS_base[bS_offset + 0] = bS_base[bS_offset + 1] = bS_base[bS_offset + 2] = bS_base[bS_offset + 3] = check_mv(b_idx, bn_idx, mvy_limit);
+						bS_base[bS_offset + 0] = bS_base[bS_offset + 1] = bS_base[bS_offset + 2] = bS_base[bS_offset + 3] = (short)check_mv(b_idx, bn_idx, mvy_limit);
 						mv_done = 1;
 					}
 					else
@@ -5369,7 +5360,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 						}
 						else if (0 == mv_done)
 						{
-							bS_base[bS_offset + i] = check_mv(b_idx, bn_idx, mvy_limit);
+							bS_base[bS_offset + i] = (short)check_mv(b_idx, bn_idx, mvy_limit);
 						}
 					}
 
@@ -5407,9 +5398,9 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 
 		//	public void ff_h264_filter_mb(int mb_x, int mb_y, uint8_t *img_y, uint8_t *img_cb, uint8_t *img_cr, unsigned int linesize, unsigned int uvlinesize) {
 		public void ff_h264_filter_mb(int mb_x, int mb_y,
-				int[] img_y_base, int img_y_offset,
-				int[] img_cb_base, int img_cb_offset,
-				int[] img_cr_base, int img_cr_offset,
+				byte[] img_y_base, int img_y_offset,
+				byte[] img_cb_base, int img_cb_offset,
+				byte[] img_cr_base, int img_cr_offset,
 				int linesize,
 				int uvlinesize)
 		{
@@ -5430,8 +5421,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 				/* First vertical edge is different in MBAFF frames
 				 * There are 8 different bS to compute and 2 different Qp
 				 */
-				//DECLARE_ALIGNED(8, int16_t, bS)[8];
-				int[] bS = new int[8];
+				short[] bS = new short[8];
 				int[] qp = new int[2];
 				int[] bqp = new int[2];
 				int[] rqp = new int[2];
@@ -5482,11 +5472,12 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 							bS[i] = 4;
 						else
 						{
-							bS[i] = 1 + ((this.non_zero_count_cache[12 + 8 * (i >> 1)] != 0 ? 1 : 0) |
+							bS[i] = (short)(1 + (
+								(this.non_zero_count_cache[12 + 8 * (i >> 1)] != 0 ? 1 : 0) |
 								 ((0 == this.pps.cabac && (mbn_type & MB_TYPE_8x8DCT) != 0) ?
 									(((this.cbp_table[mbn_xy] & ((mb_field_decoding_flag != 0 ? (i & 2) : (mb_y & 1)))) != 0 ? 8 : 2))
 																			   :
-									this.non_zero_count[mbn_xy][off[i]]));
+									this.non_zero_count[mbn_xy][off[i]])));
 						}
 					}
 				}
@@ -5539,9 +5530,9 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		public void loop_filter()
 		{
 			//uint8_t  *dest_y, *dest_cb, *dest_cr;
-			int[] dest_y_base; int dest_y_offset;
-			int[] dest_cb_base; int dest_cb_offset;
-			int[] dest_cr_base; int dest_cr_offset;
+			byte[] dest_y_base; int dest_y_offset;
+			byte[] dest_cb_base; int dest_cb_offset;
+			byte[] dest_cr_base; int dest_cr_offset;
 			int linesize, uvlinesize, mb_x, mb_y;
 			int end_mb_y = s.mb_y + mb_aff_frame;
 			int old_slice_type = this.slice_type;
@@ -5819,9 +5810,9 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		//        int src_x_offset, int src_y_offset,
 		//        qpel_mc_func *qpix_op, h264_chroma_mc_func chroma_op){
 		public void mc_dir_part(AVFrame pic, int n, int square, int chroma_height, int delta, int list,
-				int[] dest_y_base, int dest_y_offset,
-				int[] dest_cb_base, int dest_cb_offset,
-				int[] dest_cr_base, int dest_cr_offset,
+				byte[] dest_y_base, int dest_y_offset,
+				byte[] dest_cb_base, int dest_cb_offset,
+				byte[] dest_cr_base, int dest_cr_offset,
 				int src_x_offset, int src_y_offset,
 				DSPContext.Ih264_qpel_mc_func[] qpix_op, DSPContext.Ih264_chroma_mc_func chroma_op)
 		{
@@ -5831,11 +5822,11 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 
 			//uint8_t * src_y = pic.data[0] + (mx>>2) + (my>>2)*this.mb_linesize;
 			//uint8_t * src_cb, * src_cr;
-			int[] src_y_base = pic.data_base[0];
+			byte[] src_y_base = pic.data_base[0];
 			int _src_y_offset = pic.data_offset[0] + (mx >> 2) + (my >> 2) * this.mb_linesize;
-			int[] src_cb_base;
+			byte[] src_cb_base;
 			int src_cb_offset;
-			int[] src_cr_base;
+			byte[] src_cr_base;
 			int src_cr_offset;
 
 			int extra_width = this.emu_edge_width;
@@ -5919,9 +5910,9 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		}
 
 		public void mc_part_std(int n, int square, int chroma_height, int delta,
-				int[] dest_y_base, int dest_y_offset,
-				int[] dest_cb_base, int dest_cb_offset,
-				int[] dest_cr_base, int dest_cr_offset,
+				byte[] dest_y_base, int dest_y_offset,
+				byte[] dest_cb_base, int dest_cb_offset,
+				byte[] dest_cr_base, int dest_cr_offset,
 					int x_offset, int y_offset,
 					DSPContext.Ih264_qpel_mc_func[] qpix_put, DSPContext.Ih264_chroma_mc_func chroma_put,
 					DSPContext.Ih264_qpel_mc_func[] qpix_avg, DSPContext.Ih264_chroma_mc_func chroma_avg,
@@ -5963,9 +5954,9 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		}
 
 		public void mc_part_weighted(int n, int square, int chroma_height, int delta,
-				int[] dest_y_base, int dest_y_offset,
-				int[] dest_cb_base, int dest_cb_offset,
-				int[] dest_cr_base, int dest_cr_offset,
+				byte[] dest_y_base, int dest_y_offset,
+				byte[] dest_cb_base, int dest_cb_offset,
+				byte[] dest_cr_base, int dest_cr_offset,
 					int x_offset, int y_offset,
 					DSPContext.Ih264_qpel_mc_func[] qpix_put, DSPContext.Ih264_chroma_mc_func chroma_put,
 					H264DSPContext.IH264WeightFunctionStub luma_weight_op, H264DSPContext.IH264WeightFunctionStub chroma_weight_op,
@@ -5983,11 +5974,11 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 			{
 				/* don't optimize for luma-only case, since B-frames usually
 				* use implicit weights => chroma too. */
-				int[] tmp_cb_base = s.obmc_scratchpad;
+				byte[] tmp_cb_base = s.obmc_scratchpad;
 				int tmp_cb_offset = 0;
-				int[] tmp_cr_base = s.obmc_scratchpad;
+				byte[] tmp_cr_base = s.obmc_scratchpad;
 				int tmp_cr_offset = 8;
-				int[] tmp_y_base = s.obmc_scratchpad;
+				byte[] tmp_y_base = s.obmc_scratchpad;
 				int tmp_y_offset = 8 * this.mb_uvlinesize;
 				int refn0 = this.ref_cache[0][scan8[n]];
 				int refn1 = this.ref_cache[1][scan8[n]];
@@ -6060,9 +6051,9 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 				int list0, int list1){
 		*/
 		public void mc_part(int n, int square, int chroma_height, int delta,
-				int[] dest_y_base, int dest_y_offset,
-				int[] dest_cb_base, int dest_cb_offset,
-				int[] dest_cr_base, int dest_cr_offset,
+				byte[] dest_y_base, int dest_y_offset,
+				byte[] dest_cb_base, int dest_cb_offset,
+				byte[] dest_cr_base, int dest_cr_offset,
 					int x_offset, int y_offset,
 					DSPContext.Ih264_qpel_mc_func[] qpix_put, DSPContext.Ih264_chroma_mc_func chroma_put,
 					DSPContext.Ih264_qpel_mc_func[] qpix_avg, DSPContext.Ih264_chroma_mc_func chroma_avg,
@@ -6115,9 +6106,9 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		//	       qpel_mc_func (*qpix_avg)[16], h264_chroma_mc_func (*chroma_avg),
 		//	       h264_weight_func *weight_op, h264_biweight_func *weight_avg){
 		public void hl_motion(
-				int[] dest_y_base, int dest_y_offset,
-				int[] dest_cb_base, int dest_cb_offset,
-				int[] dest_cr_base, int dest_cr_offset,
+				byte[] dest_y_base, int dest_y_offset,
+				byte[] dest_cb_base, int dest_cb_offset,
+				byte[] dest_cr_base, int dest_cr_offset,
 				DSPContext.Ih264_qpel_mc_func[][] qpix_put, DSPContext.Ih264_chroma_mc_func[] chroma_put,
 				DSPContext.Ih264_qpel_mc_func[][] qpix_avg, DSPContext.Ih264_chroma_mc_func[] chroma_avg,
 				H264DSPContext.IH264WeightFunctionStub[] weight_op, H264DSPContext.IH264BiWeightFunctionStub[] weight_avg)
@@ -8240,7 +8231,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 			 * FIXME: redo bipred weight to not require extra buffer? */
 			for (i = 0; i < s.thread_count; i++)
 				if (this.thread_context[i] != null && null == this.thread_context[i].s.obmc_scratchpad)
-					this.thread_context[i].s.obmc_scratchpad = new int[16 * 2 * s.linesize + 8 * 2 * s.uvlinesize];
+					this.thread_context[i].s.obmc_scratchpad = new byte[16 * 2 * s.linesize + 8 * 2 * s.uvlinesize];
 
 			/* some macroblocks can be accessed before they're available in case of lost slices, mbaff or threading*/
 			Arrays.Fill(slice_table_base, slice_table_offset, slice_table_offset + (s.mb_height * s.mb_stride - 1), -1);
@@ -9648,7 +9639,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 					{
 						int k;
 						//uint8_t *base= h.ref_list[j][i].base[0];
-						int[] @base = h.ref_list[j][i].@base[0];
+						byte[] @base = h.ref_list[j][i].@base[0];
 						for (k = 0; k < h.short_ref_count; k++)
 							if (h.short_ref[k].@base[0] == @base)
 							{

@@ -3,9 +3,8 @@ namespace cscodec.h264.decoder
 	public class InternalBuffer
 	{
 		public int last_pic_num;
-		//uint8_t *base[4];
 		//uint8_t *data[4];
-		public int[][] @base = new int[4][];
+		public byte[][] @base = new byte[4][];
 		public int[] data_offset = new int[4]; // offset into base ptr
 		public int[] linesize = new int[4];
 		public int width, height;

@@ -16,8 +16,8 @@ namespace cscodec.av
 		 * This might be different from the first allocated byte\
 		 * - encoding: \
 		 * - decoding: \
-		 */	
-		public int[][] data_base = new int[4][]; //uint8_t *data[4];\
+		 */
+		public byte[][] data_base = new byte[4][]; 
 		public int[] data_offset = new int[4]; // Offset in each data_base
 		public int[] linesize = new int[4];
 		/**\
@@ -26,7 +26,7 @@ namespace cscodec.av
 		 * - encoding: \
 		 * - decoding: \
 		 */
-		 public int[][] @base = new int[4][]; //uint8_t *base[4];\
+		public byte[][] @base = new byte[4][];
 		/**\
 		 * 1 -> keyframe, 0-> not\
 		 * - encoding: Set by libavcodec.\

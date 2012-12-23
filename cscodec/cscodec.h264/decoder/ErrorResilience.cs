@@ -83,9 +83,9 @@ namespace cscodec.h264.decoder
 		 * replaces the current MB with a flat dc only version.
 		 */
 		public static void put_dc(MpegEncContext s,
-				int[] dest_y_base, int dest_y_offset,
-				int[] dest_cb_base, int dest_cb_offset,
-				int[] dest_cr_base, int dest_cr_offset,
+				byte[] dest_y_base, int dest_y_offset,
+				byte[] dest_cb_base, int dest_cb_offset,
+				byte[] dest_cr_base, int dest_cr_offset,
 				int mb_x, int mb_y)
 		{
 			/* H264 does not use this function ???*/
@@ -100,7 +100,7 @@ namespace cscodec.h264.decoder
 					int x;
 					for (x = 0; x < 8; x++)
 					{
-						dest_y_base[dest_y_offset + x + (i & 1) * 8 + (y + (i >> 1) * 8) * s.linesize] = dc / 8;
+						dest_y_base[dest_y_offset + x + (i & 1) * 8 + (y + (i >> 1) * 8) * s.linesize] = (byte)(dc / 8);
 					}
 				}
 			}
@@ -115,8 +115,8 @@ namespace cscodec.h264.decoder
 				int x;
 				for (x = 0; x < 8; x++)
 				{
-					dest_cb_base[dest_cb_offset + x + y * (s.uvlinesize)] = dcu / 8;
-					dest_cr_base[dest_cr_offset + x + y * (s.uvlinesize)] = dcv / 8;
+					dest_cb_base[dest_cb_offset + x + y * (s.uvlinesize)] = (byte)(dcu / 8);
+					dest_cr_base[dest_cr_offset + x + y * (s.uvlinesize)] = (byte)(dcv / 8);
 				}
 			}
 		}
@@ -272,13 +272,13 @@ namespace cscodec.h264.decoder
 		 * @param h     height in 8 pixel blocks
 		 */
 		public static void h_block_filter(MpegEncContext s,
-				int[] dst_base, int dst_offset,
+				byte[] dst_base, int dst_offset,
 				int w, int h, int stride, int is_luma)
 		{
 			int b_x, b_y, mvx_stride, mvy_stride;
-			int[] cm_base = H264DSPContext.ff_cropTbl;
+			var cm_base = H264DSPContext.ff_cropTbl;
 			int cm_offset = H264DSPContext.MAX_NEG_CROP;
-			int[] param = new int[2];
+			var param = new int[2];
 			set_mv_strides(s, param);
 			mvx_stride = param[0];
 			mvy_stride = param[1];
@@ -328,17 +328,17 @@ namespace cscodec.h264.decoder
 
 						if (left_damage != 0)
 						{
-							dst_base[dst_offset + offset + 7 + y * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + 7 + y * stride] + ((d * 7) >> 4)];
-							dst_base[dst_offset + offset + 6 + y * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + 6 + y * stride] + ((d * 5) >> 4)];
-							dst_base[dst_offset + offset + 5 + y * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + 5 + y * stride] + ((d * 3) >> 4)];
-							dst_base[dst_offset + offset + 4 + y * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + 4 + y * stride] + ((d * 1) >> 4)];
+							dst_base[dst_offset + offset + 7 + y * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + 7 + y * stride] + ((d * 7) >> 4)];
+							dst_base[dst_offset + offset + 6 + y * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + 6 + y * stride] + ((d * 5) >> 4)];
+							dst_base[dst_offset + offset + 5 + y * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + 5 + y * stride] + ((d * 3) >> 4)];
+							dst_base[dst_offset + offset + 4 + y * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + 4 + y * stride] + ((d * 1) >> 4)];
 						}
 						if (right_damage != 0)
 						{
-							dst_base[dst_offset + offset + 8 + y * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + 8 + y * stride] - ((d * 7) >> 4)];
-							dst_base[dst_offset + offset + 9 + y * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + 9 + y * stride] - ((d * 5) >> 4)];
-							dst_base[dst_offset + offset + 10 + y * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + 10 + y * stride] - ((d * 3) >> 4)];
-							dst_base[dst_offset + offset + 11 + y * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + 11 + y * stride] - ((d * 1) >> 4)];
+							dst_base[dst_offset + offset + 8 + y * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + 8 + y * stride] - ((d * 7) >> 4)];
+							dst_base[dst_offset + offset + 9 + y * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + 9 + y * stride] - ((d * 5) >> 4)];
+							dst_base[dst_offset + offset + 10 + y * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + 10 + y * stride] - ((d * 3) >> 4)];
+							dst_base[dst_offset + offset + 11 + y * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + 11 + y * stride] - ((d * 1) >> 4)];
 						}
 					}
 				}
@@ -351,13 +351,13 @@ namespace cscodec.h264.decoder
 		 * @param h     height in 8 pixel blocks
 		 */
 		public static void v_block_filter(MpegEncContext s,
-				int[] dst_base, int dst_offset,
+				byte[] dst_base, int dst_offset,
 				int w, int h, int stride, int is_luma)
 		{
 			int b_x, b_y, mvx_stride, mvy_stride;
-			int[] cm_base = H264DSPContext.ff_cropTbl;
-			int cm_offset = H264DSPContext.MAX_NEG_CROP;
-			int[] param = new int[2];
+			var cm_base = H264DSPContext.ff_cropTbl;
+			var cm_offset = H264DSPContext.MAX_NEG_CROP;
+			var param = new int[2];
 			set_mv_strides(s, param);
 			mvx_stride = param[0];
 			mvy_stride = param[1];
@@ -407,17 +407,17 @@ namespace cscodec.h264.decoder
 
 						if (0 != top_damage)
 						{
-							dst_base[dst_offset + offset + x + 7 * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + x + 7 * stride] + ((d * 7) >> 4)];
-							dst_base[dst_offset + offset + x + 6 * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + x + 6 * stride] + ((d * 5) >> 4)];
-							dst_base[dst_offset + offset + x + 5 * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + x + 5 * stride] + ((d * 3) >> 4)];
-							dst_base[dst_offset + offset + x + 4 * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + x + 4 * stride] + ((d * 1) >> 4)];
+							dst_base[dst_offset + offset + x + 7 * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + x + 7 * stride] + ((d * 7) >> 4)];
+							dst_base[dst_offset + offset + x + 6 * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + x + 6 * stride] + ((d * 5) >> 4)];
+							dst_base[dst_offset + offset + x + 5 * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + x + 5 * stride] + ((d * 3) >> 4)];
+							dst_base[dst_offset + offset + x + 4 * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + x + 4 * stride] + ((d * 1) >> 4)];
 						}
 						if (0 != bottom_damage)
 						{
-							dst_base[dst_offset + offset + x + 8 * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + x + 8 * stride] - ((d * 7) >> 4)];
-							dst_base[dst_offset + offset + x + 9 * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + x + 9 * stride] - ((d * 5) >> 4)];
-							dst_base[dst_offset + offset + x + 10 * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + x + 10 * stride] - ((d * 3) >> 4)];
-							dst_base[dst_offset + offset + x + 11 * stride] = cm_base[cm_offset + dst_base[dst_offset + offset + x + 11 * stride] - ((d * 1) >> 4)];
+							dst_base[dst_offset + offset + x + 8 * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + x + 8 * stride] - ((d * 7) >> 4)];
+							dst_base[dst_offset + offset + x + 9 * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + x + 9 * stride] - ((d * 5) >> 4)];
+							dst_base[dst_offset + offset + x + 10 * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + x + 10 * stride] - ((d * 3) >> 4)];
+							dst_base[dst_offset + offset + x + 11 * stride] = (byte)cm_base[cm_offset + dst_base[dst_offset + offset + x + 11 * stride] - ((d * 1) >> 4)];
 						}
 					}
 				}
@@ -645,7 +645,7 @@ namespace cscodec.h264.decoder
 							for (j = 0; j < pred_count; j++)
 							{
 								int score = 0;
-								int[] src_base = s.current_picture.data_base[0];
+								byte[] src_base = s.current_picture.data_base[0];
 								int src_offset = s.current_picture.data_offset[0] + mb_x * 16 + mb_y * 16 * s.linesize;
 
 								s.current_picture.motion_val_base[0][s.current_picture.motion_val_offset[0] + mot_index][0]
@@ -732,8 +732,8 @@ namespace cscodec.h264.decoder
 		}
 
 		public static int pix_abs16_c(Object v,
-				int[] pix1_base, int pix1_offset,
-				int[] pix2_base, int pix2_offset,
+				byte[] pix1_base, int pix1_offset,
+				byte[] pix2_base, int pix2_offset,
 				int line_size, int h)
 		{
 			int s, i;
@@ -815,8 +815,8 @@ namespace cscodec.h264.decoder
 					{
 						//uint8_t *mb_ptr     = s.current_picture.data[0] + mb_x*16 + mb_y*16*s.linesize;
 						//uint8_t *last_mb_ptr= s.last_picture.data   [0] + mb_x*16 + mb_y*16*s.linesize;
-						int[] mb_ptr_base = s.current_picture.data_base[0];
-						int[] last_mb_ptr_base = s.last_picture.data_base[0];
+						byte[] mb_ptr_base = s.current_picture.data_base[0];
+						byte[] last_mb_ptr_base = s.last_picture.data_base[0];
 						int mb_ptr_offset = s.current_picture.data_offset[0] + mb_x * 16 + mb_y * 16 * s.linesize;
 						int last_mb_ptr_offset = s.last_picture.data_offset[0] + mb_x * 16 + mb_y * 16 * s.linesize;
 
@@ -1276,7 +1276,7 @@ namespace cscodec.h264.decoder
 					int[] dc_ptr_base;
 					int dc_ptr_offset;
 					//uint8_t *dest_y, *dest_cb, *dest_cr;
-					int[] dest_y_base, dest_cb_base, dest_cr_base;
+					byte[] dest_y_base, dest_cb_base, dest_cr_base;
 					int dest_y_offset, dest_cb_offset, dest_cr_offset;
 					int mb_xy = mb_x + mb_y * s.mb_stride;
 					int mb_type = (int)s.current_picture.mb_type_base[s.current_picture.mb_type_offset + mb_xy];
@@ -1317,8 +1317,8 @@ namespace cscodec.h264.decoder
 						int x;
 						for (x = 0; x < 8; x++)
 						{
-							dcu += dest_cb_base[dest_cb_offset + x + y * (s.uvlinesize)];
-							dcv += dest_cr_base[dest_cr_offset + x + y * (s.uvlinesize)];
+							dcu += (sbyte)dest_cb_base[dest_cb_offset + x + y * (s.uvlinesize)];
+							dcv += (sbyte)dest_cr_base[dest_cr_offset + x + y * (s.uvlinesize)];
 						}
 					}
 					dc_val_base[dc_val[1] + mb_x + mb_y * s.mb_stride] = (dcu + 4) >> 3;
@@ -1352,7 +1352,7 @@ namespace cscodec.h264.decoder
 				for (mb_x = 0; mb_x < s.mb_width; mb_x++)
 				{
 					//uint8_t *dest_y, *dest_cb, *dest_cr;
-					int[] dest_y_base, dest_cb_base, dest_cr_base;
+					byte[] dest_y_base, dest_cb_base, dest_cr_base;
 					int dest_y_offset, dest_cb_offset, dest_cr_offset;
 
 					int mb_xy = mb_x + mb_y * s.mb_stride;

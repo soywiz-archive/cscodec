@@ -5,12 +5,12 @@ namespace cscodec.h264.decoder
 	{
 
 		public const int MAX_NEG_CROP = 1024;
-		public static int[] ff_cropTbl = new int[256 + 2 * MAX_NEG_CROP];
+		public static byte[] ff_cropTbl = new byte[256 + 2 * MAX_NEG_CROP];
 
 		static H264DSPContext()
 		{
 			int i;
-			for (i = 0; i < 256; i++) ff_cropTbl[i + MAX_NEG_CROP] = i;
+			for (i = 0; i < 256; i++) ff_cropTbl[i + MAX_NEG_CROP] = (byte)i;
 			for (i = 0; i < MAX_NEG_CROP; i++)
 			{
 				ff_cropTbl[i] = 0;
@@ -18,7 +18,7 @@ namespace cscodec.h264.decoder
 			}
 		}
 
-		static public void weight_h264_pixels_c(int W, int H, int[] block, int _block_offset, int stride, int log2_denom, int weight, int offset)
+		static public void weight_h264_pixels_c(int W, int H, byte[] block, int _block_offset, int stride, int log2_denom, int weight, int offset)
 		{
 			int y;
 			int block_offset = _block_offset;
@@ -48,7 +48,7 @@ namespace cscodec.h264.decoder
 			}
 		}
 
-		static public void biweight_h264_pixels_c(int W, int H, int[] dst, int _dst_offset, int[] src, int _src_offset, int stride, int log2_denom, int weightd, int weights, int offset)
+		static public void biweight_h264_pixels_c(int W, int H, byte[] dst, int _dst_offset, byte[] src, int _src_offset, int stride, int log2_denom, int weightd, int weights, int offset)
 		{
 			int y;
 			int src_offset = _src_offset;
@@ -78,8 +78,8 @@ namespace cscodec.h264.decoder
 			}
 		}
 
-		public delegate void IH264WeightFunctionStub(int[] block, int block_offset, int stride, int log2_denom, int weight, int offset);
-		public delegate void IH264BiWeightFunctionStub(int[] dst, int dst_offset, int[] src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset);
+		public delegate void IH264WeightFunctionStub(byte[] block, int block_offset, int stride, int log2_denom, int weight, int offset);
+		public delegate void IH264BiWeightFunctionStub(byte[] dst, int dst_offset, byte[] src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset);
 
 		//public interface IH264WeightFunctionStub {
 		//	public void h264_weight_func(int []block, int block_offset, int stride, int log2_denom, int weight, int offset);
@@ -96,67 +96,67 @@ namespace cscodec.h264.decoder
 
 		/* weighted MC */
 		public IH264WeightFunctionStub[] weight_h264_pixels_tab = new IH264WeightFunctionStub[] {
-    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+    		(block, block_offset, stride, log2_denom, weight, offset) => {
     			weight_h264_pixels_c(16, 16, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+    		(block, block_offset, stride, log2_denom, weight, offset) => {
    				weight_h264_pixels_c(16, 8, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+    		(block, block_offset, stride, log2_denom, weight, offset) => {
    				weight_h264_pixels_c(8, 16, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+    		(block, block_offset, stride, log2_denom, weight, offset) => {
    				weight_h264_pixels_c(8, 8, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+    		(block, block_offset, stride, log2_denom, weight, offset) => {
    				weight_h264_pixels_c(8, 4, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+    		(block, block_offset, stride, log2_denom, weight, offset) => {
    				weight_h264_pixels_c(4, 8, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+    		(block, block_offset, stride, log2_denom, weight, offset) => {
    				weight_h264_pixels_c(4, 4, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+    		(block, block_offset, stride, log2_denom, weight, offset) => {
    				weight_h264_pixels_c(4, 2, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+    		(block, block_offset, stride, log2_denom, weight, offset) => {
    				weight_h264_pixels_c(2, 4, block, block_offset, stride, log2_denom, weight, offset);
     		},
-    		(int []block, int block_offset, int stride, int log2_denom, int weight, int offset) => {
+    		(block, block_offset, stride, log2_denom, weight, offset) => {
    				weight_h264_pixels_c(2, 2, block, block_offset, stride, log2_denom, weight, offset);
     		},
 		};
 
 		public IH264BiWeightFunctionStub[] biweight_h264_pixels_tab = new IH264BiWeightFunctionStub[] {
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
+        	(dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset) => {
         			biweight_h264_pixels_c(16, 16, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
+        	(dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset) => {
         			biweight_h264_pixels_c(16, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
+        	(dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset) => {
         			biweight_h264_pixels_c(8, 16, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
+        	(dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset) => {
         			biweight_h264_pixels_c(8, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
+        	(dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset) => {
         			biweight_h264_pixels_c(8, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
+        	(dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset) => {
         			biweight_h264_pixels_c(4, 8, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
+        	(dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset) => {
         			biweight_h264_pixels_c(4, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
+        	(dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset) => {
         			biweight_h264_pixels_c(4, 2, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
+        	(dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset) => {
         			biweight_h264_pixels_c(2, 4, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},
-        	(int []dst, int dst_offset, int []src, int src_offset, int stride, int log2_denom, int weightd, int weights, int offset) => {
+        	(dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset) => {
         			biweight_h264_pixels_c(2, 2, dst, dst_offset, src, src_offset, stride, log2_denom, weightd, weights, offset);
         	},    		
 		};
@@ -168,14 +168,14 @@ namespace cscodec.h264.decoder
 			else return a;
 		}
 
-		static private int av_clip_uint8(int a)
+		static private byte av_clip_uint8(int a)
 		{
-			if ((a & (~0x000000FF)) != 0) return (-a) >> 31;
-			else return a;
+			if ((a & (~0xFF)) != 0) return (byte)((-a) >> 31);
+			else return (byte)a;
 		}
 
 		/* loop filter */
-		private void h264_loop_filter_luma_c(int[] pix, int _pix_offset, int xstride, int ystride, int alpha, int beta, int[] tc0)
+		private void h264_loop_filter_luma_c(byte[] pix, int _pix_offset, int xstride, int ystride, int alpha, int beta, int[] tc0)
 		{
 			int i, d;
 			int pix_offset = _pix_offset;
@@ -208,13 +208,13 @@ namespace cscodec.h264.decoder
 						if (Math.Abs(p2 - p0) < beta)
 						{
 							if (tc0[i] != 0)
-								pix[pix_offset - 2 * xstride] = p1 + av_clip(((p2 + ((p0 + q0 + 1) >> 1)) >> 1) - p1, -tc0[i], tc0[i]);
+								pix[pix_offset - 2 * xstride] = (byte)(p1 + av_clip(((p2 + ((p0 + q0 + 1) >> 1)) >> 1) - p1, -tc0[i], tc0[i]));
 							tc++;
 						}
 						if (Math.Abs(q2 - q0) < beta)
 						{
 							if (tc0[i] != 0)
-								pix[pix_offset + xstride] = q1 + av_clip(((q2 + ((p0 + q0 + 1) >> 1)) >> 1) - q1, -tc0[i], tc0[i]);
+								pix[pix_offset + xstride] = (byte)(q1 + av_clip(((q2 + ((p0 + q0 + 1) >> 1)) >> 1) - q1, -tc0[i], tc0[i]));
 							tc++;
 						}
 
@@ -227,17 +227,17 @@ namespace cscodec.h264.decoder
 			}
 		}
 
-		public void h264_v_loop_filter_luma(int[] pix_base/*align 16*/, int pix_offset, int stride, int alpha, int beta, int[] tc0)
+		public void h264_v_loop_filter_luma(byte[] pix_base/*align 16*/, int pix_offset, int stride, int alpha, int beta, int[] tc0)
 		{
 			h264_loop_filter_luma_c(pix_base, pix_offset, stride, 1, alpha, beta, tc0);
 		}
 
-		public void h264_h_loop_filter_luma(int[] pix_base/*align 4 */, int pix_offset, int stride, int alpha, int beta, int[] tc0)
+		public void h264_h_loop_filter_luma(byte[] pix_base/*align 4 */, int pix_offset, int stride, int alpha, int beta, int[] tc0)
 		{
 			h264_loop_filter_luma_c(pix_base, pix_offset, 1, stride, alpha, beta, tc0);
 		}
 
-		private void h264_loop_filter_luma_intra_c(int[] pix, int _pix_offset, int xstride, int ystride, int alpha, int beta)
+		private void h264_loop_filter_luma_intra_c(byte[] pix, int _pix_offset, int xstride, int ystride, int alpha, int beta)
 		{
 			int d;
 			int pix_offset = _pix_offset;
@@ -262,34 +262,34 @@ namespace cscodec.h264.decoder
 						{
 							int p3 = pix[pix_offset - 4 * xstride];
 							/* p0', p1', p2' */
-							pix[pix_offset - 1 * xstride] = (p2 + 2 * p1 + 2 * p0 + 2 * q0 + q1 + 4) >> 3;
-							pix[pix_offset - 2 * xstride] = (p2 + p1 + p0 + q0 + 2) >> 2;
-							pix[pix_offset - 3 * xstride] = (2 * p3 + 3 * p2 + p1 + p0 + q0 + 4) >> 3;
+							pix[pix_offset - 1 * xstride] = (byte)((p2 + 2 * p1 + 2 * p0 + 2 * q0 + q1 + 4) >> 3);
+							pix[pix_offset - 2 * xstride] = (byte)((p2 + p1 + p0 + q0 + 2) >> 2);
+							pix[pix_offset - 3 * xstride] = (byte)((2 * p3 + 3 * p2 + p1 + p0 + q0 + 4) >> 3);
 						}
 						else
 						{
 							/* p0' */
-							pix[pix_offset - 1 * xstride] = (2 * p1 + p0 + q1 + 2) >> 2;
+							pix[pix_offset - 1 * xstride] = (byte)((2 * p1 + p0 + q1 + 2) >> 2);
 						}
 						if (Math.Abs(q2 - q0) < beta)
 						{
 							int q3 = pix[pix_offset + 3 * xstride];
 							/* q0', q1', q2' */
-							pix[pix_offset + 0 * xstride] = (p1 + 2 * p0 + 2 * q0 + 2 * q1 + q2 + 4) >> 3;
-							pix[pix_offset + 1 * xstride] = (p0 + q0 + q1 + q2 + 2) >> 2;
-							pix[pix_offset + 2 * xstride] = (2 * q3 + 3 * q2 + q1 + q0 + p0 + 4) >> 3;
+							pix[pix_offset + 0 * xstride] = (byte)((p1 + 2 * p0 + 2 * q0 + 2 * q1 + q2 + 4) >> 3);
+							pix[pix_offset + 1 * xstride] = (byte)((p0 + q0 + q1 + q2 + 2) >> 2);
+							pix[pix_offset + 2 * xstride] = (byte)((2 * q3 + 3 * q2 + q1 + q0 + p0 + 4) >> 3);
 						}
 						else
 						{
 							/* q0' */
-							pix[pix_offset + 0 * xstride] = (2 * q1 + q0 + p1 + 2) >> 2;
+							pix[pix_offset + 0 * xstride] = (byte)((2 * q1 + q0 + p1 + 2) >> 2);
 						}
 					}
 					else
 					{
 						/* p0', q0' */
-						pix[pix_offset - 1 * xstride] = (2 * p1 + p0 + q1 + 2) >> 2;
-						pix[pix_offset + 0 * xstride] = (2 * q1 + q0 + p1 + 2) >> 2;
+						pix[pix_offset - 1 * xstride] = (byte)((2 * p1 + p0 + q1 + 2) >> 2);
+						pix[pix_offset + 0 * xstride] = (byte)((2 * q1 + q0 + p1 + 2) >> 2);
 					}
 				}
 				pix_offset += ystride;
@@ -297,17 +297,17 @@ namespace cscodec.h264.decoder
 		}
 
 		/* v/h_loop_filter_luma_intra: align 16 */
-		public void h264_v_loop_filter_luma_intra(int[] pix, int pix_offset, int stride, int alpha, int beta)
+		public void h264_v_loop_filter_luma_intra(byte[] pix, int pix_offset, int stride, int alpha, int beta)
 		{
 			h264_loop_filter_luma_intra_c(pix, pix_offset, stride, 1, alpha, beta);
 		}
 
-		public void h264_h_loop_filter_luma_intra(int[] pix, int pix_offset, int stride, int alpha, int beta)
+		public void h264_h_loop_filter_luma_intra(byte[] pix, int pix_offset, int stride, int alpha, int beta)
 		{
 			h264_loop_filter_luma_intra_c(pix, pix_offset, 1, stride, alpha, beta);
 		}
 
-		private void h264_loop_filter_chroma_c(int[] pix, int _pix_offset, int xstride, int ystride, int alpha, int beta, int[] tc0)
+		private void h264_loop_filter_chroma_c(byte[] pix, int _pix_offset, int xstride, int ystride, int alpha, int beta, int[] tc0)
 		{
 			int i, d;
 			int pix_offset = _pix_offset;
@@ -341,17 +341,17 @@ namespace cscodec.h264.decoder
 			}
 		}
 
-		public void h264_v_loop_filter_chroma(int[] pix/*align 8*/, int pix_offset, int stride, int alpha, int beta, int[] tc0)
+		public void h264_v_loop_filter_chroma(byte[] pix/*align 8*/, int pix_offset, int stride, int alpha, int beta, int[] tc0)
 		{
 			h264_loop_filter_chroma_c(pix, pix_offset, stride, 1, alpha, beta, tc0);
 		}
 
-		public void h264_h_loop_filter_chroma(int[] pix/*align 4*/, int pix_offset, int stride, int alpha, int beta, int[] tc0)
+		public void h264_h_loop_filter_chroma(byte[] pix/*align 4*/, int pix_offset, int stride, int alpha, int beta, int[] tc0)
 		{
 			h264_loop_filter_chroma_c(pix, pix_offset, 1, stride, alpha, beta, tc0);
 		}
 
-		private void h264_loop_filter_chroma_intra_c(int[] pix, int _pix_offset, int xstride, int ystride, int alpha, int beta)
+		private void h264_loop_filter_chroma_intra_c(byte[] pix, int _pix_offset, int xstride, int ystride, int alpha, int beta)
 		{
 			int d;
 			int pix_offset = _pix_offset;
@@ -367,19 +367,19 @@ namespace cscodec.h264.decoder
 						Math.Abs(q1 - q0) < beta)
 				{
 
-					pix[pix_offset - xstride] = (2 * p1 + p0 + q1 + 2) >> 2;   /* p0' */
-					pix[pix_offset] = (2 * q1 + q0 + p1 + 2) >> 2;   /* q0' */
+					pix[pix_offset - xstride] = (byte)((2 * p1 + p0 + q1 + 2) >> 2);   /* p0' */
+					pix[pix_offset] = (byte)((2 * q1 + q0 + p1 + 2) >> 2);   /* q0' */
 				}
 				pix_offset += ystride;
 			}
 		}
 
-		public void h264_v_loop_filter_chroma_intra(int[] pix/*align 8*/, int pix_offset, int stride, int alpha, int beta)
+		public void h264_v_loop_filter_chroma_intra(byte[] pix/*align 8*/, int pix_offset, int stride, int alpha, int beta)
 		{
 			h264_loop_filter_chroma_intra_c(pix, pix_offset, stride, 1, alpha, beta);
 		}
 
-		public void h264_h_loop_filter_chroma_intra(int[] pix/*align 8*/, int pix_offset, int stride, int alpha, int beta)
+		public void h264_h_loop_filter_chroma_intra(byte[] pix/*align 8*/, int pix_offset, int stride, int alpha, int beta)
 		{
 			h264_loop_filter_chroma_intra_c(pix, pix_offset, 1, stride, alpha, beta);
 		}
@@ -392,12 +392,12 @@ namespace cscodec.h264.decoder
 		}
 
 		/* IDCT */
-		public void h264_idct_add(int[] dst/*align 4*/, int offset, short[] block/*align 16*/, int block_offset, int stride)
+		public void h264_idct_add(byte[] dst/*align 4*/, int offset, short[] block/*align 16*/, int block_offset, int stride)
 		{
 			idct_internal(dst, offset, block, block_offset, stride, 4, 6, 1);
 		}
 
-		public void idct_internal(int[] dst/*align 4*/, int offset, short[] block/*align 16*/, int block_offset, int stride, int block_stride, int shift, int add)
+		public void idct_internal(byte[] dst/*align 4*/, int offset, short[] block/*align 16*/, int block_offset, int stride, int block_stride, int shift, int add)
 		{
 			int i;
 			int cm_pos = MAX_NEG_CROP;
@@ -424,15 +424,15 @@ namespace cscodec.h264.decoder
 				int z2 = (block[block_offset + 1 + block_stride * i] >> 1) - block[block_offset + 3 + block_stride * i];
 				int z3 = block[block_offset + 1 + block_stride * i] + (block[block_offset + 3 + block_stride * i] >> 1);
 
-				dst[offset + i + 0 * stride] = ff_cropTbl[cm_pos + add * dst[offset + i + 0 * stride] + ((z0 + z3) >> shift)];
-				dst[offset + i + 1 * stride] = ff_cropTbl[cm_pos + add * dst[offset + i + 1 * stride] + ((z1 + z2) >> shift)];
-				dst[offset + i + 2 * stride] = ff_cropTbl[cm_pos + add * dst[offset + i + 2 * stride] + ((z1 - z2) >> shift)];
-				dst[offset + i + 3 * stride] = ff_cropTbl[cm_pos + add * dst[offset + i + 3 * stride] + ((z0 - z3) >> shift)];
+				dst[offset + i + 0 * stride] = (byte)ff_cropTbl[cm_pos + add * dst[offset + i + 0 * stride] + ((z0 + z3) >> shift)];
+				dst[offset + i + 1 * stride] = (byte)ff_cropTbl[cm_pos + add * dst[offset + i + 1 * stride] + ((z1 + z2) >> shift)];
+				dst[offset + i + 2 * stride] = (byte)ff_cropTbl[cm_pos + add * dst[offset + i + 2 * stride] + ((z1 - z2) >> shift)];
+				dst[offset + i + 3 * stride] = (byte)ff_cropTbl[cm_pos + add * dst[offset + i + 3 * stride] + ((z0 - z3) >> shift)];
 			}
 		}
 
 
-		public void h264_idct8_add(int[] dst/*align 8*/, int offset, short[] block/*align 16*/, int block_offset, int stride)
+		public void h264_idct8_add(byte[] dst/*align 8*/, int offset, short[] block/*align 16*/, int block_offset, int stride)
 		{
 			int i;
 			int cm_pos = MAX_NEG_CROP;
@@ -492,18 +492,18 @@ namespace cscodec.h264.decoder
 				int b5 = (a3 >> 2) - a5;
 				int b7 = a7 - (a1 >> 2);
 
-				dst[offset + i + 0 * stride] = ff_cropTbl[cm_pos + dst[offset + i + 0 * stride] + ((b0 + b7) >> 6)];
-				dst[offset + i + 1 * stride] = ff_cropTbl[cm_pos + dst[offset + i + 1 * stride] + ((b2 + b5) >> 6)];
-				dst[offset + i + 2 * stride] = ff_cropTbl[cm_pos + dst[offset + i + 2 * stride] + ((b4 + b3) >> 6)];
-				dst[offset + i + 3 * stride] = ff_cropTbl[cm_pos + dst[offset + i + 3 * stride] + ((b6 + b1) >> 6)];
-				dst[offset + i + 4 * stride] = ff_cropTbl[cm_pos + dst[offset + i + 4 * stride] + ((b6 - b1) >> 6)];
-				dst[offset + i + 5 * stride] = ff_cropTbl[cm_pos + dst[offset + i + 5 * stride] + ((b4 - b3) >> 6)];
-				dst[offset + i + 6 * stride] = ff_cropTbl[cm_pos + dst[offset + i + 6 * stride] + ((b2 - b5) >> 6)];
-				dst[offset + i + 7 * stride] = ff_cropTbl[cm_pos + dst[offset + i + 7 * stride] + ((b0 - b7) >> 6)];
+				dst[offset + i + 0 * stride] = (byte)ff_cropTbl[cm_pos + dst[offset + i + 0 * stride] + ((b0 + b7) >> 6)];
+				dst[offset + i + 1 * stride] = (byte)ff_cropTbl[cm_pos + dst[offset + i + 1 * stride] + ((b2 + b5) >> 6)];
+				dst[offset + i + 2 * stride] = (byte)ff_cropTbl[cm_pos + dst[offset + i + 2 * stride] + ((b4 + b3) >> 6)];
+				dst[offset + i + 3 * stride] = (byte)ff_cropTbl[cm_pos + dst[offset + i + 3 * stride] + ((b6 + b1) >> 6)];
+				dst[offset + i + 4 * stride] = (byte)ff_cropTbl[cm_pos + dst[offset + i + 4 * stride] + ((b6 - b1) >> 6)];
+				dst[offset + i + 5 * stride] = (byte)ff_cropTbl[cm_pos + dst[offset + i + 5 * stride] + ((b4 - b3) >> 6)];
+				dst[offset + i + 6 * stride] = (byte)ff_cropTbl[cm_pos + dst[offset + i + 6 * stride] + ((b2 - b5) >> 6)];
+				dst[offset + i + 7 * stride] = (byte)ff_cropTbl[cm_pos + dst[offset + i + 7 * stride] + ((b0 - b7) >> 6)];
 			}
 		}
 
-		public void h264_idct_dc_add(int[] dst/*align 4*/, int offset, short[] block/*align 16*/, int block_offset, int stride)
+		public void h264_idct_dc_add(byte[] dst/*align 4*/, int offset, short[] block/*align 16*/, int block_offset, int stride)
 		{
 			int i, j;
 			int dc = (block[block_offset + 0] + 32) >> 6;
@@ -512,12 +512,12 @@ namespace cscodec.h264.decoder
 			for (j = 0; j < 4; j++)
 			{
 				for (i = 0; i < 4; i++)
-					dst[offset + dst_pos + i] = ff_cropTbl[cm_pos + dst[offset + dst_pos + i]];
+					dst[offset + dst_pos + i] = (byte)ff_cropTbl[cm_pos + dst[offset + dst_pos + i]];
 				dst_pos += stride;
 			}
 		}
 
-		public void h264_idct8_dc_add(int[] dst/*align 8*/, int offset, short[] block/*align 16*/, int block_offset, int stride)
+		public void h264_idct8_dc_add(byte[] dst/*align 8*/, int offset, short[] block/*align 16*/, int block_offset, int stride)
 		{
 			int i, j;
 			int dc = (block[block_offset + 0] + 32) >> 6;
@@ -526,7 +526,7 @@ namespace cscodec.h264.decoder
 			for (j = 0; j < 8; j++)
 			{
 				for (i = 0; i < 8; i++)
-					dst[offset + dst_pos + i] = ff_cropTbl[cm_pos + dst[offset + dst_pos + i]];
+					dst[offset + dst_pos + i] = (byte)ff_cropTbl[cm_pos + dst[offset + dst_pos + i]];
 				dst_pos += stride;
 			}
 		}
@@ -547,7 +547,7 @@ namespace cscodec.h264.decoder
     		 1+5*8, 2+5*8,
     		};
 
-		public void h264_idct_add16(int[] dst/*align 16*/, int dst_offset, int[] blockoffset, int blockoffset_offset, short[] block/*align 16*/, int block_offset, int stride, int[] nnzc)
+		public void h264_idct_add16(byte[] dst/*align 16*/, int dst_offset, int[] blockoffset, int blockoffset_offset, short[] block/*align 16*/, int block_offset, int stride, int[] nnzc)
 		{
 			int i;
 			for (i = 0; i < 16; i++)
@@ -561,7 +561,7 @@ namespace cscodec.h264.decoder
 			}
 		}
 
-		public void h264_idct8_add4(int[] dst/*align 16*/, int dst_offset, int[] blockoffset, int blockoffset_offset, short[] block/*align 16*/, int block_offset, int stride, int[] nnzc)
+		public void h264_idct8_add4(byte[] dst/*align 16*/, int dst_offset, int[] blockoffset, int blockoffset_offset, short[] block/*align 16*/, int block_offset, int stride, int[] nnzc)
 		{
 			int i;
 			for (i = 0; i < 16; i += 4)
@@ -576,7 +576,7 @@ namespace cscodec.h264.decoder
 
 		}
 
-		public void h264_idct_add8(int[][] dst/*align 16*/, int[] dst_offset, int[] blockoffset, int blockoffset_offset, short[] block/*align 16*/, int block_offset, int stride, int[] nnzc)
+		public void h264_idct_add8(byte[][] dst/*align 16*/, int[] dst_offset, int[] blockoffset, int blockoffset_offset, short[] block/*align 16*/, int block_offset, int stride, int[] nnzc)
 		{
 			int i;
 			for (i = 16; i < 16 + 8; i++)
@@ -588,7 +588,7 @@ namespace cscodec.h264.decoder
 			}
 		}
 
-		public void h264_idct_add16intra(int[] dst/*align 16*/, int dst_offset, int[] blockoffset, int blockoffset_offset, short[] block/*align 16*/, int block_offset, int stride, int[] nnzc)
+		public void h264_idct_add16intra(byte[] dst/*align 16*/, int dst_offset, int[] blockoffset, int blockoffset_offset, short[] block/*align 16*/, int block_offset, int stride, int[] nnzc)
 		{
 			int i;
 			for (i = 0; i < 16; i++)

@@ -704,10 +704,10 @@ namespace cscodec.av
 		//		};
 
 
-		public static void av_image_copy(/* uint8_t * */int[][] dst_base,
+		public static void av_image_copy(byte[][] dst_base,
 				int[] dst_offset,
 				int[] dst_linesizes,
-			/* const uint8_t * */int[][] src_base,
+			byte[][] src_base,
 				int[] src_offset,
 				int[] src_linesizes,
 			/* enum PixelFormat */int pix_fmt, int width, int height)
@@ -753,14 +753,14 @@ namespace cscodec.av
 			}
 		}
 
-		public static void av_image_copy_plane(/* uint8_t * */int[] dst,
-				int _dst_offset,
-				int dst_linesize,
-			/* const uint8_t * */int[] src,
-				int _src_offset,
-				int src_linesize, int bytewidth,
-				int height)
-		{
+		public static void av_image_copy_plane(byte[] dst,
+			int _dst_offset,
+			int dst_linesize,
+			byte[] src,
+			int _src_offset,
+			int src_linesize, int bytewidth,
+			int height
+		) {
 			int dst_offset = _dst_offset;
 			int src_offset = _src_offset;
 			

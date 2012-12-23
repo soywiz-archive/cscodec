@@ -555,11 +555,10 @@ namespace cscodec.h264.decoder
 
 		//uint8_t *edge_emu_buffer;     ///< points into the middle of allocated_edge_emu_buffer
 		//uint8_t *allocated_edge_emu_buffer;
-		public int[] allocated_edge_emu_buffer;
+		public byte[] allocated_edge_emu_buffer;
 		public int edge_emu_buffer_offset;     ///< points into the middle of allocated_edge_emu_buffer
 
-		//uint8_t *obmc_scratchpad;
-		public int[] obmc_scratchpad;
+		public byte[] obmc_scratchpad;
 
 		public int intra_only;   ///< if true, only intra pictures are generated
 
@@ -991,7 +990,7 @@ namespace cscodec.h264.decoder
 			return total_size;
 		}
 
-		public int ff_set_systematic_pal2(/*uint32_t => int8_t*/int[] pal/*[256]*/, int pal_offset, int pix_fmt)
+		public int ff_set_systematic_pal2(byte[] pal/*[256]*/, int pal_offset, int pix_fmt)
 		{
 			int i;
 
@@ -1028,10 +1027,10 @@ namespace cscodec.h264.decoder
 						return -1;
 				}
 				//pal[i] = b + (g<<8) + (r<<16);
-				pal[pal_offset + i * 4 + 0] = b;
-				pal[pal_offset + i * 4 + 1] = g;
-				pal[pal_offset + i * 4 + 2] = r;
-				pal[pal_offset + i * 4 + 3] = 0x00; // a?	        
+				pal[pal_offset + i * 4 + 0] = (byte)MathUtils.Clamp(b, 0, 255);
+				pal[pal_offset + i * 4 + 1] = (byte)MathUtils.Clamp(g, 0, 255);
+				pal[pal_offset + i * 4 + 2] = (byte)MathUtils.Clamp(r, 0, 255);
+				pal[pal_offset + i * 4 + 3] = (byte)MathUtils.Clamp(0x00, 0, 255); // a?	        
 			}
 
 			return 0;
@@ -1164,10 +1163,10 @@ namespace cscodec.h264.decoder
 					buf.linesize[i] = picture.linesize[i];
 
 					//buf.base[i]= av_malloc(size[i]+16); //FIXME 16
-					buf.@base[i] = new int[size[i] + 16];
+					buf.@base[i] = new byte[size[i] + 16];
 					if (buf.@base[i] == null) return -1;
 					//memset(buf.base[i], 128, size[i]);
-					Arrays.Fill(buf.@base[i], 0, size[i], 128);
+					Arrays.Fill(buf.@base[i], 0, size[i], (byte)128);
 
 					// no edge if EDGE EMU or not planar YUV
 					if ((this.flags & CODEC_FLAG_EMU_EDGE) != 0 || 0 == size[2])
@@ -1605,7 +1604,7 @@ namespace cscodec.h264.decoder
 			int i;
 
 			// edge emu needs blocksize + filter length - 1 (=17x17 for halfpel / 21x21 for h264)
-			s.allocated_edge_emu_buffer = new int[(s.width + 64) * 2 * 21 * 2];
+			s.allocated_edge_emu_buffer = new byte[(s.width + 64) * 2 * 21 * 2];
 			//FF_ALLOCZ_OR_GOTO(s.avctx, s.allocated_edge_emu_buffer, (s.width+64)*2*21*2, fail); //(width + edge + align)*interlaced*MBsize*tolerance
 			s.edge_emu_buffer_offset = (s.width + 64) * 2 * 21;
 

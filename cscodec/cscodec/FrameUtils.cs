@@ -28,18 +28,11 @@ namespace cscodec
 			return bi;
 		}
 
-		static private int Clamp(int Value, int Min, int Max)
-		{
-			if (Value < Min) return Min;
-			if (Value > Max) return Max;
-			return Value;
-		}
-
 		public static void YUV2RGB(AVFrame f, int[] rgb)
 		{
-			int[] luma = f.data_base[0];
-			int[] cb = f.data_base[1];
-			int[] cr = f.data_base[2];
+			var luma = f.data_base[0];
+			var cb = f.data_base[1];
+			var cr = f.data_base[2];
 			int stride = f.linesize[0];
 			int strideChroma = f.linesize[1];
 
@@ -54,9 +47,9 @@ namespace cscodec
 					int d = cb[lineOffChroma + (x >> 1)] - 128;
 					int e = cr[lineOffChroma + (x >> 1)] - 128;
 
-					byte red = (byte)Clamp((298 * c + 409 * e + 128) >> 8, 0, 255);
-					byte green = (byte)Clamp((298 * c - 100 * d - 208 * e + 128) >> 8, 0, 255);
-					byte blue = (byte)Clamp((298 * c + 516 * d + 128) >> 8, 0, 255);
+					byte red = (byte)MathUtils.Clamp((298 * c + 409 * e + 128) >> 8, 0, 255);
+					byte green = (byte)MathUtils.Clamp((298 * c - 100 * d - 208 * e + 128) >> 8, 0, 255);
+					byte blue = (byte)MathUtils.Clamp((298 * c + 516 * d + 128) >> 8, 0, 255);
 					byte alpha = 255;
 
 					rgb[lineOffLuma + x] = (alpha << 24) | (red << 16) | (green << 8) | (blue << 0);
