@@ -19,13 +19,28 @@ public class H264Player {
 	/**
 	 * @param args
 	 */
+	[STAThreadAttribute]
 	public static void Main(string[] args) {
-		args = new string[] { @"C:\projects\h264j\H264Player\sample_clips\admiral.264" };
+		if (args.Length < 1)
+		{
+			var OpenFileDialog = new OpenFileDialog();
+			OpenFileDialog.CheckFileExists = true;
+			OpenFileDialog.Filter = "h264 files|*.h264;*.264|All Files|*.*";
+			if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+			{
+				args = new string[] { OpenFileDialog.FileName };
+			}
+			else
+			{
+				Console.WriteLine("Usage: H264Player <.h264 raw file>\n");
+				return;
+			}
+		}
 
 		// TODO Auto-generated method stub
 		if (args.Length < 1)
 		{
-			Console.WriteLine("Usage: java com.twilight.h264.decoder.H264Player <.h264 raw file>\n");
+			Console.WriteLine("Usage: H264Player <.h264 raw file>\n");
 			return;
 		}
 		else
@@ -34,7 +49,7 @@ public class H264Player {
 
 			H264Player.frame = new Form()
 			{
-				Text = "Player",
+				Text = "cscodec.h264 Player",
 				FormBorderStyle = FormBorderStyle.FixedDialog,
 				MinimizeBox = false,
 				StartPosition = FormStartPosition.CenterScreen,
@@ -96,37 +111,40 @@ public class H264Player {
 		{
 			avpkt.av_init_packet();
 
-			/* set end of buffer to 0 (this ensures that no overreading happens for damaged mpeg streams) */
+			// Set end of buffer to 0 (this ensures that no overreading happens for damaged mpeg streams)
 			Arrays.fill(inbuf, INBUF_SIZE, MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE + INBUF_SIZE, (sbyte)0);
 
 			Console.WriteLine("Video decoding\n");
 
-			/* find the mpeg1 video decoder */
+			// Find the mpeg1 video decoder
 			codec = new H264Decoder();
 			if (codec == null)
 			{
 				Console.WriteLine("codec not found\n");
 				Environment.Exit(1);
-			} // if
+			}
 
 			c = MpegEncContext.avcodec_alloc_context();
 			picture = AVFrame.avcodec_alloc_frame();
 
+			// We do not send complete frames
 			if ((codec.capabilities & H264Decoder.CODEC_CAP_TRUNCATED) != 0)
-				c.flags |= MpegEncContext.CODEC_FLAG_TRUNCATED; /* we do not send complete frames */
+			{
+				c.flags |= MpegEncContext.CODEC_FLAG_TRUNCATED;
+			}
 
-			/* For some codecs, such as msmpeg4 and mpeg4, width and height
-			   MUST be initialized there because this information is not
-			   available in the bitstream. */
+			// For some codecs, such as msmpeg4 and mpeg4, width and height
+			// MUST be initialized there because this information is not
+			// available in the bitstream.
 
-			/* open it */
+			// Open it
 			if (c.avcodec_open(codec) < 0)
 			{
 				Console.WriteLine("could not open codec\n");
 				Environment.Exit(1);
 			}
 
-			/* the codec gives us the frame size, in samples */
+			// The codec gives us the frame size, in samples
 
 			frame = 0;
 			int dataPointer;
@@ -139,11 +157,7 @@ public class H264Player {
 			cacheRead[1] = fin.ReadByte();
 			cacheRead[2] = fin.ReadByte();
 
-			while (!(
-					cacheRead[0] == 0x00 &&
-					cacheRead[1] == 0x00 &&
-					cacheRead[2] == 0x01
-					))
+			while (!(cacheRead[0] == 0x00 && cacheRead[1] == 0x00 && cacheRead[2] == 0x01))
 			{
 				cacheRead[0] = cacheRead[1];
 				cacheRead[1] = cacheRead[2];
@@ -160,17 +174,10 @@ public class H264Player {
 			{
 				dataPointer = 4;
 				// Find next NAL
-				cacheRead[0] = fin.ReadByte();
-				if (cacheRead[0] == -1) hasMoreNAL = false;
-				cacheRead[1] = fin.ReadByte();
-				if (cacheRead[1] == -1) hasMoreNAL = false;
-				cacheRead[2] = fin.ReadByte();
-				if (cacheRead[2] == -1) hasMoreNAL = false;
-				while (!(
-						cacheRead[0] == 0x00 &&
-						cacheRead[1] == 0x00 &&
-						cacheRead[2] == 0x01
-						) && hasMoreNAL)
+				if ((cacheRead[0] = fin.ReadByte()) == -1) hasMoreNAL = false;
+				if ((cacheRead[1] = fin.ReadByte()) == -1) hasMoreNAL = false;
+				if ((cacheRead[2] = fin.ReadByte()) == -1) hasMoreNAL = false;
+				while (!(cacheRead[0] == 0x00 && cacheRead[1] == 0x00 && cacheRead[2] == 0x01) && hasMoreNAL)
 				{
 					inbuf_int[dataPointer++] = cacheRead[0];
 					cacheRead[0] = cacheRead[1];

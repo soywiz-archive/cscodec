@@ -4437,7 +4437,10 @@ namespace cscodec.h264.decoder
 				}
 			}
 		}
-	
+
+		int[][] mask_edge_tab = Arrays.ConvertDimensional(new int[,]{{0,3,3,3,1,1,1,1},
+													  {0,3,1,1,3,3,3,3}});
+
 		public void filter_mb_dir(int mb_x, int mb_y, 
 				int[] img_y_base, int img_y_offset, 
 				int[] img_cb_base, int img_cb_offset, 
@@ -4450,8 +4453,6 @@ namespace cscodec.h264.decoder
 			// how often to recheck mv-based bS when iterating between edges
 			//static uint8_t mask_edge_tab[2][8]={{0,3,3,3,1,1,1,1},
 			//                                          {0,3,1,1,3,3,3,3}};
-			int[][] mask_edge_tab =Arrays.ConvertDimensional(new int[,]{{0,3,3,3,1,1,1,1},
-													  {0,3,1,1,3,3,3,3}});
 			int mask_edge = mask_edge_tab[dir][(mb_type>>3)&7];
 			int edges = ((mask_edge== 3 && (0==(this.cbp&15)) )? 1 : 4);
 

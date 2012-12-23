@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E8791C5D-F790-404C-B661-D509844DBBFF}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>cscodec.h264</RootNamespace>
     <AssemblyName>cscodec.h264</AssemblyName>
@@ -38,7 +38,6 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -84,20 +83,15 @@
     <Compile Include="decoder\SequenceParameterSet.cs" />
     <Compile Include="decoder\VLC.cs" />
     <Compile Include="decoder\VLCcode.cs" />
+    <Compile Include="player\FrameDecoder.cs" />
     <Compile Include="player\FrameUtils.cs" />
-    <Compile Include="player\H264Player.cs" />
     <Compile Include="player\PlayerFrame.cs" />
     <Compile Include="player\VideoPacket.cs" />
     <Compile Include="util\Arrays.cs" />
     <Compile Include="util\Buffer.cs" />
-    <Compile Include="util\BufferedInputStream.cs" />
-    <Compile Include="util\CountingInputStream.cs" />
-    <Compile Include="util\FilterInputStream.cs" />
     <Compile Include="util\Frame.cs" />
     <Compile Include="util\FrameUtils.cs" />
     <Compile Include="util\HashUtil.cs" />
-    <Compile Include="util\IOUtils.cs" />
-    <Compile Include="util\PushbackInputStream.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
