@@ -19,9 +19,8 @@ namespace cscodec.h264.player
 		int frame, len;
 		int[] got_picture = new int[1];
 		AVFrame picture;
-		//uint8_t inbuf[INBUF_SIZE + H264Context.FF_INPUT_BUFFER_PADDING_SIZE];
 		sbyte[] inbuf = new sbyte[INBUF_SIZE + MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE];
-		int[] inbuf_int = new int[INBUF_SIZE + MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE];
+		byte[] inbuf_int = new byte[INBUF_SIZE + MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE];
 		//char buf[1024];
 		sbyte[] buf = new sbyte[1024];
 		AVPacket avpkt = new AVPacket();
@@ -122,11 +121,11 @@ namespace cscodec.h264.player
 				if ((cacheRead[2] = fin.ReadByte()) == -1) hasMoreNAL = false;
 				while (!(cacheRead[0] == 0x00 && cacheRead[1] == 0x00 && cacheRead[2] == 0x01) && hasMoreNAL)
 				{
-					inbuf_int[dataPointer++] = cacheRead[0];
+					inbuf_int[dataPointer++] = (byte)cacheRead[0];
 					cacheRead[0] = cacheRead[1];
 					cacheRead[1] = cacheRead[2];
 					cacheRead[2] = fin.ReadByte();
-					if (cacheRead[2] == -1) hasMoreNAL = false;
+					if (fin.Position >= fin.Length) hasMoreNAL = false;
 				} // while
 
 				avpkt.size = dataPointer;

@@ -703,8 +703,7 @@ namespace cscodec.h264.decoder
 		 * - encoding: Set/allocated/freed by libavcodec.
 		 * - decoding: Set/allocated/freed by user.
 		 */
-		/*uint8_t **/
-		public int[] extradata;
+		public byte[] extradata;
 		public int extradata_size;
 
 		public static /*enum PixelFormat*/ int get_format(/*const enum PixelFormat*/int[] fmt)

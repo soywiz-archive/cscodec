@@ -99,7 +99,7 @@ namespace cscodec.h264.decoder
 				15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,15,17,
 				};
 
-		public int[] buffer; // const uint8_t *buffer, *buffer_end;
+		public byte[] buffer;
 		public int buffer_offset;
 		public int buffer_end;
 		public int index;
@@ -407,8 +407,7 @@ namespace cscodec.h264.decoder
 		 * While GetBitContext stores the buffer size, for performance reasons you are
 		 * responsible for checking for the buffer end yourself (take advantage of the padding)!
 		 */
-		public /*inline*/ void init_get_bits(
-			/*const uint8_t **/ int[] buffer, int buffer_offset, int bit_size)
+		public void init_get_bits(byte[] buffer, int buffer_offset, int bit_size)
 		{
 			int buffer_size = (bit_size + 7) >> 3;
 			if (buffer_size < 0 || bit_size < 0)

@@ -13,7 +13,7 @@ namespace cscodec.h264.decoder
 		public int symCount;
 		public int bytestream_start;
 		public int bytestream_current;
-		public int[] bytestream;
+		public byte[] bytestream;
 		public int bytestream_end;
 		public PutBitContext pb;
 
@@ -730,7 +730,7 @@ namespace cscodec.h264.decoder
 		*
 		* @param buf_size size of buf in bits
 		*/
-		public void ff_init_cabac_decoder(int[] buf, int buf_offset, int buf_size)
+		public void ff_init_cabac_decoder(byte[] buf, int buf_offset, int buf_size)
 		{
 			bytestream_start = buf_offset;
 			bytestream_current = buf_offset;

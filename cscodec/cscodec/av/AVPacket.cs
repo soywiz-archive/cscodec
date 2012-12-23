@@ -19,8 +19,7 @@ namespace cscodec.av
 		 * Can be AV_NOPTS_VALUE if it is not stored in the file.
 		 */
 		public long dts;
-		/*uint8_t **/
-		public int[] data_base;
+		public byte[] data_base;
 		public int data_offset;
 		public int size;
 		public int stream_index;
@@ -64,7 +63,5 @@ namespace cscodec.av
 			this.stream_index = 0;
 			//this.destruct= null;
 		}
-
-
 	}
 }

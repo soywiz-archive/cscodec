@@ -340,7 +340,7 @@ namespace cscodec.h264.decoder
 
 		public int nal_ref_idc;
 		public int nal_unit_type;
-		public int[][] rbsp_buffer = new int[2][]; // uint8_t *rbsp_buffer[2];
+		public byte[][] rbsp_buffer = new byte[2][];
 		public long[] rbsp_buffer_size = new long[2]; // unsigned int rbsp_buffer_size[2];
 
 		/**
@@ -3505,7 +3505,7 @@ namespace cscodec.h264.decoder
 			if ((mb_type & MB_TYPE_INTRA_PCM) != 0)
 			{
 				int ptr_offset = cabac.bytestream_current;
-				int[] ptr = cabac.bytestream;
+				byte[] ptr = cabac.bytestream;
 
 				// We assume these blocks are very rare so we do not optimize it.
 				// FIXME The two following lines get the bitstream position in the cabac
@@ -5660,8 +5660,9 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 				/* init cabac */
 				this.cabac.ff_init_cabac_states();
 				this.cabac.ff_init_cabac_decoder(
-									   s.gb.buffer, s.gb.buffer_offset + s.gb.get_bits_count() / 8,
-									   (s.gb.get_bits_left() + 7) / 8);
+					s.gb.buffer, s.gb.buffer_offset + s.gb.get_bits_count() / 8,
+					(s.gb.get_bits_left() + 7) / 8
+				);
 
 				cabac.ff_h264_init_cabac_states(this);
 
@@ -6254,7 +6255,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		//	public static void av_fast_malloc(void *ptr, unsigned int *size, FF_INTERNALC_MEM_TYPE min_size)
 		//  param1[0] = ptr :int[] (in/out)
 		//  param2[0] = size :int (in/out)
-		public static void av_fast_malloc(int[][] param1, int[] param2, int min_size)
+		public static void av_fast_malloc(byte[][] param1, int[] param2, int min_size)
 		{
 			int size = param2[0];
 			//void **p = ptr;
@@ -6262,7 +6263,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 				return;
 			min_size = Math.Max(17 * min_size / 16 + 32, min_size);
 			//av_free(*p);
-			param1[0] = new int[min_size];
+			param1[0] = new byte[min_size];
 			//if (!*p) min_size = 0;
 			param2[0] = min_size;
 		}
@@ -6272,11 +6273,11 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		 * dst_length_consumed[1] = consumed
 		 * dst_length_consumed[2] = dst_offset
 		 */
-		public int[] ff_h264_decode_nal(/*const uint8_t *src*/int[] src_base, int src_offset, /*int *dst_length, int *consumed*/ int[] dst_length_consumed, int length)
+		public byte[] ff_h264_decode_nal(byte[] src_base, int src_offset, /*int *dst_length, int *consumed*/ int[] dst_length_consumed, int length)
 		{
 			int i, si, di;
 			//uint8_t *dst;
-			int[] dst;
+			byte[] dst;
 			int dst_offset = 0;
 			int bufidx;
 
@@ -6358,7 +6359,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 
 			bufidx = (this.nal_unit_type == NAL_DPC ? 1 : 0); // use second escape buffer for inter data
 			//av_fast_malloc(&this.rbsp_buffer[bufidx], &this.rbsp_buffer_size[bufidx], length+MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE);
-			int[][] param1 = new int[][] { this.rbsp_buffer[bufidx] };
+			byte[][] param1 = new byte[][] { this.rbsp_buffer[bufidx] };
 			int[] param2 = new int[] { (int)this.rbsp_buffer_size[bufidx] };
 			av_fast_malloc(param1, param2, length + MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE);
 			this.rbsp_buffer[bufidx] = param1[0];
@@ -6410,7 +6411,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 			//	nsc:
 
 			//memset(dst+di, 0, FF_INPUT_BUFFER_PADDING_SIZE);
-			Arrays.Fill(dst, di, di + MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE, 0);
+			Arrays.Fill(dst, di, di + MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE, (byte)0);
 
 			dst_length_consumed[0] = di;
 			dst_length_consumed[1] = si + 1;//+1 for the header
@@ -6419,7 +6420,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 			return dst;
 		}
 
-		public int ff_h264_decode_rbsp_trailing(/*const uint8_t *src*/ int[] src_base, int src_offset)
+		public int ff_h264_decode_rbsp_trailing(byte[] src_base, int src_offset)
 		{
 			int v = src_base[src_offset];
 			int r;
@@ -7325,7 +7326,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 
 		////////////////////////////
 		// Decode NAL Units		
-		public int decode_nal_units( /*const uint8_t *buf*/int[] buf_base, int buf_offset, int buf_size)
+		public int decode_nal_units(byte[] buf_base, int buf_offset, int buf_size)
 		{
 			int buf_index = 0;
 			H264Context hx = this; ///< thread context
@@ -7347,7 +7348,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 				int dst_length;
 				int bit_length;
 				//const uint8_t *ptr;
-				int[] ptr_base;
+				byte[] ptr_base;
 				int ptr_offset;
 				int i, nalsize = 0;
 				int err;
@@ -9714,8 +9715,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 			if (s.extradata[0] == 1)
 			{
 				int i, cnt, nalsize;
-				/*unsigned char *p*/
-				int[] p_base = s.extradata;
+				byte[] p_base = s.extradata;
 				int p_offset = 0;
 
 				this.is_avc = 1;
@@ -9796,7 +9796,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 		public int decode_frame(AVFrame data, int[] data_size, AVPacket avpkt)
 		{
 			/* const uint8_t * */
-			int[] buf_base = avpkt.data_base;
+			byte[] buf_base = avpkt.data_base;
 			int buf_offset = avpkt.data_offset;
 			int buf_size = avpkt.size;
 			//AVFrame pict = data;
