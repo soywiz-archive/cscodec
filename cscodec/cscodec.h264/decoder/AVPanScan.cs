@@ -1,4 +1,4 @@
-using cscodec.h264.util;
+using cscodec.util;
 namespace cscodec.h264.decoder
 {
 	public class AVPanScan {
@@ -22,6 +22,6 @@ namespace cscodec.h264.decoder
 		 * - encoding: Set by user.
 		 * - decoding: Set by libavcodec.
 		 */
-		public int[][] position = Arrays.Create2D<int>(3, 2);
+		public int[][] position = Arrays.Create<int>(3, 2);
 	}
 }

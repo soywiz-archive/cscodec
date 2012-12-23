@@ -1,4 +1,4 @@
-using cscodec.h264.util;
+using cscodec.util;
 using System;
 namespace cscodec.h264.decoder
 {
@@ -21,8 +21,8 @@ namespace cscodec.h264.decoder
 		/*uint8_t*/ public int[] idct_permutation = new int[64];
 		public int idct_permutation_type;
 	
-		public static Ih264_qpel_mc_func[][] put_h264_qpel_pixels_tab = Arrays.Create2D<Ih264_qpel_mc_func>(4,16);
-		public static Ih264_qpel_mc_func[][] avg_h264_qpel_pixels_tab = Arrays.Create2D<Ih264_qpel_mc_func>(4,16);
+		public static Ih264_qpel_mc_func[][] put_h264_qpel_pixels_tab = Arrays.Create<Ih264_qpel_mc_func>(4,16);
+		public static Ih264_qpel_mc_func[][] avg_h264_qpel_pixels_tab = Arrays.Create<Ih264_qpel_mc_func>(4,16);
 
 		/* draw the edges of width 'w' of an image of size width, height */
 		//FIXME check that this is ok for mpeg4 interlaced
@@ -49,21 +49,21 @@ namespace cscodec.h264.decoder
 			ptr_base = buf_base;
 			ptr_offset = buf_offset;
 			for(i=0;i<height;i++) {
-	    		Arrays.fill(ptr_base, ptr_offset -w, ptr_offset -w +w, ptr_base[ptr_offset]);
+	    		Arrays.Fill(ptr_base, ptr_offset -w, ptr_offset -w +w, ptr_base[ptr_offset]);
 				//memset(ptr - w, ptr[0], w);
-	    		Arrays.fill(ptr_base, ptr_offset +width, ptr_offset +width +w, ptr_base[ptr_offset + width-1]);
+	    		Arrays.Fill(ptr_base, ptr_offset +width, ptr_offset +width +w, ptr_base[ptr_offset + width-1]);
 				//memset(ptr + width, ptr[width-1], w);
 				ptr_offset += wrap;
 			}
 			/* corners */
 			for(i=0;i<w;i++) {
-	    		Arrays.fill(buf_base, buf_offset - (i + 1) * wrap - w, buf_offset - (i + 1) * wrap - w +w, buf_base[buf_offset]);
+	    		Arrays.Fill(buf_base, buf_offset - (i + 1) * wrap - w, buf_offset - (i + 1) * wrap - w +w, buf_base[buf_offset]);
 				//memset(buf - (i + 1) * wrap - w, buf[0], w); /* top left */
-	    		Arrays.fill(buf_base, buf_offset - (i + 1) * wrap + width, buf_offset - (i + 1) * wrap + width +w, buf_base[buf_offset + width-1]);
+	    		Arrays.Fill(buf_base, buf_offset - (i + 1) * wrap + width, buf_offset - (i + 1) * wrap + width +w, buf_base[buf_offset + width-1]);
 	    		//memset(buf - (i + 1) * wrap + width, buf[width-1], w); /* top right */
-	    		Arrays.fill(last_line_base, last_line_offset + (i + 1) * wrap - w, last_line_offset + (i + 1) * wrap - w +w, last_line_base[last_line_offset]);
+	    		Arrays.Fill(last_line_base, last_line_offset + (i + 1) * wrap - w, last_line_offset + (i + 1) * wrap - w +w, last_line_base[last_line_offset]);
 				//memset(last_line + (i + 1) * wrap - w, last_line[0], w); /* top left */
-	    		Arrays.fill(last_line_base, last_line_offset + (i + 1) * wrap + width, last_line_offset + (i + 1) * wrap + width +w, last_line_base[last_line_offset + width-1]);
+	    		Arrays.Fill(last_line_base, last_line_offset + (i + 1) * wrap + width, last_line_offset + (i + 1) * wrap + width +w, last_line_base[last_line_offset + width-1]);
 				//memset(last_line + (i + 1) * wrap + width, last_line[width-1], w); /* top right */
 			}
 		}
@@ -177,7 +177,7 @@ namespace cscodec.h264.decoder
 	
 		public void clear_block(short[] block)
 		{
-			Arrays.fill(block,0,64,(short)0);
+			Arrays.Fill(block,0,64,(short)0);
 			//memset(block, 0, sizeof(DCTELEM)*64);
 		}
 	
@@ -187,13 +187,13 @@ namespace cscodec.h264.decoder
 		public void clear_blocks(short[][]blocks, int first_block_index)
 		{
 			for(int i=0;i<6;i++)
-				Arrays.fill(blocks[first_block_index],0,64,(short)0);
+				Arrays.Fill(blocks[first_block_index],0,64,(short)0);
 			//memset(blocks, 0, sizeof(DCTELEM)*6*64);
 		}
 
 		public void clear_blocks(short[] blocks)
 		{
-			Arrays.fill(blocks,0,6*64,(short)0);
+			Arrays.Fill(blocks,0,6*64,(short)0);
 			//memset(blocks, 0, sizeof(DCTELEM)*6*64);
 		}
 

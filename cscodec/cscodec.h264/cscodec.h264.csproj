@@ -87,15 +87,16 @@
     <Compile Include="player\FrameUtils.cs" />
     <Compile Include="player\PlayerFrame.cs" />
     <Compile Include="player\VideoPacket.cs" />
-    <Compile Include="util\Arrays.cs" />
-    <Compile Include="util\Buffer.cs" />
-    <Compile Include="util\Frame.cs" />
-    <Compile Include="util\FrameUtils.cs" />
-    <Compile Include="util\HashUtil.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="README.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\cscodec\cscodec.csproj">
+      <Project>{351dcb00-efcf-435a-9c72-9a7e1d5950b0}</Project>
+      <Name>cscodec</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

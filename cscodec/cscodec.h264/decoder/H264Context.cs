@@ -1,5 +1,6 @@
-using cscodec.h264.util;
 using System;
+using cscodec.util;
+
 namespace cscodec.h264.decoder
 {
 	public class H264Context {
@@ -179,8 +180,8 @@ namespace cscodec.h264.decoder
 		/**
 		 * Motion vector cache.
 		 */
-		public int[][][] mv_cache = Arrays.Create3D<int>(2, 5 * 8, 2); // DECLARE_ALIGNED(16, int16_t, mv_cache)[2][5*8][2];
-		public int[][] ref_cache = Arrays.Create2D<int>(2, 5 * 8); // DECLARE_ALIGNED(8, int8_t, ref_cache)[2][5*8];
+		public int[][][] mv_cache = Arrays.Create<int>(2, 5 * 8, 2); // DECLARE_ALIGNED(16, int16_t, mv_cache)[2][5*8][2];
+		public int[][] ref_cache = Arrays.Create<int>(2, 5 * 8); // DECLARE_ALIGNED(8, int8_t, ref_cache)[2][5*8];
 
 		/**
 		 * is 1 if the specific list MV&references are set to 0,0,-2.
@@ -216,8 +217,8 @@ namespace cscodec.h264.decoder
 		 */
 		public PictureParameterSet pps = new PictureParameterSet(); //FIXME move to Picture perhaps? (->no) do we need that?
 
-		public long[][][] dequant4_buffer = Arrays.Create3D<long>(6, 52, 16); // uint32_t dequant4_buffer[6][52][16]; //FIXME should these be moved down?
-		public long[][][] dequant8_buffer = Arrays.Create3D<long>(2, 52, 64); // uint32_t dequant8_buffer[2][52][64];
+		public long[][][] dequant4_buffer = Arrays.Create<long>(6, 52, 16); // uint32_t dequant4_buffer[6][52][16]; //FIXME should these be moved down?
+		public long[][][] dequant8_buffer = Arrays.Create<long>(2, 52, 64); // uint32_t dequant8_buffer[2][52][64];
 		public long[][][] dequant4_coeff = new long[16][][]; // uint32_t (*dequant4_coeff[6])[16];
 		public long[][][] dequant8_coeff = new long[64][][]; // uint32_t (*dequant8_coeff[2])[64];	
 	
@@ -241,17 +242,17 @@ namespace cscodec.h264.decoder
 		public int luma_log2_weight_denom;
 		public int chroma_log2_weight_denom;
 		//The following 2 can be changed to int8_t but that causes 10cpu cycles speedloss
-		public int[][][] luma_weight = Arrays.Create3D<int>(48, 2, 2);
-		public int[][][][] chroma_weight = Arrays.Create4D<int>(48, 2, 2, 2);
-		public int[][][] implicit_weight = Arrays.Create3D<int>(48, 48, 2);
+		public int[][][] luma_weight = Arrays.Create<int>(48, 2, 2);
+		public int[][][][] chroma_weight = Arrays.Create<int>(48, 2, 2, 2);
+		public int[][][] implicit_weight = Arrays.Create<int>(48, 48, 2);
 
 		public int direct_spatial_mv_pred;
 		public int col_parity;
 		public int col_fieldoff;
 		public int[] dist_scale_factor = new int[16];
-		public int[][] dist_scale_factor_field = Arrays.Create2D<int>(2, 32);
-		public int[][] map_col_to_list0 = Arrays.Create2D<int>(2, 16 + 32);
-		public int[][][] map_col_to_list0_field = Arrays.Create3D<int>(2, 2, 16 + 32);
+		public int[][] dist_scale_factor_field = Arrays.Create<int>(2, 32);
+		public int[][] map_col_to_list0 = Arrays.Create<int>(2, 16 + 32);
+		public int[][][] map_col_to_list0_field = Arrays.Create<int>(2, 2, 16 + 32);
 
 		/**
 		 * num_ref_idx_l0/1_active_minus1 + 1
@@ -259,10 +260,10 @@ namespace cscodec.h264.decoder
 		public long[] ref_count = new long[2];   // unsigned int ref_count[2];   ///< counts frames or fields, depending on current mb mode
 		public long list_count;
 		public int[] list_counts;            ///< Array of list_count per MB specifying the slice type
-		public AVFrame[][] ref_list = Arrays.Create2D<AVFrame>(2, 48);         /**< 0..15: frame refs, 16..47: mbaff field refs.
+		public AVFrame[][] ref_list = Arrays.Create<AVFrame>(2, 48);         /**< 0..15: frame refs, 16..47: mbaff field refs.
 											  Reordered version of default_ref_list
 											  according to picture reordering in slice header */
-		public int[][][] ref2frm = Arrays.Create3D<int>(MAX_SLICES, 2, 64);  ///< reference to frame number lists, used in the loop filter, the first 2 are for -2,-1
+		public int[][][] ref2frm = Arrays.Create<int>(MAX_SLICES, 2, 64);  ///< reference to frame number lists, used in the loop filter, the first 2 are for -2,-1
 
 		//data partitioning
 		public GetBitContext intra_gb;
@@ -272,7 +273,7 @@ namespace cscodec.h264.decoder
 
 		public short[] mb = new short[16*24];
 		public short[] mb_luma_dc = new short[16];
-		public short[][] mb_chroma_dc = Arrays.Create2D<short>(2, 4);
+		public short[][] mb_chroma_dc = Arrays.Create<short>(2, 4);
 		public short[] mb_padding = new short[256];        ///< as mb is addressed by scantable[i] and scantable is uint8_t we can either check that i is not too large or ensure that there is some unused stuff after mb
 
 		/**
@@ -290,7 +291,7 @@ namespace cscodec.h264.decoder
 		public int[]     chroma_pred_mode_table; // uint8_t     *chroma_pred_mode_table;
 		public int         last_qscale_diff;
 		public int[][][]     mvd_table = new int[2][][]; // uint8_t     (*mvd_table[2])[2];
-		public int[][][] mvd_cache = Arrays.Create3D<int>(2, 5 * 8, 2); // DECLARE_ALIGNED(16, uint8_t, mvd_cache)[2][5*8][2];
+		public int[][][] mvd_cache = Arrays.Create<int>(2, 5 * 8, 2); // DECLARE_ALIGNED(16, uint8_t, mvd_cache)[2][5*8][2];
 		public int[]     direct_table; // uint8_t     *direct_table;
 		public int[]     direct_cache = new int[5*8]; // uint8_t     direct_cache[5*8];
 
@@ -379,7 +380,7 @@ namespace cscodec.h264.decoder
 
 		public AVFrame[] short_ref = new AVFrame[32];
 		public AVFrame[] long_ref = new AVFrame[32];
-		public AVFrame[][] default_ref_list = Arrays.Create2D<AVFrame>(2, 32); ///< base reference list for all slices of a coded picture
+		public AVFrame[][] default_ref_list = Arrays.Create<AVFrame>(2, 32); ///< base reference list for all slices of a coded picture
 		public AVFrame[] delayed_pic = new AVFrame[MAX_DELAYED_PIC_COUNT+2]; //FIXME size?
 		public int outputed_poc;
 
@@ -889,10 +890,10 @@ namespace cscodec.h264.decoder
 								int[] mv_col = l1mv_base[l1mv_offset + x8*2 + (i4&1) + (y8*2 + (i4>>1))*b4_stride];
 								if(Math.Abs(mv_col[0]) <= 1 && Math.Abs(mv_col[1]) <= 1){
 									if(@ref[0] == 0)
-	                            		Arrays.fill(this.mv_cache[0][scan8[i8*4+i4]], 0, 2, 0);
+	                            		Arrays.Fill(this.mv_cache[0][scan8[i8*4+i4]], 0, 2, 0);
 										//AV_ZERO32(this.mv_cache[0][scan8[i8*4+i4]]);
 									if(@ref[1] == 0)
-	                            		Arrays.fill(this.mv_cache[1][scan8[i8*4+i4]], 0, 2, 0);
+	                            		Arrays.Fill(this.mv_cache[1][scan8[i8*4+i4]], 0, 2, 0);
 	                            		//AV_ZERO32(this.mv_cache[1][scan8[i8*4+i4]]);
 									m++;
 								}
@@ -1207,7 +1208,7 @@ namespace cscodec.h264.decoder
 					long[] mb_types_base = s.current_picture_ptr.mb_type_base;
 					int mb_types_offset = s.current_picture_ptr.mb_type_offset;
 					int[] mv;
-					Arrays.fill(this.mv_cache[list][scan8[0]-2], 0, 2, 0); // size = int_16 x 2
+					Arrays.Fill(this.mv_cache[list][scan8[0]-2], 0, 2, 0); // size = int_16 x 2
 					pC[0] = this.mv_cache[list][scan8[0]-2];
 
 					if(0 == mb_field_decoding_flag
@@ -1665,7 +1666,7 @@ namespace cscodec.h264.decoder
 						//AV_WN32A(&this.ref_cache[list][scan8[0] + 0 - 1*8], ((top_type !=0? LIST_NOT_USED : PART_NOT_AVAILABLE)&0xFF)*0x01010101);
 
 	            		//// !!!????????????? Need to be unsigned
-	            		Arrays.fill(this.ref_cache[list], scan8[0] + 0 - 1*8, scan8[0] + 0 - 1*8 +4, ((top_type !=0? LIST_NOT_USED : PART_NOT_AVAILABLE)/*&0xFF*/));
+	            		Arrays.Fill(this.ref_cache[list], scan8[0] + 0 - 1*8, scan8[0] + 0 - 1*8 +4, ((top_type !=0? LIST_NOT_USED : PART_NOT_AVAILABLE)/*&0xFF*/));
 					}
 
 					if((mb_type & (MB_TYPE_16x8|MB_TYPE_8x8)) != 0){
@@ -1684,8 +1685,8 @@ namespace cscodec.h264.decoder
 						}else{
 							//AV_ZERO32(this.mv_cache [list][cache_idx  ]);
 							//AV_ZERO32(this.mv_cache [list][cache_idx+8]);
-		            		Arrays.fill(this.mv_cache [list][cache_idx  ],0,2,0);
-		            		Arrays.fill(this.mv_cache [list][cache_idx+8  ],0,2,0);
+		            		Arrays.Fill(this.mv_cache [list][cache_idx  ],0,2,0);
+		            		Arrays.Fill(this.mv_cache [list][cache_idx+8  ],0,2,0);
 
 							this.ref_cache[list][cache_idx  ]=
 	                    		this.ref_cache[list][cache_idx+8]= (left_type[i]!=0) ? LIST_NOT_USED : PART_NOT_AVAILABLE;
@@ -1702,7 +1703,7 @@ namespace cscodec.h264.decoder
 							this.ref_cache[list][scan8[0] - 1]= s.current_picture.ref_index[list][b8_xy + (left_block[0]&~1)];
 						}else{
 							//AV_ZERO32(this.mv_cache [list][scan8[0] - 1]);
-	                		Arrays.fill(this.mv_cache [list][scan8[0] - 1],0,2,0);
+	                		Arrays.Fill(this.mv_cache [list][scan8[0] - 1],0,2,0);
 							this.ref_cache[list][scan8[0] - 1]= left_type[0]!=0 ? LIST_NOT_USED : PART_NOT_AVAILABLE;
 						}
 					}
@@ -1715,7 +1716,7 @@ namespace cscodec.h264.decoder
 						this.ref_cache[list][scan8[0] + 4 - 1*8]= s.current_picture.ref_index[list][4*topright_xy + 2];
 					}else{
 						//AV_ZERO32(this.mv_cache [list][scan8[0] + 4 - 1*8]);
-	            		Arrays.fill(this.mv_cache [list][scan8[0] + 4 - 1*8], 0, 2, 0);
+	            		Arrays.Fill(this.mv_cache [list][scan8[0] + 4 - 1*8], 0, 2, 0);
 						this.ref_cache[list][scan8[0] + 4 - 1*8]= topright_type != 0? LIST_NOT_USED : PART_NOT_AVAILABLE;
 					}
 					if(this.ref_cache[list][scan8[0] + 4 - 1*8] < 0){
@@ -1728,7 +1729,7 @@ namespace cscodec.h264.decoder
 							this.ref_cache[list][scan8[0] - 1 - 1*8]= s.current_picture.ref_index[list][b8_xy];
 						}else{
 							//AV_ZERO32(this.mv_cache[list][scan8[0] - 1 - 1*8]);
-	                		Arrays.fill(this.mv_cache[list][scan8[0] - 1 - 1*8], 0, 2, 0);
+	                		Arrays.Fill(this.mv_cache[list][scan8[0] - 1 - 1*8], 0, 2, 0);
 							this.ref_cache[list][scan8[0] - 1 - 1*8]= topleft_type!=0 ? LIST_NOT_USED : PART_NOT_AVAILABLE;
 						}
 					}
@@ -1741,8 +1742,8 @@ namespace cscodec.h264.decoder
 	            			this.ref_cache[list][scan8[12]] = PART_NOT_AVAILABLE;
 					//AV_ZERO32(this.mv_cache [list][scan8[4 ]]);
 					//AV_ZERO32(this.mv_cache [list][scan8[12]]);
-					Arrays.fill(this.mv_cache [list][scan8[4 ]], 0, 2, 0);
-					Arrays.fill(this.mv_cache [list][scan8[12 ]], 0, 2, 0);
+					Arrays.Fill(this.mv_cache [list][scan8[4 ]], 0, 2, 0);
+					Arrays.Fill(this.mv_cache [list][scan8[12 ]], 0, 2, 0);
 
 					if( pps.cabac != 0 ) {
 						/* XXX beurk, Load mvd */
@@ -1827,14 +1828,14 @@ namespace cscodec.h264.decoder
 
 							if((top_type & MB_TYPE_DIRECT2) != 0){
 								//AV_WN32A(&this.direct_cache[scan8[0] - 1*8], 0x01010101u*(MB_TYPE_DIRECT2>>1));
-								Arrays.fill(this.direct_cache, scan8[0] - 1*8, scan8[0] - 1*8 +4, (MB_TYPE_DIRECT2>>1));
+								Arrays.Fill(this.direct_cache, scan8[0] - 1*8, scan8[0] - 1*8 +4, (MB_TYPE_DIRECT2>>1));
 							}else if((top_type & MB_TYPE_8x8) != 0){
 								int b8_xy = 4*top_xy;
 								this.direct_cache[scan8[0] + 0 - 1*8]= this.direct_table[b8_xy + 2];
 								this.direct_cache[scan8[0] + 2 - 1*8]= this.direct_table[b8_xy + 3];
 							}else{
 								//AV_WN32A(&this.direct_cache[scan8[0] - 1*8], 0x01010101*(MB_TYPE_16x16>>1));
-	                    		Arrays.fill(this.direct_cache, scan8[0] - 1*8, scan8[0] - 1*8 +4, (MB_TYPE_16x16>>1));
+	                    		Arrays.Fill(this.direct_cache, scan8[0] - 1*8, scan8[0] - 1*8 +4, (MB_TYPE_16x16>>1));
 							}
 
 							if((left_type[0] & MB_TYPE_DIRECT2) != 0)
@@ -1953,7 +1954,7 @@ namespace cscodec.h264.decoder
 						//AV_ZERO128(mvd_dst);
 	            		// Fill 8 uint_16 with 0..
 	            		for(int k=0;k<8;k++)
-	            			Arrays.fill(mvd_dst_base[mvd_dst_offset + k], 0 , 2, 0);
+	            			Arrays.Fill(mvd_dst_base[mvd_dst_offset + k], 0 , 2, 0);
 					} else {
 	            		//AV_COPY64(mvd_dst, mvd_src + 8*3);
 						//AV_COPY16(mvd_dst + 3 + 3, mvd_src + 3 + 8*0);
@@ -2589,8 +2590,8 @@ namespace cscodec.h264.decoder
 			int mb_xy= this.mb_xy;
 			int mb_type=0;
 
-			Arrays.fill(non_zero_count[mb_xy], 0); // Fill 32 integers
-			Arrays.fill(non_zero_count_cache, 8, non_zero_count_cache.Length, 0); // Fill 8*5 integers
+			Arrays.Fill(non_zero_count[mb_xy], 0); // Fill 32 integers
+			Arrays.Fill(non_zero_count_cache, 8, non_zero_count_cache.Length, 0); // Fill 8*5 integers
 
 			// DebugTool.dumpDebugFrameData(this, "Reset non_zero_count_cache to 0s.", false);
 
@@ -3041,7 +3042,7 @@ namespace cscodec.h264.decoder
 				// In deblocking, the quantizer is 0
 				s.current_picture.qscale_table[mb_xy]= 0;
 				// All coeffs are present
-				Arrays.fill(non_zero_count[mb_xy], 16); // 32 bytes fill
+				Arrays.Fill(non_zero_count[mb_xy], 16); // 32 bytes fill
 				//memset(h->non_zero_count[mb_xy], 16, 32);
 				s.current_picture.mb_type_base[s.current_picture.mb_type_offset + mb_xy]= mb_type;
 				last_qscale_diff = 0;
@@ -3094,7 +3095,7 @@ namespace cscodec.h264.decoder
 				int i, j; 
 				int[] sub_partition_count = new int[4];
 				int list;
-				int[][] @ref = Arrays.Create2D<int>(2, 4);
+				int[][] @ref = Arrays.Create<int>(2, 4);
 
 				if( slice_type_nos == FF_B_TYPE ) {
 					for( i = 0; i < 4; i++ ) {
@@ -3483,7 +3484,7 @@ namespace cscodec.h264.decoder
 					//av_log( s.avctx, AV_LOG_ERROR, "INTRA16x16 DC\n" );
 					//AV_ZERO128(mb_luma_dc+0);
 					//AV_ZERO128(mb_luma_dc+8);
-					Arrays.fill(mb_luma_dc, 0, 16, (short)0); // Fill entire 16 uint16_t with 0.
+					Arrays.Fill(mb_luma_dc, 0, 16, (short)0); // Fill entire 16 uint16_t with 0.
 					decode_cabac_residual_dc( mb_luma_dc, 0, 0, LUMA_DC_BLOCK_INDEX, scan, 0, 16);
 
 					if( (cbp&15) != 0 ) {
@@ -5580,7 +5581,7 @@ namespace cscodec.h264.decoder
 	//	nsc:
 
 			//memset(dst+di, 0, FF_INPUT_BUFFER_PADDING_SIZE);
-			Arrays.fill(dst, di, di+MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE, 0);
+			Arrays.Fill(dst, di, di+MpegEncContext.FF_INPUT_BUFFER_PADDING_SIZE, 0);
 
 			dst_length_consumed[0]= di;
 			dst_length_consumed[1]= si + 1;//+1 for the header
@@ -6231,9 +6232,9 @@ namespace cscodec.h264.decoder
 			//memset(sps.scaling_matrix4, 16, sizeof(sps.scaling_matrix4));
 			//memset(sps.scaling_matrix8, 16, sizeof(sps.scaling_matrix8));
 			for(int k=0;k<sps.scaling_matrix4.Length;k++)
-	    		Arrays.fill(sps.scaling_matrix4[k], 16);
+	    		Arrays.Fill(sps.scaling_matrix4[k], 16);
 			for(int k=0;k<sps.scaling_matrix8.Length;k++)
-	    		Arrays.fill(sps.scaling_matrix8[k], 16);
+	    		Arrays.Fill(sps.scaling_matrix8[k], 16);
 
 			sps.scaling_matrix_present = 0;
 
@@ -7013,7 +7014,7 @@ namespace cscodec.h264.decoder
 			this.dequant8_coeff[1] = this.dequant8_buffer[1];
 
 			for(i=0; i<2; i++ ){
-				if(i !=0 && Arrays.equals(this.pps.scaling_matrix8[0], this.pps.scaling_matrix8[1])){
+				if(i !=0 && Arrays.Equals(this.pps.scaling_matrix8[0], this.pps.scaling_matrix8[1])){
 					this.dequant8_coeff[1] = this.dequant8_buffer[0];
 					break;
 				}
@@ -7034,7 +7035,7 @@ namespace cscodec.h264.decoder
 			for(i=0; i<6; i++ ){
 				this.dequant4_coeff[i] = this.dequant4_buffer[i];
 				for(j=0; j<i; j++){
-					if(Arrays.equals(this.pps.scaling_matrix4[j], this.pps.scaling_matrix4[i])){
+					if(Arrays.Equals(this.pps.scaling_matrix4[j], this.pps.scaling_matrix4[i])){
 						this.dequant4_coeff[i] = this.dequant4_buffer[j];
 						break;
 					}
@@ -7114,7 +7115,7 @@ namespace cscodec.h264.decoder
 			this.intra4x4_pred_mode = new int[row_mb_num * 8];
 	    
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.non_zero_count    , big_mb_num * 32 * sizeof(uint8_t), fail)
-			this.non_zero_count = Arrays.Create2D<int>(big_mb_num, 32);
+			this.non_zero_count = Arrays.Create<int>(big_mb_num, 32);
 
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.slice_table_base  , (big_mb_num+s.mb_stride) * sizeof(*this.slice_table_base), fail)
 			this.slice_table_base = new int[big_mb_num+s.mb_stride];
@@ -7126,10 +7127,10 @@ namespace cscodec.h264.decoder
 			this.chroma_pred_mode_table = new int[big_mb_num];
 
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.mvd_table[0], 16*row_mb_num * sizeof(uint8_t), fail);
-			this.mvd_table[0] = Arrays.Create2D<int>(8 * row_mb_num, 2);
+			this.mvd_table[0] = Arrays.Create<int>(8 * row_mb_num, 2);
 
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.mvd_table[1], 16*row_mb_num * sizeof(uint8_t), fail);
-			this.mvd_table[1] = Arrays.Create2D<int>(8 * row_mb_num, 2);
+			this.mvd_table[1] = Arrays.Create<int>(8 * row_mb_num, 2);
 
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.direct_table, 4*big_mb_num * sizeof(uint8_t) , fail);
 			this.direct_table = new int[4*big_mb_num];
@@ -7137,7 +7138,7 @@ namespace cscodec.h264.decoder
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.list_counts, big_mb_num * sizeof(uint8_t), fail)
 			this.list_counts = new int[big_mb_num];
 
-			Arrays.fill(this.slice_table_base, -1);
+			Arrays.Fill(this.slice_table_base, -1);
 			//memset(this.slice_table_base, -1, (big_mb_num+s.mb_stride)  * sizeof(*this.slice_table_base));
 			this.slice_table_offset = s.mb_stride*2 + 1;
 
@@ -7170,8 +7171,8 @@ namespace cscodec.h264.decoder
 		public int context_init(){
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.top_borders[0], this.s.mb_width * (16+8+8) * sizeof(uint8_t), fail)
 			//FF_ALLOCZ_OR_GOTO(this.s.avctx, this.top_borders[1], this.s.mb_width * (16+8+8) * sizeof(uint8_t), fail)
-			this.top_borders[0] = Arrays.Create2D<int>(this.s.mb_width, 16+8+8);
-			this.top_borders[1] = Arrays.Create2D<int>(this.s.mb_width, 16+8+8);
+			this.top_borders[0] = Arrays.Create<int>(this.s.mb_width, 16+8+8);
+			this.top_borders[1] = Arrays.Create<int>(this.s.mb_width, 16+8+8);
 
 			this.ref_cache[0][scan8[5 ]+1] = this.ref_cache[0][scan8[7 ]+1] = this.ref_cache[0][scan8[13]+1] =
 			this.ref_cache[1][scan8[5 ]+1] = this.ref_cache[1][scan8[7 ]+1] = this.ref_cache[1][scan8[13]+1] = PART_NOT_AVAILABLE;
@@ -7216,7 +7217,7 @@ namespace cscodec.h264.decoder
 					this.thread_context[i].s.obmc_scratchpad = new int[16*2*s.linesize + 8*2*s.uvlinesize];
 
 			/* some macroblocks can be accessed before they're available in case of lost slices, mbaff or threading*/
-			Arrays.fill(slice_table_base, slice_table_offset, slice_table_offset + (s.mb_height*s.mb_stride-1), -1);
+			Arrays.Fill(slice_table_base, slice_table_offset, slice_table_offset + (s.mb_height*s.mb_stride-1), -1);
 			//memset(this.slice_table, -1, (s.mb_height*s.mb_stride-1) * sizeof(*this.slice_table));
 
 	//	    s.decode= (s.flags&CODEC_FLAG_PSNR) || !s.encoding || s.current_picture.reference /*|| this.contains_intra*/ || 1;
@@ -8548,9 +8549,9 @@ namespace cscodec.h264.decoder
 			//memset(this.pps.scaling_matrix4, 16, 6*16*sizeof(uint8_t));
 			//memset(this.pps.scaling_matrix8, 16, 2*64*sizeof(uint8_t));
 			for(int i=0;i<this.pps.scaling_matrix4.Length;i++)
-	    		Arrays.fill(this.pps.scaling_matrix4[i], 16);
+	    		Arrays.Fill(this.pps.scaling_matrix4[i], 16);
 			for(int i=0;i<this.pps.scaling_matrix8.Length;i++)
-	    		Arrays.fill(this.pps.scaling_matrix4[i], 16);
+	    		Arrays.Fill(this.pps.scaling_matrix4[i], 16);
 		}	
 	
 		public int decode_frame(AVFrame data, int[] data_size, AVPacket avpkt) {

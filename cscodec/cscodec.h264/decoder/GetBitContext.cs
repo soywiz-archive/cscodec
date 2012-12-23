@@ -1,4 +1,4 @@
-using cscodec.h264.util;
+using cscodec.util;
 using System;
 namespace cscodec.h264.decoder
 {
@@ -453,7 +453,7 @@ namespace cscodec.h264.decoder
 					return 0;
 				} 
 				vlc.table_allocated += (1 << vlc.bits);
-				short[][/*2*/] newTab = Arrays.Create2D<short>(2 * vlc.table_allocated, 2);
+				short[][/*2*/] newTab = Arrays.Create<short>(2 * vlc.table_allocated, 2);
 				for(int i=0;i<vlc.table_base.Length;i++) {
             		newTab[i][0] = vlc.table_base[i][0];
             		newTab[i][1] = vlc.table_base[i][1];

@@ -1,4 +1,4 @@
-using cscodec.h264.util;
+using cscodec.util;
 namespace cscodec.h264.decoder
 {
 	public class CAVLCTables
@@ -9,7 +9,7 @@ namespace cscodec.h264.decoder
 			// Calculate Table Size.
 			for(int i=0;i<input.Length;i++)
 				tableSize += input[i][2];
-			short[][] output = Arrays.Create2D<short>(tableSize, 2);
+			short[][] output = Arrays.Create<short>(tableSize, 2);
 			int j = 0;
 			for(int i=0;i<input.Length;i++) {
 				for(int k=0;k<input[i][2];k++) {

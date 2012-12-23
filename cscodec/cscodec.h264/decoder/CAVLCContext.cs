@@ -1,4 +1,4 @@
-using cscodec.h264.util;
+using cscodec.util;
 using System;
 namespace cscodec.h264.decoder
 {
@@ -239,7 +239,7 @@ namespace cscodec.h264.decoder
 
 		public const int LEVEL_TAB_BITS = 8;
 		//static int8_t cavlc_level_tab[7][1<<LEVEL_TAB_BITS][2];
-		public static int[][][] cavlc_level_tab = Arrays.Create3D<int>(7, 1<<LEVEL_TAB_BITS, 2);
+		public static int[][][] cavlc_level_tab = Arrays.Create<int>(7, 1<<LEVEL_TAB_BITS, 2);
 
 		public static readonly int[/*256*/] ff_log2_tab = {
 				0,0,1,1,2,2,2,2,3,3,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
@@ -833,7 +833,7 @@ namespace cscodec.h264.decoder
 				s.current_picture.qscale_table[mb_xy]= 0;
 				// All coeffs are present
 				//memset(h.non_zero_count[mb_xy], 16, 32);
-				Arrays.fill(h.non_zero_count[mb_xy],0,32,16);
+				Arrays.Fill(h.non_zero_count[mb_xy],0,32,16);
 
 				s.current_picture.mb_type_base[s.current_picture.mb_type_offset + mb_xy]= mb_type;
 				return 0;
@@ -891,7 +891,7 @@ namespace cscodec.h264.decoder
 				int i, j;
 				int[] sub_partition_count = new int[4];
 				int list;
-				int[][] @ref = Arrays.Create2D<int>(2, 4);
+				int[][] @ref = Arrays.Create<int>(2, 4);
 
 				if(h.slice_type_nos == H264Context.FF_B_TYPE){
 					for(i=0; i<4; i++){
@@ -1202,7 +1202,7 @@ namespace cscodec.h264.decoder
 				h.chroma_qp[1]= h.pps.chroma_qp_table[1][s.qscale];
 				if(0!=(mb_type & H264Context.MB_TYPE_INTRA16x16)){
 	        		// Fill 16 uint16_t with 0
-	        		Arrays.fill(h.mb_luma_dc, 0, 16, (short)0);
+	        		Arrays.Fill(h.mb_luma_dc, 0, 16, (short)0);
 					//AV_ZERO128(h.mb_luma_dc+0);
 					//AV_ZERO128(h.mb_luma_dc+8);
 					if( decode_residual(h, h.intra_gb_ptr, h.mb_luma_dc, 0, H264Context.LUMA_DC_BLOCK_INDEX, scan, 0, h.dequant4_coeff[0][s.qscale], 0, 16) < 0){
@@ -1260,8 +1260,8 @@ namespace cscodec.h264.decoder
 
 				if((cbp&0x030)!=0){
 	        		// Fill 2x4 uint_16t with 0
-	        		Arrays.fill(h.mb_chroma_dc[0], (short)0);
-	        		Arrays.fill(h.mb_chroma_dc[1], (short)0);
+	        		Arrays.Fill(h.mb_chroma_dc[0], (short)0);
+	        		Arrays.Fill(h.mb_chroma_dc[1], (short)0);
 					//AV_ZERO128(h.mb_chroma_dc);
 					for(chroma_idx=0; chroma_idx<2; chroma_idx++) {
 						if( decode_residual(h, gb, h.mb_chroma_dc[chroma_idx], 0, H264Context.CHROMA_DC_BLOCK_INDEX+chroma_idx, H264Data.chroma_dc_scan, 0, null, 0 , 4) < 0){

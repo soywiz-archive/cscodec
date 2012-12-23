@@ -1,4 +1,4 @@
-﻿using cscodec.h264.util;
+﻿using cscodec.util;
 namespace cscodec.h264.decoder
 {
 	public class CABACContext

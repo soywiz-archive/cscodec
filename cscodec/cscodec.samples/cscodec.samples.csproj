@@ -54,6 +54,10 @@
       <Project>{e8791c5d-f790-404c-b661-d509844dbbff}</Project>
       <Name>cscodec.h264</Name>
     </ProjectReference>
+    <ProjectReference Include="..\cscodec\cscodec.csproj">
+      <Project>{351dcb00-efcf-435a-9c72-9a7e1d5950b0}</Project>
+      <Name>cscodec</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

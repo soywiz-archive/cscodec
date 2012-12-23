@@ -1,4 +1,4 @@
-using cscodec.h264.util;
+using cscodec.util;
 using System;
 namespace cscodec.h264.decoder
 {
@@ -245,8 +245,8 @@ namespace cscodec.h264.decoder
 		 public int pic_id;                 /**< h264 pic_num (short -> no wrap version of pic_num,
 										  pic_num & max_pic_num; long -> long_pic_num) */
 		 public int long_ref;               ///< 1->long term reference 0->short term reference
-		 public int[][][] ref_poc = Arrays.Create3D<int>(2, 2, 16);      ///< h264 POCs of the frames used as reference (FIXME need per slice)
-		 public int[][] ref_count = Arrays.Create2D<int>(2, 2);        ///< number of entries in ref_poc              (FIXME need per slice)
+		 public int[][][] ref_poc = Arrays.Create<int>(2, 2, 16);      ///< h264 POCs of the frames used as reference (FIXME need per slice)
+		 public int[][] ref_count = Arrays.Create<int>(2, 2);        ///< number of entries in ref_poc              (FIXME need per slice)
 		 public int mbaff;                  ///< h264 1 -> MBAFF frame 0-> not MBAFF
 
 		 public int mb_var_sum;             ///< sum of MB variance for current frame

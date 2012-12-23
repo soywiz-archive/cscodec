@@ -1,4 +1,4 @@
-using cscodec.h264.util;
+using cscodec.util;
 using System;
 namespace cscodec.h264.decoder
 {
@@ -787,10 +787,10 @@ namespace cscodec.h264.decoder
 		{
 			int i;
 			// memset(max_pixsteps, 0, 4*sizeof(max_pixsteps[0]));
-			Arrays.fill(max_pixsteps, 0, 4, 0);
+			Arrays.Fill(max_pixsteps, 0, 4, 0);
 			if (max_pixstep_comps != null)
 				// memset(max_pixstep_comps, 0, 4*sizeof(max_pixstep_comps[0]));
-				Arrays.fill(max_pixstep_comps, 0, 4, 0);
+				Arrays.Fill(max_pixstep_comps, 0, 4, 0);
 
 			for (i = 0; i < 4; i++)
 			{

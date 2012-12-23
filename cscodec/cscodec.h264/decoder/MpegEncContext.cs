@@ -1,4 +1,4 @@
-using cscodec.h264.util;
+using cscodec.util;
 namespace cscodec.h264.decoder
 {
 	public class MpegEncContext {
@@ -868,10 +868,10 @@ namespace cscodec.h264.decoder
 		{
 			int i;
 			//memset(max_pixsteps, 0, 4*sizeof(max_pixsteps[0]));
-			Arrays.fill(max_pixsteps, 0);
+			Arrays.Fill(max_pixsteps, 0);
 			if (max_pixstep_comps!=null)
 			//memset(max_pixstep_comps, 0, 4*sizeof(max_pixstep_comps[0]));
-				Arrays.fill(max_pixstep_comps, 0);
+				Arrays.Fill(max_pixstep_comps, 0);
 		
 			for (i = 0; i < 4; i++) {
 				AVComponentDescriptor comp = (pixdesc.comp[i]);
@@ -891,7 +891,7 @@ namespace cscodec.h264.decoder
 			int[] max_step_comp = new int[4];       /* the component for each plane which has the max pixel step */
 
 			//memset(linesizes, 0, 4*sizeof(linesizes[0]));
-			Arrays.fill(linesizes, 0);
+			Arrays.Fill(linesizes, 0);
 
 			if (/*(unsigned)*/pix_fmt >= PIX_FMT_NB || (desc.flags & ImageUtils.PIX_FMT_HWACCEL)!=0)
 				return -1;
@@ -1125,7 +1125,7 @@ namespace cscodec.h264.decoder
 					buf.@base[i] = new int[size[i]+16];
 					if(buf.@base[i]==null) return -1;
 					//memset(buf.base[i], 128, size[i]);
-					Arrays.fill(buf.@base[i], 0, size[i], 128);
+					Arrays.Fill(buf.@base[i], 0, size[i], 128);
 
 					// no edge if EDGE EMU or not planar YUV
 					if((this.flags&CODEC_FLAG_EMU_EDGE)!=0 || 0==size[2])
@@ -1262,7 +1262,7 @@ namespace cscodec.h264.decoder
 				if(this.out_format == FMT_H264){
 					for(i=0; i<2; i++){
 						//FF_ALLOCZ_OR_GOTO(this.avctx, pic.motion_val_base[i], 2 * (b4_array_size+4)  * sizeof(int16_t), fail)
-						pic.motion_val_base[i] = Arrays.Create2D<int>(b4_array_size + 4, 2);
+						pic.motion_val_base[i] = Arrays.Create<int>(b4_array_size + 4, 2);
            
 						pic.motion_val_offset[i]= 4;
                     
@@ -1555,7 +1555,7 @@ namespace cscodec.h264.decoder
 			// FF_ALLOCZ_OR_GOTO(s.avctx, s.blocks, 64*12*2 * sizeof(DCTELEM), fail)
 
 			//s.blocks = new short[64*12*2];?? Size seems not sync
-			s.blocks = Arrays.Create3D<short>(2, 12, 64);
+			s.blocks = Arrays.Create<short>(2, 12, 64);
 			s.block= s.blocks[0];
 			s.pblocks_offset = new int[12];
 			for(i=0;i<12;i++){
@@ -1769,7 +1769,7 @@ namespace cscodec.h264.decoder
 			//FF_ALLOCZ_OR_GOTO(this.avctx, this.mbintra_table, mb_array_size, fail);
 			this.mbintra_table = new int[mb_array_size];
 			//memset(this.mbintra_table, 1, mb_array_size);
-			Arrays.fill(this.mbintra_table, 1);
+			Arrays.Fill(this.mbintra_table, 1);
 
 			/* init macroblock skip table */
 			//FF_ALLOCZ_OR_GOTO(this.avctx, this.mbskip_table, mb_array_size+2, fail);

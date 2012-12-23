@@ -1,4 +1,4 @@
-using cscodec.h264.util;
+using cscodec.util;
 using System;
 namespace cscodec.h264.decoder
 {
@@ -20,7 +20,7 @@ namespace cscodec.h264.decoder
 	
 		public static int[] dc_val_base;
 		public static int[] dc_val = new int[3];
-		public static int[][][] mv = Arrays.Create3D<int>(2, 4, 2);
+		public static int[][][] mv = Arrays.Create<int>(2, 4, 2);
 
 		// Number of MacroBlock rows at top/bottom those are skipped, Set by User. 
 		public static int skip_top;
@@ -36,7 +36,7 @@ namespace cscodec.h264.decoder
 				H264Context h= s.priv_data;
 				h.mb_xy= s.mb_x + s.mb_y*s.mb_stride;
 				//memset(h.non_zero_count_cache, 0, sizeof(h.non_zero_count_cache));
-				Arrays.fill(h.non_zero_count_cache, 0);
+				Arrays.Fill(h.non_zero_count_cache, 0);
 				//assert(ref>=0);
 				if (@ref >= h.ref_count[0]) //FIXME it is posible albeit uncommon that slice references differ between slices, we take the easy approuch and ignore it for now. If this turns out to have any relevance in practice then correct remapping should be added
 					@ref=0;
@@ -447,7 +447,7 @@ namespace cscodec.h264.decoder
 					for(mb_y=0; mb_y<s.mb_height; mb_y++){
 						for(mb_x=0; mb_x<s.mb_width; mb_x++){
 							int mb_xy= mb_x + mb_y*s.mb_stride;
-							int[][] mv_predictor = Arrays.Create2D<int>(8, 2);
+							int[][] mv_predictor = Arrays.Create<int>(8, 2);
 							int[] @ref = new int[8];
 							int pred_count=0;
 							int j;
@@ -755,7 +755,7 @@ namespace cscodec.h264.decoder
 			if(0==s.error_recognition) return;
 
 			//memset(this.error_status_table, MV_ERROR|AC_ERROR|DC_ERROR|VP_START|AC_END|DC_END|MV_END, this.mb_stride*this.mb_height*sizeof(uint8_t));
-			Arrays.fill(s.error_status_table, 0, s.mb_stride*s.mb_height, MpegEncContext.MV_ERROR|MpegEncContext.AC_ERROR|MpegEncContext.DC_ERROR|MpegEncContext.VP_START|MpegEncContext.AC_END|MpegEncContext.DC_END|MpegEncContext.MV_END);
+			Arrays.Fill(s.error_status_table, 0, s.mb_stride*s.mb_height, MpegEncContext.MV_ERROR|MpegEncContext.AC_ERROR|MpegEncContext.DC_ERROR|MpegEncContext.VP_START|MpegEncContext.AC_END|MpegEncContext.DC_END|MpegEncContext.MV_END);
 			s.error_count= 3*s.mb_num;
 		}
 
@@ -805,7 +805,7 @@ namespace cscodec.h264.decoder
 
 			if(mask == ~0x7F){
 				//memset(&s.error_status_table[start_xy], 0, (end_xy - start_xy) * sizeof(uint8_t));
-	    		Arrays.fill(s.error_status_table, start_xy, end_xy, 0);
+	    		Arrays.Fill(s.error_status_table, start_xy, end_xy, 0);
 			}else{
 				int i;
 				for(i=start_xy; i<end_xy; i++){
@@ -853,7 +853,7 @@ namespace cscodec.h264.decoder
 				for(i=0; i<2; i++){
 					//pic.ref_index[i]= av_mallocz(s.mb_stride * s.mb_height * 4 * sizeof(uint8_t));
 					pic.ref_index[i]= new int[s.mb_stride * s.mb_height * 4];
-					pic.motion_val_base[i] = Arrays.Create2D<int>(size + 4, 2);
+					pic.motion_val_base[i] = Arrays.Create<int>(size + 4, 2);
 					pic.motion_val_offset[i]= 4;
 				}
 				pic.motion_subsample_log2= 3;

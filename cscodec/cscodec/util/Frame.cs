@@ -1,4 +1,4 @@
-namespace cscodec.h264.util
+namespace cscodec.util
 {
 	public class Frame
 	{
