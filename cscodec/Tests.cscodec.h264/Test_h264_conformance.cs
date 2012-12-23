@@ -38,7 +38,8 @@ namespace Tests.cscodec.h264
 				//var Packet = FrameDecoder._ReadPacket();
 				//Console.WriteLine("{0}: {1}", Index, FrameCrc.GetFrameLine(Packet));
 				var Frame = FrameDecoder.DecodeFrame();
-				Console.WriteLine("{0}: {1}, {2}, {3}", Index, Frame.pkt_dts, Frame.pkt_pts, Frame.data_base[0].Length - Frame.data_offset[0]);
+				var Image = FrameUtils.imageFromFrame(Frame);
+				Console.WriteLine("{0}: {1}, {2}, {3}", Index, Frame.pkt_dts, Frame.pkt_pts, Frame.imageWidthWOEdge * Frame.imageHeightWOEdge);
 				Index++;
 			}
 		}

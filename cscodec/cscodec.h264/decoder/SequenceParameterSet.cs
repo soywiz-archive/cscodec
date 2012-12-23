@@ -3,32 +3,33 @@ using cscodec.util;
 using System;
 namespace cscodec.h264.decoder
 {
-	public class SequenceParameterSet {
-	
-		public const int AVCOL_PRI_BT709      =1; ///< also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B
-		public const int AVCOL_PRI_UNSPECIFIED=2;
-		public const int AVCOL_PRI_BT470M     =4;
-		public const int AVCOL_PRI_BT470BG    =5; ///< also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM
-		public const int AVCOL_PRI_SMPTE170M  =6; ///< also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC
-		public const int AVCOL_PRI_SMPTE240M  =7; ///< functionally identical to above
-		public const int AVCOL_PRI_FILM       =8;
-		public const int AVCOL_PRI_NB         =9;   ///< Not part of ABI
-	
-		public const int AVCOL_TRC_BT709      =1; ///< also ITU-R BT1361
-		public const int AVCOL_TRC_UNSPECIFIED=2;
-		public const int AVCOL_TRC_GAMMA22    =4; ///< also ITU-R BT470M / ITU-R BT1700 625 PAL & SECAM
-		public const int AVCOL_TRC_GAMMA28    =5; ///< also ITU-R BT470BG
-		public const int AVCOL_TRC_NB         =6; ///< Not part of ABI
-    
-		public const int AVCOL_SPC_RGB        =0;
-		public const int AVCOL_SPC_BT709      =1; ///< also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B
-		public const int AVCOL_SPC_UNSPECIFIED=2;
-		public const int AVCOL_SPC_FCC        =4;
-		public const int AVCOL_SPC_BT470BG    =5; ///< also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM / IEC 61966-2-4 xvYCC601
-		public const int AVCOL_SPC_SMPTE170M  =6; ///< also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC / functionally identical to above
-		public const int AVCOL_SPC_SMPTE240M  =7;
-		public const int AVCOL_SPC_NB         =8; ///< Not part of ABI
-        
+	public class SequenceParameterSet
+	{
+
+		public const int AVCOL_PRI_BT709 = 1; ///< also ITU-R BT1361 / IEC 61966-2-4 / SMPTE RP177 Annex B
+		public const int AVCOL_PRI_UNSPECIFIED = 2;
+		public const int AVCOL_PRI_BT470M = 4;
+		public const int AVCOL_PRI_BT470BG = 5; ///< also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM
+		public const int AVCOL_PRI_SMPTE170M = 6; ///< also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC
+		public const int AVCOL_PRI_SMPTE240M = 7; ///< functionally identical to above
+		public const int AVCOL_PRI_FILM = 8;
+		public const int AVCOL_PRI_NB = 9;   ///< Not part of ABI
+
+		public const int AVCOL_TRC_BT709 = 1; ///< also ITU-R BT1361
+		public const int AVCOL_TRC_UNSPECIFIED = 2;
+		public const int AVCOL_TRC_GAMMA22 = 4; ///< also ITU-R BT470M / ITU-R BT1700 625 PAL & SECAM
+		public const int AVCOL_TRC_GAMMA28 = 5; ///< also ITU-R BT470BG
+		public const int AVCOL_TRC_NB = 6; ///< Not part of ABI
+
+		public const int AVCOL_SPC_RGB = 0;
+		public const int AVCOL_SPC_BT709 = 1; ///< also ITU-R BT1361 / IEC 61966-2-4 xvYCC709 / SMPTE RP177 Annex B
+		public const int AVCOL_SPC_UNSPECIFIED = 2;
+		public const int AVCOL_SPC_FCC = 4;
+		public const int AVCOL_SPC_BT470BG = 5; ///< also ITU-R BT601-6 625 / ITU-R BT1358 625 / ITU-R BT1700 625 PAL & SECAM / IEC 61966-2-4 xvYCC601
+		public const int AVCOL_SPC_SMPTE170M = 6; ///< also ITU-R BT601-6 525 / ITU-R BT1358 525 / ITU-R BT1700 NTSC / functionally identical to above
+		public const int AVCOL_SPC_SMPTE240M = 7;
+		public const int AVCOL_SPC_NB = 8; ///< Not part of ABI
+
 		public int profile_idc;
 		public int level_idc;
 		public int chroma_format_idc;
@@ -53,7 +54,7 @@ namespace cscodec.h264.decoder
 		public long crop_top;             ///< frame_cropping_rect_top_offset
 		public long crop_bottom;          ///< frame_cropping_rect_bottom_offset
 		public int vui_parameters_present_flag;
-		public AVRational sar = new AVRational(0,0);
+		public AVRational sar = new AVRational(0, 0);
 		public int video_signal_type_present_flag;
 		public int full_range;
 		public int colour_description_present_flag;
@@ -81,8 +82,9 @@ namespace cscodec.h264.decoder
 		public int bit_depth_luma;                ///< bit_depth_luma_minus8 + 8
 		public int bit_depth_chroma;              ///< bit_depth_chroma_minus8 + 8
 		public int residual_color_transform_flag; ///< residual_colour_transform_flag
-    
-		public void copyTo(SequenceParameterSet sps) {
+
+		public void copyTo(SequenceParameterSet sps)
+		{
 			sps.profile_idc = profile_idc;
 			sps.level_idc = level_idc;
 			sps.chroma_format_idc = chroma_format_idc;

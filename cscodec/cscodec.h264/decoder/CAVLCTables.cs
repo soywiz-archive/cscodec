@@ -4,17 +4,20 @@ namespace cscodec.h264.decoder
 	public class CAVLCTables
 	{
 
-		public static short[][] expandTable(short[][] input) {
+		public static short[][] expandTable(short[][] input)
+		{
 			int tableSize = 0;
 			// Calculate Table Size.
-			for(int i=0;i<input.Length;i++)
+			for (int i = 0; i < input.Length; i++)
 				tableSize += input[i][2];
 			short[][] output = Arrays.Create<short>(tableSize, 2);
 			int j = 0;
-			for(int i=0;i<input.Length;i++) {
-				for(int k=0;k<input[i][2];k++) {
-					output[j+k][0] = input[i][0];
-					output[j+k][1] = input[i][1];
+			for (int i = 0; i < input.Length; i++)
+			{
+				for (int k = 0; k < input[i][2]; k++)
+				{
+					output[j + k][0] = input[i][0];
+					output[j + k][1] = input[i][1];
 				} // for k
 				j += input[i][2];
 			} // for i

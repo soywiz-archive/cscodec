@@ -9,14 +9,15 @@ namespace cscodec.h264.decoder
 		 * (even if intended for a little-endian bitstream reader) 
 		uint32_t code;
 		*/
-    
+
 		public int bits;
 		public int symbol;
 		public long code;
-    
-		public int compareTo(object arg0) {
+
+		public int compareTo(object arg0)
+		{
 			// TODO Auto-generated method stub
-			if(arg0 == null || !(arg0 is VLCcode)) return 0;
+			if (arg0 == null || !(arg0 is VLCcode)) return 0;
 			return (int)(this.code - ((VLCcode)arg0).code);
 		}
 	}

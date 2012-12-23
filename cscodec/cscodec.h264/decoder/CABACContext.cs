@@ -36,12 +36,12 @@ namespace cscodec.h264.decoder
     	{  6,  8,  9, 11}, {  6,  7,  9, 10}, {  6,  7,  8,  9}, {  2,  2,  2,  2},
     	});
 
-    public short[] ff_h264_mlps_state = new short[4*64];
-    public short[] ff_h264_lps_range = new short[4*2*64];
-    public short[] ff_h264_lps_state = new short[2*64];
-    public short[] ff_h264_mps_state = new short[2*64];
+		public short[] ff_h264_mlps_state = new short[4 * 64];
+		public short[] ff_h264_lps_range = new short[4 * 2 * 64];
+		public short[] ff_h264_lps_state = new short[2 * 64];
+		public short[] ff_h264_mps_state = new short[2 * 64];
 
-    public static readonly short[] mps_state = {
+		public static readonly short[] mps_state = {
     	  1, 2, 3, 4, 5, 6, 7, 8,
     	  9,10,11,12,13,14,15,16,
     	 17,18,19,20,21,22,23,24,
@@ -52,7 +52,7 @@ namespace cscodec.h264.decoder
     	 57,58,59,60,61,62,62,63,
     	};
 
-    public static readonly short[] lps_state = {
+		public static readonly short[] lps_state = {
     	  0, 0, 1, 2, 2, 4, 4, 5,
     	  6, 7, 8, 9, 9,11,11,12,
     	 13,13,15,15,16,16,18,18,
@@ -63,7 +63,7 @@ namespace cscodec.h264.decoder
     	 36,36,37,37,37,38,38,63,
     	};
 
-    public static readonly short[] ff_h264_norm_shift = {
+		public static readonly short[] ff_h264_norm_shift = {
     	 9,8,7,7,6,6,6,6,5,5,5,5,5,5,5,5,
     	 4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,
     	 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,
@@ -85,8 +85,8 @@ namespace cscodec.h264.decoder
     	 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     	 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
     	};
-    
-	public static readonly sbyte[][] cabac_context_init_I = Arrays.ConvertDimensional(new sbyte[,]
+
+		public static readonly sbyte[][] cabac_context_init_I = Arrays.ConvertDimensional(new sbyte[,]
 	{
 	    /* 0 - 10 */
 	    { 20, -15 }, {  2, 54 },  {  3,  74 }, { 20, -15 },
@@ -255,7 +255,7 @@ namespace cscodec.h264.decoder
 	    {  29,   9 }, {  35,  20 }, {  29,  36 }, {  14,  67 }
 	});
 
-	public static readonly sbyte[][][] cabac_context_init_PB =
+		public static readonly sbyte[][][] cabac_context_init_PB =
 	{
 	    /* i_cabac_init_idc == 0 */
 	    Arrays.ConvertDimensional(new sbyte[,] {
@@ -824,20 +824,21 @@ namespace cscodec.h264.decoder
 
 		}
 
-		public void renorm_cabac_decoder_once(){
-        // DebugTool.printDebugString("renorm_cabac_decoder_once(1): low="+low+", range="+range+"\n");
+		public void renorm_cabac_decoder_once()
+		{
+			// DebugTool.printDebugString("renorm_cabac_decoder_once(1): low="+low+", range="+range+"\n");
 
-		int shift= (int)(((uint)(range - 0x00000100))>>31);
-	    range<<= shift;
-	    low  <<= shift;
+			int shift = (int)(((uint)(range - 0x00000100)) >> 31);
+			range <<= shift;
+			low <<= shift;
 
-	    // DebugTool.printDebugString("renorm_cabac_decoder_once: shift="+shift+"\n");
+			// DebugTool.printDebugString("renorm_cabac_decoder_once: shift="+shift+"\n");
 
-	    if((low & CABAC_MASK) == 0)
-	        refill();
+			if ((low & CABAC_MASK) == 0)
+				refill();
 
-	    // DebugTool.printDebugString("renorm_cabac_decoder_once(2): low="+low+", range="+range+"\n");
-	}
+			// DebugTool.printDebugString("renorm_cabac_decoder_once(2): low="+low+", range="+range+"\n");
+		}
 
 		public int get_cabac_inline(int[] state, int state_offset)
 		{
@@ -1153,33 +1154,39 @@ namespace cscodec.h264.decoder
 			return type;
 		}
 
-		public int decode_cabac_mb_ref(H264Context h, int list, int n) {
+		public int decode_cabac_mb_ref(H264Context h, int list, int n)
+		{
 			int refa = h.ref_cache[list][H264Context.scan8[n] - 1];
 			int refb = h.ref_cache[list][H264Context.scan8[n] - 8];
-	    int @ref  = 0;
-	    int ctx  = 0;
+			int @ref = 0;
+			int ctx = 0;
 
-	    if( h.slice_type_nos == H264Context.FF_B_TYPE) {
-			if (refa > 0 && 0 == (h.direct_cache[H264Context.scan8[n] - 1] & (H264Context.MB_TYPE_DIRECT2 >> 1)))
-	            ctx++;
-			if (refb > 0 && 0 == (h.direct_cache[H264Context.scan8[n] - 8] & (H264Context.MB_TYPE_DIRECT2 >> 1)))
-	            ctx += 2;
-	    } else {
-	        if( refa > 0 )
-	            ctx++;
-	        if( refb > 0 )
-	            ctx += 2;
-	    }
+			if (h.slice_type_nos == H264Context.FF_B_TYPE)
+			{
+				if (refa > 0 && 0 == (h.direct_cache[H264Context.scan8[n] - 1] & (H264Context.MB_TYPE_DIRECT2 >> 1)))
+					ctx++;
+				if (refb > 0 && 0 == (h.direct_cache[H264Context.scan8[n] - 8] & (H264Context.MB_TYPE_DIRECT2 >> 1)))
+					ctx += 2;
+			}
+			else
+			{
+				if (refa > 0)
+					ctx++;
+				if (refb > 0)
+					ctx += 2;
+			}
 
-	    while( this.get_cabac( h.cabac_state, 54+ctx ) != 0) {
-	        @ref++;
-	        ctx = (ctx>>2)+4;
-	        if(@ref >= 32 /*this.ref_list[list]*/){
-	            return -1;
-	        }
-	    }
-		return @ref;
-	}
+			while (this.get_cabac(h.cabac_state, 54 + ctx) != 0)
+			{
+				@ref++;
+				ctx = (ctx >> 2) + 4;
+				if (@ref >= 32 /*this.ref_list[list]*/)
+				{
+					return -1;
+				}
+			}
+			return @ref;
+		}
 
 		public const int INT_BIT = 32;
 		public int decode_cabac_mb_mvd(H264Context h, int ctxbase, int amvd, int[] mvda)
