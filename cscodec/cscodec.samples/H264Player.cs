@@ -5,123 +5,129 @@ using System.Drawing;
 using System.IO;
 using System.Threading;
 using System.Windows.Forms;
+
 namespace cscodec.h264.player
 {
+	public class H264Player
+	{
 
-public class H264Player {
-	
-	Form frame;
-	//private PlayerFrame displayPanel;
+		Form frame;
+		//private PlayerFrame displayPanel;
 
-	/**
-	 * @param args
-	 */
-	[STAThreadAttribute]
-	public static void Main(string[] args) {
-		if (args.Length < 1)
+		/**
+		 * @param args
+		 */
+		[STAThread]
+		public static void Main(string[] args)
 		{
-			var OpenFileDialog = new OpenFileDialog();
-			OpenFileDialog.CheckFileExists = true;
-			OpenFileDialog.Filter = "h264 files|*.h264;*.264|All Files|*.*";
-			if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+			if (args.Length < 1)
 			{
-				args = new string[] { OpenFileDialog.FileName };
+				var OpenFileDialog = new OpenFileDialog();
+				OpenFileDialog.CheckFileExists = true;
+				OpenFileDialog.Filter = "h264 files|*.h264;*.264|All Files|*.*";
+				if (OpenFileDialog.ShowDialog() == DialogResult.OK)
+				{
+					args = new string[] { OpenFileDialog.FileName };
+				}
+				else
+				{
+					Console.WriteLine("Usage: H264Player <.h264 raw file>\n");
+					return;
+				}
 			}
-			else
+
+			// TODO Auto-generated method stub
+			if (args.Length < 1)
 			{
 				Console.WriteLine("Usage: H264Player <.h264 raw file>\n");
 				return;
 			}
-		}
-
-		// TODO Auto-generated method stub
-		if (args.Length < 1)
-		{
-			Console.WriteLine("Usage: H264Player <.h264 raw file>\n");
-			return;
-		}
-		else
-		{
-			var H264Player = new H264Player();
-
-			H264Player.frame = new Form()
+			else
 			{
-				Text = "cscodec.h264 Player",
-				FormBorderStyle = FormBorderStyle.FixedDialog,
-				MinimizeBox = false,
-				StartPosition = FormStartPosition.CenterScreen,
-			};
-			//displayPanel = new PlayerFrame();
+				var H264Player = new H264Player();
 
-			//frame.getContentPane().add(displayPanel, BorderLayout.CENTER);
-
-			// Finish setting up the frame, and show it.
-			H264Player.frame.FormClosing += (s, e) =>
-			{
-				Environment.Exit(0);
-			};
-
-			H264Player.frame.HandleCreated += (s, e) =>
-			{
-				new Thread(() =>
+				H264Player.frame = new Form()
 				{
-					H264Player.run(args[0]);
-				}).Start();
-			};
+					Text = "cscodec.h264 Player",
+					FormBorderStyle = FormBorderStyle.FixedDialog,
+					MinimizeBox = false,
+					StartPosition = FormStartPosition.CenterScreen,
+				};
+				//displayPanel = new PlayerFrame();
 
-			Application.Run(H264Player.frame);
+				//frame.getContentPane().add(displayPanel, BorderLayout.CENTER);
 
-		} // if
-	}
-
-	public H264Player() {
-		
-	}
-
-	public void run(string fileName)
-	{
-		Console.WriteLine("Playing "+ fileName);
-		playFile(fileName);		
-	}
-
-	public static void CenterForm(Form theForm)
-	{
-		theForm.Location = new Point(
-			Screen.PrimaryScreen.WorkingArea.Width / 2 - theForm.Width / 2,
-			Screen.PrimaryScreen.WorkingArea.Height / 2 - theForm.Height / 2);
-	}
-
-	public bool playFile(string filename) {
-
-		using (Stream fin = File.OpenRead(filename))
-		using (FrameDecoder FrameDecoder = new FrameDecoder(fin))
-		{
-			try
-			{
-				while (true)
+				// Finish setting up the frame, and show it.
+				H264Player.frame.FormClosing += (s, e) =>
 				{
-					var picture = FrameDecoder.DecodeFrame();
-					if (this.frame.ClientSize.Width < picture.imageWidth || this.frame.ClientSize.Height < picture.imageHeight)
+					Environment.Exit(0);
+				};
+
+				H264Player.frame.HandleCreated += (s, e) =>
+				{
+					new Thread(() =>
 					{
-						this.frame.Invoke((Action)(() =>
+						H264Player.run(args[0]);
+					}).Start();
+				};
+
+				Application.Run(H264Player.frame);
+
+			} // if
+		}
+
+		public H264Player()
+		{
+
+		}
+
+		public void run(string fileName)
+		{
+			Console.WriteLine("Playing " + fileName);
+			playFile(fileName);
+		}
+
+		public static void CenterForm(Form theForm)
+		{
+			theForm.Location = new Point(
+				Screen.PrimaryScreen.WorkingArea.Width / 2 - theForm.Width / 2,
+				Screen.PrimaryScreen.WorkingArea.Height / 2 - theForm.Height / 2);
+		}
+
+		public bool playFile(string filename)
+		{
+			//using (Stream fin = File.OpenRead(filename))
+			using (Stream fin = new MemoryStream(File.ReadAllBytes(filename)))
+			using (FrameDecoder FrameDecoder = new FrameDecoder(fin))
+			{
+				try
+				{
+					while (true)
+					{
+						var picture = FrameDecoder.DecodeFrame();
+
+						var Width = picture.imageWidthWOEdge;
+						var Height = picture.imageHeightWOEdge;
+
+						if (this.frame.ClientSize.Width < Width || this.frame.ClientSize.Height < Height)
 						{
-							this.frame.ClientSize = new Size(picture.imageWidth, picture.imageHeight);
-							CenterForm(this.frame);
-						}));
+							this.frame.Invoke((Action)(() =>
+							{
+								this.frame.ClientSize = new Size(Width, Height);
+								CenterForm(this.frame);
+							}));
+						}
+						this.frame.CreateGraphics().DrawImage(FrameUtils.imageFromFrameWithoutEdges(picture, Width, Height), Point.Empty);
 					}
-					this.frame.CreateGraphics().DrawImage(FrameUtils.imageFromFrame(picture), Point.Empty);
+				}
+				catch (EndOfStreamException)
+				{
 				}
 			}
-			catch (EndOfStreamException)
-			{
-			}
-		}
-	
-	    Console.WriteLine("Stop playing video.");
-	    
-	    return true;
-	}
-	
 
-}
+			Console.WriteLine("Stop playing video.");
+
+			return true;
+		}
+	}
 }
