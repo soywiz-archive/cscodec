@@ -1,5 +1,3 @@
-using cscodec.h264.decoder;
-using cscodec.h264.player;
 using System;
 using System.Drawing;
 using System.IO;
@@ -22,66 +20,58 @@ namespace cscodec.h264.player
 		{
 			if (args.Length < 1)
 			{
-				var OpenFileDialog = new OpenFileDialog();
-				OpenFileDialog.CheckFileExists = true;
-				OpenFileDialog.Filter = "h264 files|*.h264;*.264|All Files|*.*";
-				if (OpenFileDialog.ShowDialog() == DialogResult.OK)
-				{
-					args = new string[] { OpenFileDialog.FileName };
-				}
-				else
-				{
-					Console.WriteLine("Usage: H264Player <.h264 raw file>\n");
-					return;
-				}
+			    var OpenFileDialog = new OpenFileDialog
+			    {
+			        CheckFileExists = true,
+			        Filter = "h264 files|*.h264;*.264|All Files|*.*"
+			    };
+			    if (OpenFileDialog.ShowDialog() != DialogResult.OK)
+			    {
+			        Console.WriteLine("Usage: H264Player <.h264 raw file>\n");
+			        return;
+			    }
+			    args = new[] {OpenFileDialog.FileName};
 			}
 
-			// TODO Auto-generated method stub
+		    // TODO Auto-generated method stub
 			if (args.Length < 1)
 			{
 				Console.WriteLine("Usage: H264Player <.h264 raw file>\n");
 				return;
 			}
-			else
-			{
-				var H264Player = new H264Player();
+		    var H264Player = new H264Player
+		    {
+		        frame = new Form
+		        {
+		            Text = "cscodec.h264 Player",
+		            FormBorderStyle = FormBorderStyle.FixedDialog,
+		            MinimizeBox = false,
+		            StartPosition = FormStartPosition.CenterScreen
+		        }
+		    };
 
-				H264Player.frame = new Form()
-				{
-					Text = "cscodec.h264 Player",
-					FormBorderStyle = FormBorderStyle.FixedDialog,
-					MinimizeBox = false,
-					StartPosition = FormStartPosition.CenterScreen,
-				};
-				//displayPanel = new PlayerFrame();
+		    //displayPanel = new PlayerFrame();
 
-				//frame.getContentPane().add(displayPanel, BorderLayout.CENTER);
+		    //frame.getContentPane().add(displayPanel, BorderLayout.CENTER);
 
-				// Finish setting up the frame, and show it.
-				H264Player.frame.FormClosing += (s, e) =>
-				{
-					Environment.Exit(0);
-				};
+		    // Finish setting up the frame, and show it.
+		    H264Player.frame.FormClosing += (s, e) =>
+		    {
+		        Environment.Exit(0);
+		    };
 
-				H264Player.frame.HandleCreated += (s, e) =>
-				{
-					new Thread(() =>
-					{
-						H264Player.run(args[0]);
-					}).Start();
-				};
+		    H264Player.frame.HandleCreated += (s, e) =>
+		    {
+		        new Thread(() =>
+		        {
+		            H264Player.run(args[0]);
+		        }).Start();
+		    };
 
-				Application.Run(H264Player.frame);
-
-			} // if
+		    Application.Run(H264Player.frame);
 		}
 
-		public H264Player()
-		{
-
-		}
-
-		public void run(string fileName)
+	    public void run(string fileName)
 		{
 			Console.WriteLine("Playing " + fileName);
 			playFile(fileName);
@@ -109,15 +99,15 @@ namespace cscodec.h264.player
 						var Width = picture.imageWidthWOEdge;
 						var Height = picture.imageHeightWOEdge;
 
-						if (this.frame.ClientSize.Width < Width || this.frame.ClientSize.Height < Height)
+						if (frame.ClientSize.Width < Width || frame.ClientSize.Height < Height)
 						{
-							this.frame.Invoke((Action)(() =>
+							frame.Invoke((Action)(() =>
 							{
-								this.frame.ClientSize = new Size(Width, Height);
-								CenterForm(this.frame);
+								frame.ClientSize = new Size(Width, Height);
+								CenterForm(frame);
 							}));
 						}
-						this.frame.CreateGraphics().DrawImage(FrameUtils.imageFromFrameWithoutEdges(picture, Width, Height), Point.Empty);
+						frame.CreateGraphics().DrawImage(picture.ToImageWOEdges(Width, Height), Point.Empty);
 					}
 				}
 				catch (EndOfStreamException)

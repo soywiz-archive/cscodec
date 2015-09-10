@@ -27,6 +27,10 @@ namespace cscodec.h264.decoder
 
 		public void copyTo(PictureParameterSet pps)
 		{
+            if (this == pps)
+            {
+                return;
+            }
 			pps.sps_id = sps_id;
 			pps.cabac = cabac;                  ///< entropy_coding_mode_flag
 			pps.pic_order_present = pic_order_present;      ///< pic_order_present_flag

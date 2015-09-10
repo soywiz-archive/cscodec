@@ -2515,7 +2515,7 @@ namespace cscodec.h264.decoder
 				{
 					for (int i = 0; i < 8; i++)
 					{
-						top_border_base[top_border_offset + 0 + i] = src_y_base[src_y_offset + 1 + i];
+                        src_y_base[src_y_offset + 1 + i] = (byte)top_border_base[top_border_offset + 0 + i];
 					} // for i	        	
 				} // if
 
@@ -2537,22 +2537,21 @@ namespace cscodec.h264.decoder
 					} // for i	        	
 					//XCHG(this.top_borders[top_idx][s.mb_x+1], src_y +17, 1);
 				}
-			}
 
 			//if(simple !=0|| 0==MpegEncContext.CONFIG_GRAY || 0==(s.flags&MpegEncContext.CODEC_FLAG_GRAY)){
-			if (deblock_top != 0)
+			    if (simple != 0)
 			{
 				if (deblock_left != 0)
 				{
 					for (int i = 0; i < 8; i++)
 					{
 						tmp = top_border_m1_base[top_border_m1_offset + 16 + i];
-						top_border_m1_base[top_border_m1_offset + 16 + i] = (sbyte)src_cb_base[src_cb_offset + 1 + i];
-						src_cb_base[src_cb_offset + 1 + i] = (byte)tmp;
+						    top_border_m1_base[top_border_m1_offset + 16 + i] = (sbyte)src_cb_base[src_cb_offset - 7 + i];
+						    src_cb_base[src_cb_offset - 7 + i] = (byte)tmp;
 
 						tmp = top_border_m1_base[top_border_m1_offset + 24 + i];
-						top_border_m1_base[top_border_m1_offset + 24 + i] = (sbyte)src_cr_base[src_cr_offset + 1 + i];
-						src_cr_base[src_cr_offset + 1 + i] = (byte)tmp;
+						    top_border_m1_base[top_border_m1_offset + 24 + i] = (sbyte)src_cr_base[src_cr_offset - 7 + i];
+						    src_cr_base[src_cr_offset - 7 + i] = (byte)tmp;
 					} // for i		        	
 				}
 
@@ -2567,7 +2566,7 @@ namespace cscodec.h264.decoder
 					src_cr_base[src_cr_offset + 1 + i] = (byte)tmp;
 				} // for i
 			}
-			//}
+			}
 		}
 
 		public /*av_always_inline*/ void hl_decode_mb_internal(int simple)
@@ -9726,7 +9725,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 				for (i = 0; i < cnt; i++)
 				{
 					//nalsize = AV_RB16(p) + 2;
-					nalsize = ((p_base[p_offset] & 0x0ff) | ((p_base[p_offset + 1] & 0x0ff) << 8)) + 2;
+					nalsize = ((p_base[p_offset + 1] & 0x0ff) | ((p_base[p_offset] & 0x0ff) << 8)) + 2;
 					if (decode_nal_units(p_base, p_offset, nalsize) < 0)
 					{
 						//av_log(avctx, AV_LOG_ERROR, "Decoding sps %d from avcC failed\n", i);
@@ -9739,7 +9738,7 @@ ref_cache[list][scan8[4 * i] + 8] = ref_cache[list][scan8[4 * i] + 9] = @ref[lis
 				for (i = 0; i < cnt; i++)
 				{
 					//nalsize = AV_RB16(p) + 2;
-					nalsize = ((p_base[p_offset] & 0x0ff) | ((p_base[p_offset + 1] & 0x0ff) << 8)) + 2;
+					nalsize = ((p_base[p_offset + 1] & 0x0ff) | ((p_base[p_offset] & 0x0ff) << 8)) + 2;
 					if (decode_nal_units(p_base, p_offset, nalsize) != nalsize)
 					{
 						//av_log(avctx, AV_LOG_ERROR, "Decoding pps %d from avcC failed\n", i);

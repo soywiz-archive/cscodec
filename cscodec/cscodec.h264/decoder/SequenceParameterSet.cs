@@ -85,6 +85,10 @@ namespace cscodec.h264.decoder
 
 		public void copyTo(SequenceParameterSet sps)
 		{
+            if (this == sps)
+            {
+                return;
+            }
 			sps.profile_idc = profile_idc;
 			sps.level_idc = level_idc;
 			sps.chroma_format_idc = chroma_format_idc;
