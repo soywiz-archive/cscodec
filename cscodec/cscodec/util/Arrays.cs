@@ -1,8 +1,8 @@
-using System;
+using System.Linq;
 
 namespace cscodec.util
 {
-	public class Arrays
+	public static class Arrays
 	{
 		public static T[][] ConvertDimensional<T>(T[,] In)
 		{
@@ -58,11 +58,9 @@ namespace cscodec.util
 			return Ret;
 		}
 
-		public static bool Equals<T>(T[] Array1, T[] Array2)
+		public static bool Equals(int[] Array1, int[] Array2)
 		{
-			if (Array1.Length != Array2.Length) return false;
-			for (int n = 0; n < Array1.Length; n++) if (Array1 != Array2) return false;
-			return true;
+		    return (Array1.Length == Array2.Length) && Array1.Zip(Array2, (x, y) => x == y).All(x => x);
 		}
 
 		public static void Fill<T>(T[] Array, int IndexStart, int IndexEnd, T Value)
