@@ -1,35 +1,49 @@
-using cscodec.av;
 using System;
+using cscodec.av;
 using System.Drawing;
 using System.Drawing.Imaging;
 
 namespace cscodec
 {
-	unsafe public class FrameUtils
+	unsafe public static class FrameUtils
 	{
-		public static Bitmap imageFromFrameWithoutEdges(AVFrame f)
+        public static Bitmap ToImageWOEdges(this AVFrame f)
 		{
-			return imageFromFrameWithoutEdges(f, f.imageWidthWOEdge, f.imageHeightWOEdge);
+		    Bitmap bi = new Bitmap(f.imageWidthWOEdge, f.imageHeightWOEdge, PixelFormat.Format32bppArgb);
+		    int[] rgb = new int[f.imageWidthWOEdge * f.imageHeightWOEdge];
+
+		    YUV2RGB_WOEdge(f, rgb);
+
+		    var BitmapData = bi.LockBits(new Rectangle(0, 0, bi.Width, bi.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+		    var Ptr = (int*)BitmapData.Scan0.ToPointer();
+		    for (int j = 0; j < f.imageHeightWOEdge; j++)
+		    {
+		        int off = j * f.imageWidthWOEdge;
+		        for (int i = 0; i < f.imageWidthWOEdge; i++)
+		        {
+		            Ptr[off + i] = rgb[off + i];
+		        }
+		    }
+		    bi.UnlockBits(BitmapData);
+
+		    return bi;
 		}
 
-		public static Bitmap imageFromFrameWithoutEdges(AVFrame f, int Width, int Height)
-		{
-			var XEdge = (f.imageWidth - f.imageWidthWOEdge) / 2;
-			var YEdge = (f.imageHeight - f.imageHeightWOEdge) / 2;
-			var Out = new Bitmap(Math.Min(Width, f.imageWidthWOEdge), Math.Min(Height, f.imageHeightWOEdge));
-			var In = imageFromFrame(f);
-			Graphics.FromImage(Out).DrawImage(In, new Point(-XEdge, -YEdge));
-			return Out;
-		}
+        public static Bitmap ToImageWOEdges(this AVFrame f, int Width, int Height)
+        {
+            var Out = new Bitmap(Math.Min(Width, f.imageWidthWOEdge), Math.Min(Height, f.imageHeightWOEdge));
+            Graphics.FromImage(Out).DrawImage(f.ToImageWOEdges(), Point.Empty);
+            return Out;
+        }
 
-		public static Bitmap imageFromFrame(AVFrame f)
+        public static Bitmap imageFromFrame(AVFrame f)
 		{
 			Bitmap bi = new Bitmap(f.imageWidth, f.imageHeight, PixelFormat.Format32bppArgb);
 			int[] rgb = new int[f.imageWidth * f.imageHeight];
 
 			YUV2RGB(f, rgb);
 
-			var BitmapData = bi.LockBits(new System.Drawing.Rectangle(0, 0, bi.Width, bi.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
+			var BitmapData = bi.LockBits(new Rectangle(0, 0, bi.Width, bi.Height), ImageLockMode.WriteOnly, PixelFormat.Format32bppArgb);
 			var Ptr = (int*)BitmapData.Scan0.ToPointer();
 			for (int j = 0; j < f.imageHeight; j++)
 			{
@@ -44,7 +58,7 @@ namespace cscodec
 			return bi;
 		}
 
-		public static void YUV2RGB(AVFrame f, int[] rgb)
+	    private static void YUV2RGB(AVFrame f, int[] rgb)
 		{
 			var luma = f.data_base[0];
 			var cb = f.data_base[1];
@@ -72,5 +86,38 @@ namespace cscodec
 				}
 			}
 		}
+
+        private static void YUV2RGB_WOEdge(AVFrame f, int[] rgb)
+        {
+            var luma = f.data_base[0];
+            var cb = f.data_base[1];
+            var cr = f.data_base[2];
+            int stride = f.linesize[0];
+            int strideCb = f.linesize[1];
+            int strideCr = f.linesize[2];
+
+
+            for (int y = 0; y < f.imageHeightWOEdge; y++)
+            {
+                int lineOffLuma = y * stride + f.data_offset[0];
+                int lineOffCb = (y >> 1) * strideCb + f.data_offset[1];
+                int lineOffCr = (y >> 1) * strideCr + f.data_offset[2];
+                int rgbOff = y * f.imageWidthWOEdge;
+
+                for (int x = 0; x < f.imageWidthWOEdge; x++)
+                {
+                    int c = luma[lineOffLuma + x] - 16;
+                    int d = cb[lineOffCb + (x >> 1)] - 128;
+                    int e = cr[lineOffCr + (x >> 1)] - 128;
+
+                    byte red = (byte)MathUtils.Clamp((298 * c + 409 * e + 128) >> 8, 0, 255);
+                    byte green = (byte)MathUtils.Clamp((298 * c - 100 * d - 208 * e + 128) >> 8, 0, 255);
+                    byte blue = (byte)MathUtils.Clamp((298 * c + 516 * d + 128) >> 8, 0, 255);
+                    byte alpha = 255;
+
+                    rgb[rgbOff + x] = (alpha << 24) | (red << 16) | (green << 8) | (blue << 0);
+                }
+            }
+        }
 	}
 }

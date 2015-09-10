@@ -663,7 +663,7 @@ namespace cscodec.h264.decoder
 					// Fix: for difference between JAVA and C, we need to convert signed to unsigned when we compare
 					//      signed and unsigned number because, in C, such comparing will be done in common part.
 					//      In which, common part in C in unsigned, while java is signed. -= Nok =-
-					suffix_length += (((0xffffffffL & (suffix_limit[suffix_length] + level_code)) > (2 * suffix_limit[suffix_length])) ? 1 : 0);
+					suffix_length += (((0xffffffffL & (suffix_limit[suffix_length] + level_code)) > (2L * suffix_limit[suffix_length])) ? 1 : 0);
 				}
 
 				// DebugTool.printDebugString("   - suffix_length(2) = "+suffix_length+"\n");

@@ -54,13 +54,13 @@ namespace cscodec.av
 
 		public void av_init_packet()
 		{
-			this.pts = Constants.AV_NOPTS_VALUE;
-			this.dts = Constants.AV_NOPTS_VALUE;
-			this.pos = -1;
-			this.duration = 0;
-			this.convergence_duration = 0;
-			this.flags = 0;
-			this.stream_index = 0;
+			pts = Constants.AV_NOPTS_VALUE;
+			dts = Constants.AV_NOPTS_VALUE;
+			pos = -1;
+			duration = 0;
+			convergence_duration = 0;
+			flags = 0;
+			stream_index = 0;
 			//this.destruct= null;
 		}
 	}
